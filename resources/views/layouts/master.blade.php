@@ -14,11 +14,17 @@
     <!-- DataTables CSS Bootstrap 5 -->
     <link href="https://cdn.datatables.net/1.13.8/css/dataTables.bootstrap5.min.css" rel="stylesheet">
 
+    <!-- jetbrain mono font -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:ital,wght@0,100..800;1,100..800&display=swap" rel="stylesheet">
+
     <style>
         body {
             background-color: #f0f4f8;
         }
 
+        /* sidebar */
         .sidebar-link {
             display: flex;
             align-items: center;
@@ -48,19 +54,38 @@
         }
 
         .sidebar-section {
+            font-family: "JetBrains Mono", monospace;
+            font-optical-sizing: auto;
+            font-style: normal;
             font-size: 11px;
             letter-spacing: 1px;
             margin-top: 20px;
             margin-bottom: 8px;
             color: #9aa4b2;
             font-weight: 700;
+            letter-spacing: 3px;
+        }
+
+        /* breadcrumb */
+        .breadcrumb {
+            font-size: 13px;
+        }
+
+        /* table head */
+        th {
+            font-family: "JetBrains Mono", monospace;
+            font-optical-sizing: auto;
+            font-style: normal;
+            font-weight: normal;
+            font-size: small;
+            letter-spacing: 3px;
         }
     </style>
 </head>
 
 <body>
     <div class="d-flex">
-        <div class="d-flex flex-column flex-shrink-0 p-4 bg-white vh-100 border-end" style="width: 260px;">
+        <div class="d-flex flex-column flex-shrink-0 px-4 py-3 bg-white vh-100 border-end" style="width: 260px;">
             <div href="#" class="d-flex align-items-center text-dark fw-bold pb-2 border-bottom">
                 <img src="{{ asset('storage/images/Logo_Posyandu.png') }}"
                     alt=""
@@ -76,8 +101,11 @@
                 <!-- section main menu -->
                 <li class="sidebar-section">MAIN MENU</li>
                 <li>
-                    <a href="{{ auth()->user()->role == 'admin' ? route('admin.dashboard') : route('kader.dashboard') }}"
-                        class="sidebar-link active">
+                    <a href="{{ auth()->user()->role == 'admin'
+                        ? route('admin.dashboard')
+                        : route('kader.dashboard') }}"
+                        class="sidebar-link {{ request()->routeIs('admin.dashboard') ? 'active' : '' }}">
+
                         <i class="bi bi-house"></i>
                         Dashboard
                     </a>
@@ -86,16 +114,68 @@
                 <!-- section data master -->
                 <li class="sidebar-section">DATA MASTER</li>
                 <li>
-                    <a href="#" class="sidebar-link">
-                        <i class="bi bi-people"></i>
-                        Data Balita
+                    <a class="sidebar-link d-flex justify-content-between align-items-center
+                        {{ request()->routeIs('admin.balita.*') || request()->routeIs('admin.pemeriksaan-balita.*') ? 'active' : '' }}"
+                        data-bs-toggle="collapse"
+                        href="#menuBalita"
+                        role="button"
+                        aria-expanded="false">
+                        <span>
+                            <i class="bi bi-people"></i>Balita
+                        </span>
+                        <i class="bi bi-chevron-down small"></i>
                     </a>
+                    <div class="collapse {{ request()->routeIs('admin.balita.*') || request()->routeIs('admin.pemeriksaan-balita.*') ? 'show' : '' }}"
+                        id="menuBalita">
+                        <ul class="nav flex-column ms-4 mt-1 border-start ps-3">
+                            <li>
+                                <a href="{{ route('admin.balita.index') }}"
+                                    class="sidebar-link">
+
+                                    Data Balita
+                                </a>
+                            </li>
+                            <li>
+                                <a href=""
+                                    class="sidebar-link">
+
+                                    Pemeriksaan
+                                </a>
+                            </li>
+                        </ul>
+                    </div>
                 </li>
+
                 <li>
-                    <a href="#" class="sidebar-link">
-                        <i class="bi bi-person-walking"></i>
-                        Ibu Hamil
+                    <a class="sidebar-link d-flex justify-content-between align-items-center
+                        {{ request()->routeIs('admin.ibu.*') || request()->routeIs('admin.pemeriksaan-ibu.*') ? 'active' : '' }}"
+                        data-bs-toggle="collapse"
+                        href="#menuIbu"
+                        role="button"
+                        aria-expanded="false">
+                        <span>
+                            <i class="bi bi-person-walking"></i>Ibu Hamil
+                        </span>
+                        <i class="bi bi-chevron-down small"></i>
                     </a>
+
+                    <div class="collapse {{ request()->routeIs('admin.ibu.*') || request()->routeIs('admin.pemeriksaan-ibu.*') ? 'show' : '' }}"
+                        id="menuIbu">
+                        <ul class="nav flex-column ms-4 mt-1 border-start ps-3">
+                            <li>
+                                <a href="{{ route('admin.ibu.index') }}"
+                                    class="sidebar-link">
+                                    Data Ibu Hamil
+                                </a>
+                            </li>
+                            <li>
+                                <a href=""
+                                    class="sidebar-link">
+                                    Pemeriksaan
+                                </a>
+                            </li>
+                        </ul>
+                    </div>
                 </li>
 
                 <!-- section layanan -->
@@ -114,20 +194,83 @@
                 </li>
 
             </ul>
-            <hr>
-
-            <form action="{{ route('logout') }}" method="POST">
-                @csrf
-                <button class="btn btn-danger w-100">
-                    <i class="bi bi-box-arrow-right me-1"></i> Logout
-                </button>
-            </form>
-
         </div>
 
-        <div class="flex-grow-1 p-4">
+        <div class="flex-grow-1">
+            <div class="topbar px-4 py-2 border-bottom">
 
-            @yield('content')
+                <div class="d-flex justify-content-between align-items-center">
+
+                    <div class="flex-grow-1">
+                        <nav aria-label="breadcrumb">
+                            <ol class="breadcrumb mb-0 small">
+                                @yield('page-breadcrumb')
+                            </ol>
+                        </nav>
+                    </div>
+
+                    <div class="dropdown">
+
+                        <a href="#"
+                            class="d-flex align-items-center text-decoration-none"
+                            data-bs-toggle="dropdown"
+                            aria-expanded="false">
+
+                            <img src="https://ui-avatars.com/api/?name={{ auth()->user()->name }}"
+                                width="35"
+                                height="35"
+                                alt="profile"
+                                class="rounded-circle object-fit-cover border">
+                        </a>
+
+                        <ul class="dropdown-menu dropdown-menu-end">
+
+                            <li class="px-3 py-2">
+                                <div class="fw-bold">
+                                    {{ auth()->user()->name }}
+                                </div>
+
+                                <small class="text-muted">
+                                    {{ auth()->user()->email }}
+                                </small>
+                            </li>
+
+                            <li>
+                                <hr class="dropdown-divider">
+                            </li>
+
+                            <li>
+                                <a class="dropdown-item" href="#">
+                                    <i class="bi bi-person-circle me-2"></i>
+                                    Profile
+                                </a>
+                            </li>
+
+                            <li>
+                                <hr class="dropdown-divider">
+                            </li>
+
+                            <li>
+                                <form action="{{ route('logout') }}" method="POST">
+                                    @csrf
+
+                                    <button class="dropdown-item text-danger">
+                                        <i class="bi bi-box-arrow-right me-2"></i>
+                                        Logout
+                                    </button>
+                                </form>
+                            </li>
+
+                        </ul>
+                    </div>
+
+                </div>
+            </div>
+
+            <!-- CONTENT -->
+            <div class="content px-4 py-4">
+                @yield('content')
+            </div>
 
         </div>
 
