@@ -4,6 +4,7 @@ use App\Http\Controllers\BalitaController;
 use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\IbuHamilController;
 use App\Http\Controllers\LoginController;
+use App\Http\Controllers\PegawaiController;
 use Illuminate\Support\Facades\Route;
 
 Route::get('/', function () {
@@ -32,11 +33,28 @@ Route::prefix('admin')->middleware(['auth', 'role:admin'])->group(function () {
         Route::get('/balita/edit/{id}', 'edit')->name('admin.balita.edit');
         Route::put('/balita/update/{id}', 'update')->name('admin.balita.update');
         Route::get('/balita/view/{id}', 'view')->name('admin.balita.view');
-        });
+    });
 
     // ibu hamil
     Route::controller(IbuHamilController::class)->group(function () {
         Route::get('/ibuhamil', 'index')->name('admin.ibu.index');
+        Route::get('/ibuhamil/create', 'create')->name('admin.ibu.create');
+        Route::post('/ibuhamil/store', 'store')->name('admin.ibu.store');
+        Route::delete('/ibuhamil/destroy/{id}', 'destroy')->name('admin.ibu.destroy');
+        Route::get('/ibuhamil/edit/{id}', 'edit')->name('admin.ibu.edit');
+        Route::put('/ibuhamil/update/{id}', 'update')->name('admin.ibu.update');
+        Route::get('/ibuhamil/view/{id}', 'view')->name('admin.ibu.view');
+    });
+
+    // pegawai
+    Route::controller(PegawaiController::class)->group(function () {
+        Route::get('/pegawai', 'index')->name('admin.pegawai.index');
+        Route::get('/pegawai/create', 'create')->name('admin.pegawai.create');
+        Route::post('/pegawai/store', 'store')->name('admin.pegawai.store');
+        Route::delete('/pegawai/destroy/{id}', 'destroy')->name('admin.pegawai.destroy');
+        Route::get('/pegawai/edit/{id}', 'edit')->name('admin.pegawai.edit');
+        Route::put('/pegawai/update/{id}', 'update')->name('admin.pegawai.update');
+        Route::get('/pegawai/view/{id}', 'view')->name('admin.pegawai.view');
     });
 });
 

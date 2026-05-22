@@ -19,6 +19,9 @@
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:ital,wght@0,100..800;1,100..800&display=swap" rel="stylesheet">
 
+    <!-- font awesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
+
     <style>
         body {
             background-color: #f0f4f8;
@@ -121,7 +124,7 @@
                         role="button"
                         aria-expanded="false">
                         <span>
-                            <i class="bi bi-people"></i>Balita
+                            <i class="fa-solid fa-baby"></i>Balita
                         </span>
                         <i class="bi bi-chevron-down small"></i>
                     </a>
@@ -154,7 +157,7 @@
                         role="button"
                         aria-expanded="false">
                         <span>
-                            <i class="bi bi-person-walking"></i>Ibu Hamil
+                            <i class="fa-solid fa-person-pregnant"></i>Ibu Hamil
                         </span>
                         <i class="bi bi-chevron-down small"></i>
                     </a>
@@ -176,6 +179,15 @@
                             </li>
                         </ul>
                     </div>
+                </li>
+
+                <li>
+                    <a href="{{ route('admin.pegawai.index') }}"
+                        class="sidebar-link {{ request()->routeIs('admin.pegawai.*') ? 'active' : '' }}">
+
+                        <i class="bi bi-people-fill"></i>
+                        Pegawai
+                    </a>
                 </li>
 
                 <!-- section layanan -->
@@ -216,11 +228,14 @@
                             data-bs-toggle="dropdown"
                             aria-expanded="false">
 
-                            <img src="https://ui-avatars.com/api/?name={{ auth()->user()->name }}"
-                                width="35"
-                                height="35"
+                            <img
+                                src="{{ auth()->user()->foto 
+                                ? asset('storage/' . auth()->user()->foto) 
+                                : 'https://ui-avatars.com/api/?name=' . urlencode(auth()->user()->name) }}"
                                 alt="profile"
-                                class="rounded-circle object-fit-cover border">
+                                class="rounded-circle object-fit-cover border"
+                                width="35"
+                                height="35">
                         </a>
 
                         <ul class="dropdown-menu dropdown-menu-end">

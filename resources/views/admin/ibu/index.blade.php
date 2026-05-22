@@ -6,8 +6,11 @@
 <li class="breadcrumb-item text-muted">
     Data Master
 </li>
-<li class="breadcrumb-item fw-bold">
+<li class="breadcrumb-item text-muted">
     Ibu Hamil
+</li>
+<li class="breadcrumb-item fw-bold">
+    Data Ibu Hamil
 </li>
 @endsection
 
@@ -17,46 +20,41 @@
     <h2 class="fw-bold">Data Ibu Hamil</h2>
     <div class="d-flex">
         <button class="btn btn-light me-2 border">Export</button>
-        <button class="btn btn-primary">+ Tambah</button>
+        <a href="{{ route('admin.ibu.create') }}" class="btn btn-primary">+ Tambah</a>
     </div>
 </div>
 
 <div class="row my-4">
     <div class="col-12">
         <div class="card p-4">
-            <div class="row mb-4">
-                <div class="col-4">
-                    <select name="" id="" class="form-select">
-                        <option value="">asd</option>
-                    </select>
-                </div>
-                <div class="col-4">
-                    <select name="" id="" class="form-select">
-                        <option value="">asd</option>
-                    </select>
-                </div>
-                <div class="col-4">
-                    <select name="" id="" class="form-select">
-                        <option value="">asd</option>
-                    </select>
-                </div>
-            </div>
-            <table id="ibuTable" class="table table-striped table-hover align-middle">
+            <table id="ibuTable" class="table table-hover">
                 <thead class="table-primary">
                     <tr>
-                        <th>coba</th>
-                        <th>coba</th>
-                        <th>coba</th>
-                        <th>coba</th>
+                        <th>NIK</th>
+                        <th>NAMA</th>
+                        <th>AKSI</th>
                     </tr>
                 </thead>
                 <tbody>
+                    @foreach($ibuhamil as $data)
                     <tr>
-                        <td>tes</td>
-                        <td>tes</td>
-                        <td>tes</td>
-                        <td>tes</td>
+                        <td>{{ $data->nik }}</td>
+                        <td>{{ $data->nama }}</td>
+                        <td class="text-center">
+                            <a href="{{ route('admin.ibu.view', $data->id) }}"><i class="bi bi-eye me-2"></i></a>
+                            <a href="{{ route('admin.ibu.edit', $data->id) }}"><i class="bi bi-pencil me-2"></i></a>
+                            <form action="{{ route('admin.ibu.destroy', $data->id) }}"
+                                method="POST"
+                                class="d-inline formDelete">
+                                @csrf
+                                @method('DELETE')
+                                <button type="submit" class="border-0 bg-transparent text-primary p-0 m-0">
+                                    <i class="bi bi-trash"></i>
+                                </button>
+                            </form>
+                        </td>
                     </tr>
+                    @endforeach
                 </tbody>
             </table>
         </div>
@@ -66,9 +64,11 @@
 @endsection
 
 @push('scripts')
+<!-- datatable -->
 <script>
     $(document).ready(function() {
         $('#ibuTable').DataTable({
+            order:[],
             pagingType: "simple_numbers",
             language: {
                 search: "_INPUT_",
@@ -85,4 +85,39 @@
         });
     });
 </script>
+
+<!-- konfirmasi hapus -->
+<script>
+    $('.formDelete').submit(function(e) {
+        e.preventDefault();
+        let form = this;
+        Swal.fire({
+            title: 'Hapus Data?',
+            text: 'Data yang dihapus tidak bisa dikembalikan.',
+            icon: 'warning',
+            showCancelButton: true,
+            confirmButtonColor: '#dc3545',
+            cancelButtonColor: '#6c757d',
+            confirmButtonText: 'Ya, Hapus',
+            cancelButtonText: 'Batal'
+        }).then((result) => {
+            if (result.isConfirmed) {
+                form.submit();
+            }
+        });
+    });
+</script>
+
+<!-- notifikasi ketika ada data yang disimpan -->
+@if(session('success'))
+<script>
+    Swal.fire({
+        icon: 'success',
+        title: 'Berhasil',
+        text: @json(session('success')),
+        timer: 2000,
+        showConfirmButton: false
+    });
+</script>
+@endif
 @endpush
