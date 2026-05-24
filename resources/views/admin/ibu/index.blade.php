@@ -3,15 +3,9 @@
 @section('title', 'Ibu Hamil')
 
 @section('page-breadcrumb')
-<li class="breadcrumb-item text-muted">
-    Data Master
-</li>
-<li class="breadcrumb-item text-muted">
-    Ibu Hamil
-</li>
-<li class="breadcrumb-item fw-bold">
-    Data Ibu Hamil
-</li>
+<li class="breadcrumb-item text-muted">Data Master</li>
+<li class="breadcrumb-item text-muted">Ibu Hamil</li>
+<li class="breadcrumb-item fw-bold">Data Ibu Hamil</li>
 @endsection
 
 @section('content')

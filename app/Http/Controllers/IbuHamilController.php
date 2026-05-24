@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\IbuHamil;
+use App\Models\PemeriksaanIbuHamil;
 use Illuminate\Http\Request;
 
 class IbuHamilController extends Controller
@@ -86,6 +87,37 @@ class IbuHamilController extends Controller
     public function view($id)
     {
         $ibuhamil = IbuHamil::findOrFail($id);
-        return view('admin.ibu.view', compact('ibuhamil'));
+        $pemeriksaan = PemeriksaanIbuHamil::where('ibuhamil_id', $id)->get();;
+        return view('admin.ibu.view', compact('ibuhamil', 'pemeriksaan'));
+    }
+
+    public function create_pemeriksaan()
+    {
+        $ibuhamil = IbuHamil::all();
+
+        return view('admin.ibu.pemeriksaan', compact('ibuhamil'));
+    }
+
+    public function store_pemeriksaan(Request $request)
+    {
+        $request->validate([
+            'ibuhamil_id' => 'required',
+            'hpht' => 'required',
+            'hpl' => 'required',
+            'tensi' => 'required',
+            'berat' => 'required',
+            'pemeriksaan_darah' => 'required',
+        ]);
+
+        PemeriksaanIbuHamil::create([
+            'ibuhamil_id' => $request->ibuhamil_id,
+            'hpht' => $request->hpht,
+            'hpl' => $request->hpht,
+            'tensi' => $request->tensi,
+            'berat' => $request->berat,
+            'pemeriksaan_darah' => $request->pemeriksaan_darah,
+        ]);
+
+        return redirect()->route('admin.ibu.pemeriksaan.create')->with('success', 'Pemeriksaan berhasil disimpan');
     }
 }

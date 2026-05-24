@@ -3,18 +3,10 @@
 @section('title', 'Ibu Hamil')
 
 @section('page-breadcrumb')
-<li class="breadcrumb-item text-muted">
-    Data Master
-</li>
-<li class="breadcrumb-item text-muted">
-    Ibu Hamil
-</li>
-<li class="breadcrumb-item text-muted">
-    Data Ibu Hamil
-</li>
-<li class="breadcrumb-item fw-bold">
-    Update Data
-</li>
+<li class="breadcrumb-item text-muted">Data Master</li>
+<li class="breadcrumb-item text-muted">Ibu Hamil</li>
+<li class="breadcrumb-item text-muted">Data Ibu Hamil</li>
+<li class="breadcrumb-item fw-bold">Update Data</li>
 @endsection
 
 @section('content')
