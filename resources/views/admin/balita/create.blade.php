@@ -3,18 +3,10 @@
 @section('title', 'Balita')
 
 @section('page-breadcrumb')
-<li class="breadcrumb-item text-muted">
-    Data Master
-</li>
-<li class="breadcrumb-item text-muted">
-    Balita
-</li>
-<li class="breadcrumb-item text-muted">
-    Data Balita
-</li>
-<li class="breadcrumb-item fw-bold">
-    Tambah Data
-</li>
+<li class="breadcrumb-item text-muted">Data Master</li>
+<li class="breadcrumb-item text-muted">Balita</li>
+<li class="breadcrumb-item text-muted">Data Balita</li>
+<li class="breadcrumb-item fw-bold">Tambah Data</li>
 @endsection
 
 @section('content')
@@ -63,11 +55,9 @@
                             <textarea class="form-control" name="alamat" id="alamat" rows="3"></textarea>
                         </div>
                     </div>
-                    <div class="d-flex justify-content-end mt-4">
-                        <button type="submit" class="btn btn-primary">
-                            Simpan
-                        </button>
-                    </div>
+                    <button type="submit" class="btn btn-primary mt-4">
+                        Simpan
+                    </button>
                 </form>
             </div>
         </div>

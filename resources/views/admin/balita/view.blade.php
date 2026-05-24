@@ -3,18 +3,10 @@
 @section('title', 'Balita')
 
 @section('page-breadcrumb')
-<li class="breadcrumb-item text-muted">
-    Data Master
-</li>
-<li class="breadcrumb-item text-muted">
-    Balita
-</li>
-<li class="breadcrumb-item text-muted">
-    Data Balita
-</li>
-<li class="breadcrumb-item fw-bold">
-    View Data
-</li>
+<li class="breadcrumb-item text-muted">Data Master</li>
+<li class="breadcrumb-item text-muted">Balita</li>
+<li class="breadcrumb-item text-muted">Data Balita</li>
+<li class="breadcrumb-item fw-bold">View Data</li>
 @endsection
 
 @section('content')
@@ -49,6 +41,41 @@
                     <th>Alamat</th>
                     <td class="fw-bold">{{ $balita->alamat }}</td>
                 </tr>
+            </table>
+        </div>
+    </div>
+</div>
+
+<div class="row my-4">
+    <div class="col-12">
+        <div class="card p-4">
+            <table class="table table-hover">
+                <thead class="table-primary">
+                    <tr>
+                        <th>NO</th>
+                        <th>BERAT</th>
+                        <th>TINGGI</th>
+                        <th>RIWAYAT KESEHATAN</th>
+                        <th>TANGGAL PERIKSA</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @forelse($pemeriksaan as $data)
+                    <tr>
+                        <td>{{ $loop->iteration }}</td>
+                        <td>{{ $data->berat }} kg</td>
+                        <td>{{ $data->tinggi }} cm</td>
+                        <td>{{ $data->riwayat_kesehatan }}</td>
+                        <td>{{ $data->created_at }}</td>
+                    </tr>
+                    @empty
+                    <tr>
+                        <td colspan="4" class="text-center text-muted">
+                            Belum ada data pemeriksaan
+                        </td>
+                    </tr>
+                    @endforelse
+                </tbody>
             </table>
         </div>
     </div>

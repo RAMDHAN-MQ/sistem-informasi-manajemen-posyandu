@@ -22,6 +22,10 @@
     <!-- font awesome -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
 
+    <!-- select2 -->
+    <link href="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css" rel="stylesheet" />
+    <link href="https://cdn.jsdelivr.net/npm/select2-bootstrap-5-theme@1.3.0/dist/select2-bootstrap-5-theme.min.css" rel="stylesheet" />
+
     <style>
         body {
             background-color: #f0f4f8;
@@ -134,14 +138,12 @@
                             <li>
                                 <a href="{{ route('admin.balita.index') }}"
                                     class="sidebar-link">
-
                                     Data Balita
                                 </a>
                             </li>
                             <li>
-                                <a href=""
+                                <a href="{{ route('admin.balita.pemeriksaan.create') }}"
                                     class="sidebar-link">
-
                                     Pemeriksaan
                                 </a>
                             </li>
@@ -172,8 +174,8 @@
                                 </a>
                             </li>
                             <li>
-                                <a href=""
-                                    class="sidebar-link">
+                                <a href="{{ route('admin.ibu.pemeriksaan.create') }}"
+                                    class=" sidebar-link">
                                     Pemeriksaan
                                 </a>
                             </li>
@@ -309,6 +311,9 @@
 
     <!-- cdn js chart.js plugin persenan -->
     <script src="https://cdn.jsdelivr.net/npm/chartjs-plugin-datalabels@2"></script>
+
+    <!-- select2 -->
+    <script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>
     @stack('scripts')
 </body>
 

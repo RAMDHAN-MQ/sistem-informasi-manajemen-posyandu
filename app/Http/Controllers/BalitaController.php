@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\Balita;
+use App\Models\PemeriksaanBalita;
 use Illuminate\Http\Request;
 
 class BalitaController extends Controller
@@ -90,6 +91,32 @@ class BalitaController extends Controller
     public function view($id)
     {
         $balita = Balita::findOrFail($id);
-        return view('admin.balita.view', compact('balita'));
+        $pemeriksaan = PemeriksaanBalita::where('balita_id', $id)->get();
+        return view('admin.balita.view', compact('balita', 'pemeriksaan'));
+    }
+
+    public function create_pemeriksaan()
+    {
+        $balita = Balita::all(); 
+        
+        return view('admin.balita.pemeriksaan', compact('balita'));
+    }
+
+    public function store_pemeriksaan(Request $request)
+    {
+        $request->validate([
+            'balita_id' => 'required',
+            'berat' => 'required',
+            'tinggi' => 'required',
+        ]);
+
+        PemeriksaanBalita::create([
+            'balita_id' => $request->balita_id,
+            'berat' => $request->berat,
+            'tinggi' => $request->tinggi,
+            'riwayat_kesehatan' => $request->riwayat_kesehatan,
+        ]);
+
+        return redirect()->route('admin.balita.pemeriksaan.create')->with('success', 'Pemeriksaan berhasil disimpan');
     }
 }

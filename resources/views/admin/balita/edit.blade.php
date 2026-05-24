@@ -3,18 +3,10 @@
 @section('title', 'Balita')
 
 @section('page-breadcrumb')
-<li class="breadcrumb-item text-muted">
-    Data Master
-</li>
-<li class="breadcrumb-item text-muted">
-    Balita
-</li>
-<li class="breadcrumb-item text-muted">
-    Data Balita
-</li>
-<li class="breadcrumb-item fw-bold">
-    Update Data
-</li>
+<li class="breadcrumb-item text-muted">Data Master</li>
+<li class="breadcrumb-item text-muted">Balita</li>
+<li class="breadcrumb-item text-muted">Data Balita</li>
+<li class="breadcrumb-item fw-bold">Update Data</li>
 @endsection
 
 @section('content')
