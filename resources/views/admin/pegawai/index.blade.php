@@ -3,12 +3,8 @@
 @section('title', 'Pegawai')
 
 @section('page-breadcrumb')
-<li class="breadcrumb-item text-muted">
-    Data Master
-</li>
-<li class="breadcrumb-item fw-bold">
-    Pegawai
-</li>
+<li class="breadcrumb-item text-muted">Data Master</li>
+<li class="breadcrumb-item fw-bold">Pegawai</li>
 @endsection
 
 @section('content')
@@ -28,7 +24,7 @@
                 <div class="col-4 my-3">
                     <select name="role" id="role" class="form-select">
                         <option value="">
-                            Semua Role
+                            -- Semua Role --
                         </option>
                         <option value="admin">Admin</option>
                         <option value="kader">Kader</option>

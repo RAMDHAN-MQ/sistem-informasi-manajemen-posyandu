@@ -3,15 +3,9 @@
 @section('title', 'Pegawai')
 
 @section('page-breadcrumb')
-<li class="breadcrumb-item text-muted">
-    Data Master
-</li>
-<li class="breadcrumb-item text-muted">
-    Pegawai
-</li>
-<li class="breadcrumb-item fw-bold">
-    View Data
-</li>
+<li class="breadcrumb-item text-muted">Data Master</li>
+<li class="breadcrumb-item text-muted">Pegawai</li>
+<li class="breadcrumb-item fw-bold">View Data</li>
 @endsection
 
 @section('content')
@@ -45,7 +39,7 @@
                     <td class="fw-bold">{{ $pegawai->username }}</td>
                 </tr>
                 <tr>
-                    <th>email</th>
+                    <th>Email</th>
                     <td class="fw-bold">{{ $pegawai->email }}</td>
                 </tr>
             </table>

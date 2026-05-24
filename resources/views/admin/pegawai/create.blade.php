@@ -3,15 +3,9 @@
 @section('title', 'Pegawai')
 
 @section('page-breadcrumb')
-<li class="breadcrumb-item text-muted">
-    Data Master
-</li>
-<li class="breadcrumb-item text-muted">
-    Pegawai
-</li>
-<li class="breadcrumb-item fw-bold">
-    Tambah Data
-</li>
+<li class="breadcrumb-item text-muted">Data Master</li>
+<li class="breadcrumb-item text-muted">Pegawai</li>
+<li class="breadcrumb-item fw-bold">Tambah Data</li>
 @endsection
 
 @section('content')
@@ -109,11 +103,9 @@
                             </div>
                         </div>
                     </div>
-                    <div class="d-flex justify-content-end mt-4">
-                        <button type="submit" class="btn btn-primary">
-                            Simpan
-                        </button>
-                    </div>
+                    <button type="submit" class="btn btn-primary mt-4">
+                        Simpan
+                    </button>
                 </form>
             </div>
         </div>

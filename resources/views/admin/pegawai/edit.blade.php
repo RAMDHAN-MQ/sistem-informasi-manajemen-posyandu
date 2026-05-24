@@ -3,15 +3,9 @@
 @section('title', 'Pegawai')
 
 @section('page-breadcrumb')
-<li class="breadcrumb-item text-muted">
-    Data Master
-</li>
-<li class="breadcrumb-item text-muted">
-    Pegawai
-</li>
-<li class="breadcrumb-item fw-bold">
-    Update Data
-</li>
+<li class="breadcrumb-item text-muted">Data Master</li>
+<li class="breadcrumb-item text-muted">Pegawai</li>
+<li class="breadcrumb-item fw-bold">Update Data</li>
 @endsection
 
 @section('content')
