@@ -42,7 +42,7 @@
     <div class="col-12">
         <div class="card p-4 shadow-sm border-0 rounded-3">
             <h5 class="fw-bold mb-4">Grafik Status Gizi Balita (Sehat vs Stunting)</h5>
-            <canvas id="grafikGiziBalita" height="80"></canvas>
+            <canvas id="grafikGiziBalita" height="300"></canvas>
         </div>
     </div>
 </div>
@@ -51,29 +51,11 @@
     <div class="col-6">
         <div class="card p-4 shadow-sm border-0 rounded-3 h-100">
             <h5 class="fw-bold mb-4">Jadwal Posyandu Terdekat</h5>
-            <ul class="list-group list-group-flush">
-                <li class="list-group-item px-0 d-flex justify-content-between align-items-center">
-                    <span>Penimbangan Balita - Melati 1</span>
-                    <span class="badge bg-primary rounded-pill">12 Jun 2026</span>
-                </li>
-                <li class="list-group-item px-0 d-flex justify-content-between align-items-center">
-                    <span>Kelas Ibu Hamil - Melati 2</span>
-                    <span class="badge bg-primary rounded-pill">15 Jun 2026</span>
-                </li>
-            </ul>
         </div>
     </div>
     <div class="col-6">
         <div class="card p-4 shadow-sm border-0 rounded-3 h-100">
             <h5 class="fw-bold mb-4">Aktivitas Terakhir</h5>
-            <div class="mb-3">
-                <p class="text-muted small mb-1">Hari ini, 09:00 WIB</p>
-                <p class="mb-0">Kader menambahkan data balita baru.</p>
-            </div>
-            <div>
-                <p class="text-muted small mb-1">Kemarin, 14:30 WIB</p>
-                <p class="mb-0">Kader mencatat data pemeriksaan ibu hamil.</p>
-            </div>
         </div>
     </div>
 </div>

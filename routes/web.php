@@ -3,6 +3,7 @@
 use App\Http\Controllers\BalitaController;
 use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\IbuHamilController;
+use App\Http\Controllers\JadwalController;
 use App\Http\Controllers\LoginController;
 use App\Http\Controllers\PegawaiController;
 use Illuminate\Support\Facades\Route;
@@ -62,6 +63,18 @@ Route::prefix('admin')->middleware(['auth', 'role:admin'])->group(function () {
         Route::put('/pegawai/update/{id}', 'update')->name('admin.pegawai.update');
         Route::get('/pegawai/view/{id}', 'view')->name('admin.pegawai.view');
     });
+
+    // jadwal
+    Route::controller(JadwalController::class)->group(function () {
+        Route::get('/layanan', 'index')->name('admin.layanan.index');
+        Route::get('/layanan/create', 'create')->name('admin.layanan.create');
+        Route::post('/layanan/store', 'store')->name('admin.layanan.store');
+        Route::delete('/layanan/destroy/{id}', 'destroy')->name('admin.layanan.destroy');
+        Route::get('/layanan/edit/{id}', 'edit')->name('admin.layanan.edit');
+        Route::put('/layanan/update/{id}', 'update')->name('admin.layanan.update');
+        Route::get('/layanan/view/{id}', 'view')->name('admin.layanan.view');
+        Route::post('/layanan/status/{id}', 'change_status')->name('admin.layanan.change_status');
+    });
 });
 
 // kader
@@ -74,7 +87,7 @@ Route::prefix('kader')->middleware(['auth', 'role:kader'])->group(function () {
         Route::get('/balita/pemeriksaan/tambah', 'create_pemeriksaan')->name('kader.balita.pemeriksaan.create');
         Route::post('/balita/pemeriksaan/simpan', 'store_pemeriksaan')->name('kader.balita.pemeriksaan.store');
     });
-    
+
     Route::controller(IbuHamilController::class)->group(function () {
         Route::get('/ibuhamil/pemeriksaan/tambah', 'create_pemeriksaan')->name('kader.ibu.pemeriksaan.create');
         Route::post('/ibuhamil/pemeriksaan/simpan', 'store_pemeriksaan')->name('kader.ibu.pemeriksaan.store');

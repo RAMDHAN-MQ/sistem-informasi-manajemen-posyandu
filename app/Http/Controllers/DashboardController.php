@@ -23,8 +23,7 @@ class DashboardController extends Controller
     {
         $jumlahBalita = Balita::count();
         $jumlahIbuHamil = IbuHamil::count();
-        
-        
+    
         $kegiatanAkanDatang = Layanan::whereDate('created_at', '>=', now())->count();
         $kegiatanSelesai = Layanan::whereDate('created_at', '<', now())->count();
         

@@ -10,17 +10,17 @@ class Layanan extends Model
 
     protected $fillable = [
         'user_id',
-        'jenis_id',
-        'jadwal',
+        'judul_kegiatan',
+        'lokasi',
+        'tanggal',
+        'waktu_mulai',
+        'waktu_selesai',
+        'keterangan',
+        'status',
     ];
 
     public function user()
     {
         return $this->belongsTo(User::class);
-    }
-
-    public function jenis()
-    {
-        return $this->belongsTo(JenisLayanan::class, 'jenis_id');
     }
 }

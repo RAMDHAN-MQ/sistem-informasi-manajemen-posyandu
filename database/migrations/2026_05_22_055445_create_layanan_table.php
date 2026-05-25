@@ -14,8 +14,13 @@ return new class extends Migration
         Schema::create('layanan', function (Blueprint $table) {
             $table->id();
             $table->foreignId('user_id')->constrained('users')->onDelete('cascade');
-            $table->foreignId('jenis_id')->constrained('jenis_layanan')->onDelete('cascade');
-            $table->date('jadwal');
+            $table->string('judul_kegiatan');
+            $table->string('lokasi');
+            $table->date('tanggal');
+            $table->time('waktu_mulai');
+            $table->time('waktu_selesai');
+            $table->text('keterangan');
+            $table->enum('status', ['active','inactive'])->default('active');
             $table->timestamps();
         });
     }
