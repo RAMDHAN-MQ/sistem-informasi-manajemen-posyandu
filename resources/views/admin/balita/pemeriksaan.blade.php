@@ -100,7 +100,7 @@
     $(document).ready(function() {
         $('.select2').select2({
             theme: 'bootstrap-5',
-            placeholder: '-- Cari Nama Ibu Hamil --',
+            placeholder: '-- Cari Nama Balita --',
             allowClear: true,
             width: '100%'
         });
