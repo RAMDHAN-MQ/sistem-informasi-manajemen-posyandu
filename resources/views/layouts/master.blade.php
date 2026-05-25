@@ -27,7 +27,10 @@
     <link href="https://cdn.jsdelivr.net/npm/select2-bootstrap-5-theme@1.3.0/dist/select2-bootstrap-5-theme.min.css" rel="stylesheet" />
 
     <style>
+        html,
         body {
+            height: 100%;
+            overflow: hidden;
             background-color: #f0f4f8;
         }
 
@@ -87,12 +90,17 @@
             font-size: small;
             letter-spacing: 3px;
         }
+
+        /* content */
+        .content {
+            background-color: #f0f4f8;
+        }
     </style>
 </head>
 
 <body>
-    <div class="d-flex">
-        <div class="d-flex flex-column flex-shrink-0 px-4 py-3 bg-white vh-100 border-end" style="width: 260px;">
+    <div class="d-flex vh-100 overflow-hidden">
+        <div class="d-flex flex-column flex-shrink-0 px-4 py-3 bg-white border-end" style="width: 260px;">
             <div href="#" class="d-flex align-items-center text-dark fw-bold pb-2 border-bottom">
                 <img src="{{ asset('storage/images/Logo_Posyandu.png') }}"
                     alt=""
@@ -195,7 +203,8 @@
                 <!-- section layanan -->
                 <li class="sidebar-section">LAYANAN</li>
                 <li>
-                    <a href="#" class="sidebar-link">
+                    <a href="{{ route('admin.layanan.index') }}"
+                        class="sidebar-link {{ request()->routeIs('admin.layanan.*') ? 'active' : '' }}">
                         <i class="bi bi-calendar-event"></i>
                         Jadwal
                     </a>
@@ -210,7 +219,7 @@
             </ul>
         </div>
 
-        <div class="flex-grow-1">
+        <div class="flex-grow-1 d-flex flex-column overflow-hidden">
             <div class="topbar px-4 py-2 border-bottom">
 
                 <div class="d-flex justify-content-between align-items-center">
@@ -285,7 +294,7 @@
             </div>
 
             <!-- CONTENT -->
-            <div class="content px-4 py-4">
+            <div class="content px-4 py-4 overflow-auto flex-grow-1">
                 @yield('content')
             </div>
 
