@@ -8,6 +8,7 @@ use Illuminate\Http\Request;
 
 class BalitaController extends Controller
 {
+    // --- FUNGSI DASAR ---
     public function index()
     {
         $balita = Balita::latest()->get();
@@ -30,29 +31,14 @@ class BalitaController extends Controller
             'alamat' => 'required',
         ]);
 
-        Balita::create([
-            'nama' => $request->nama,
-            'nik' => $request->nik,
-            'nama_ortu' => $request->nama_ortu,
-            'tempat_lahir' => $request->tempat_lahir,
-            'tgl_lahir' => $request->tgl_lahir,
-            'alamat' => $request->alamat,
-        ]);
-
-        return redirect()
-            ->route('admin.balita.index')
-            ->with('success', 'Data balita berhasil ditambahkan');
+        Balita::create($request->all());
+        return redirect()->route('admin.balita.index')->with('success', 'Data balita berhasil ditambahkan');
     }
 
     public function destroy($id)
     {
-        $balita = Balita::findOrFail($id);
-
-        $balita->delete();
-
-        return redirect()
-            ->route('admin.balita.index')
-            ->with('success', 'Data balita berhasil dihapus');
+        Balita::findOrFail($id)->delete();
+        return redirect()->route('admin.balita.index')->with('success', 'Data balita berhasil dihapus');
     }
 
     public function edit($id)
@@ -63,29 +49,8 @@ class BalitaController extends Controller
 
     public function update(Request $request, $id)
     {
-        $request->validate([
-            'nama' => 'required',
-            'nik' => 'required',
-            'nama_ortu' => 'required',
-            'tempat_lahir' => 'required',
-            'tgl_lahir' => 'required',
-            'alamat' => 'required',
-        ]);
-
-        $balita = Balita::findOrFail($id);
-
-        $balita->update([
-            'nama' => $request->nama,
-            'nik' => $request->nik,
-            'nama_ortu' => $request->nama_ortu,
-            'tempat_lahir' => $request->tempat_lahir,
-            'tgl_lahir' => $request->tgl_lahir,
-            'alamat' => $request->alamat,
-        ]);
-
-        return redirect()
-            ->route('admin.balita.index')
-            ->with('success', 'Data balita berhasil diupdate');
+        Balita::findOrFail($id)->update($request->all());
+        return redirect()->route('admin.balita.index')->with('success', 'Data balita berhasil diupdate');
     }
 
     public function view($id)
@@ -95,28 +60,41 @@ class BalitaController extends Controller
         return view('admin.balita.view', compact('balita', 'pemeriksaan'));
     }
 
+    // --- FUNGSI PEMERIKSAAN ---
     public function create_pemeriksaan()
     {
-        $balita = Balita::all(); 
-        
+        $balita = Balita::all();
         return view('admin.balita.pemeriksaan', compact('balita'));
     }
 
     public function store_pemeriksaan(Request $request)
     {
+        // 1. Validasi
         $request->validate([
             'balita_id' => 'required',
             'berat' => 'required',
             'tinggi' => 'required',
+            'tanggal_pemeriksaan' => 'required',
         ]);
 
+        // 2. Mengolah Checklist Imunisasi (Menghindari error NULL)
+        $imunisasiData = $request->has('imunisasi')
+            ? implode(', ', $request->imunisasi)
+            : 'Tidak ada';
+
+        // 3. Simpan ke Database
         PemeriksaanBalita::create([
-            'balita_id' => $request->balita_id,
-            'berat' => $request->berat,
-            'tinggi' => $request->tinggi,
-            'riwayat_kesehatan' => $request->riwayat_kesehatan,
+            'balita_id'           => $request->balita_id,
+            'berat'               => $request->berat,
+            'tinggi'              => $request->tinggi,
+            'tanggal_pemeriksaan' => $request->tanggal_pemeriksaan,
+            'riwayat_kesehatan'   => $imunisasiData,
         ]);
 
-        return redirect()->route('admin.balita.pemeriksaan.create')->with('success', 'Pemeriksaan berhasil disimpan');
+        // 4. Redirect dengan pesan sukses
+        $role = auth()->user()->role;
+
+        return redirect()->route($role.'.balita.pemeriksaan.create')
+            ->with('success', 'Pemeriksaan berhasil disimpan!');
     }
 }

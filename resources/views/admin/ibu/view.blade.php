@@ -11,7 +11,11 @@
 
 @section('content')
 
-<a href="{{ route('admin.ibu.index') }}" class="btn btn-light border">
+@php
+$role = auth()->user()->role;
+@endphp
+
+<a href="{{ route($role.'.ibu.index') }}" class="btn btn-light border">
     <i class="bi bi-arrow-left-short"></i>
     Kembali
 </a>

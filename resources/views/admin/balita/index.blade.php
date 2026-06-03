@@ -10,6 +10,10 @@
 
 @section('content')
 
+@php
+$role = auth()->user()->role;
+@endphp
+
 <div class="d-flex justify-content-between align-items-center">
     <h2 class="fw-bold">Data Balita</h2>
     <div class="d-flex">
@@ -37,7 +41,8 @@
                         <td>{{$data->nama}}</td>
                         <td>{{$data->nama_ortu}}</td>
                         <td class="text-center">
-                            <a href="{{ route('admin.balita.view', $data->id) }}"><i class="bi bi-eye me-2"></i></a>
+                            <a href="{{ route($role.'.balita.view', $data->id) }}"><i class="bi bi-eye me-2"></i></a>
+                            @if(auth()->user()->role === 'admin')
                             <a href="{{ route('admin.balita.edit', $data->id) }}"><i class="bi bi-pencil me-2"></i></a>
                             <form action="{{ route('admin.balita.destroy', $data->id) }}"
                                 method="POST"
@@ -51,6 +56,7 @@
                                 </button>
 
                             </form>
+                            @endif
                         </td>
                     </tr>
                     @endforeach

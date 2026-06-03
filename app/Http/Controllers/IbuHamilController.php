@@ -29,28 +29,15 @@ class IbuHamilController extends Controller
             'alamat' => 'required',
         ]);
 
-        IbuHamil::create([
-            'nama' => $request->nama,
-            'nik' => $request->nik,
-            'tempat_lahir' => $request->tempat_lahir,
-            'tgl_lahir' => $request->tgl_lahir,
-            'alamat' => $request->alamat,
-        ]);
+        IbuHamil::create($request->all());
 
-        return redirect()
-            ->route('admin.ibu.index')
-            ->with('success', 'Data ibu hamil berhasil ditambahkan');
+        return redirect()->route('admin.ibu.index')->with('success', 'Data ibu hamil berhasil ditambahkan');
     }
 
     public function destroy($id)
     {
-        $ibuhamil = IbuHamil::findOrFail($id);
-
-        $ibuhamil->delete();
-
-        return redirect()
-            ->route('admin.ibu.index')
-            ->with('success', 'Data ibu hamil berhasil dihapus');
+        IbuHamil::findOrFail($id)->delete();
+        return redirect()->route('admin.ibu.index')->with('success', 'Data ibu hamil berhasil dihapus');
     }
 
     public function edit($id)
@@ -69,32 +56,21 @@ class IbuHamilController extends Controller
             'alamat' => 'required',
         ]);
 
-        $ibuhamil = IbuHamil::findOrFail($id);
+        IbuHamil::findOrFail($id)->update($request->all());
 
-        $ibuhamil->update([
-            'nama' => $request->nama,
-            'nik' => $request->nik,
-            'tempat_lahir' => $request->tempat_lahir,
-            'tgl_lahir' => $request->tgl_lahir,
-            'alamat' => $request->alamat,
-        ]);
-
-        return redirect()
-            ->route('admin.ibu.index')
-            ->with('success', 'Data ibu hamil berhasil diupdate');
+        return redirect()->route('admin.ibu.index')->with('success', 'Data ibu hamil berhasil diupdate');
     }
 
     public function view($id)
     {
         $ibuhamil = IbuHamil::findOrFail($id);
-        $pemeriksaan = PemeriksaanIbuHamil::where('ibuhamil_id', $id)->get();;
+        $pemeriksaan = PemeriksaanIbuHamil::where('ibuhamil_id', $id)->get();
         return view('admin.ibu.view', compact('ibuhamil', 'pemeriksaan'));
     }
 
     public function create_pemeriksaan()
     {
         $ibuhamil = IbuHamil::all();
-
         return view('admin.ibu.pemeriksaan', compact('ibuhamil'));
     }
 
@@ -109,15 +85,18 @@ class IbuHamilController extends Controller
             'pemeriksaan_darah' => 'required',
         ]);
 
+        // Perbaikan: Menggunakan $request->hpl (bukan hpht)
         PemeriksaanIbuHamil::create([
-            'ibuhamil_id' => $request->ibuhamil_id,
-            'hpht' => $request->hpht,
-            'hpl' => $request->hpht,
-            'tensi' => $request->tensi,
-            'berat' => $request->berat,
+            'ibuhamil_id'       => $request->ibuhamil_id,
+            'hpht'              => $request->hpht,
+            'hpl'               => $request->hpl,
+            'tensi'             => $request->tensi,
+            'berat'             => $request->berat,
             'pemeriksaan_darah' => $request->pemeriksaan_darah,
         ]);
 
-        return redirect()->route('admin.ibu.pemeriksaan.create')->with('success', 'Pemeriksaan berhasil disimpan');
+        $role = auth()->user()->role;
+
+        return redirect()->route($role . '.ibu.pemeriksaan.create')->with('success', 'Pemeriksaan berhasil disimpan');
     }
 }
