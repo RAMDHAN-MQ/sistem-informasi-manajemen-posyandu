@@ -98,7 +98,11 @@
     </style>
 </head>
 
+
 <body>
+    @php
+    $role = auth()->user()->role;
+    @endphp
     <div class="d-flex vh-100 overflow-hidden">
         <div class="d-flex flex-column flex-shrink-0 px-4 py-3 bg-white border-end" style="width: 260px;">
             <div href="#" class="d-flex align-items-center text-dark fw-bold pb-2 border-bottom">
@@ -108,7 +112,7 @@
                     height="35"
                     class="me-2">
                 <div class="">
-                    <span class="fs-5 fw-bold">{{ auth()->user()->role == 'admin' ? 'Admin' : 'Kader' }}</span>
+                    <span class="fs-5 fw-bold">{{ $role == 'admin' ? 'Admin' : 'Kader' }}</span>
                     <div class="text-muted" style="font-size: 11px;">SIMANDU</div>
                 </div>
             </div>
@@ -116,10 +120,8 @@
                 <!-- section main menu -->
                 <li class="sidebar-section">MAIN MENU</li>
                 <li>
-                    <a href="{{ auth()->user()->role == 'admin'
-                        ? route('admin.dashboard')
-                        : route('kader.dashboard') }}"
-                        class="sidebar-link {{ request()->routeIs('admin.dashboard') ? 'active' : '' }}">
+                    <a href="{{ route($role.'.dashboard')}}"
+                        class="sidebar-link {{ request()->routeIs($role.'.dashboard') ? 'active' : '' }}">
 
                         <i class="bi bi-house"></i>
                         Dashboard
@@ -130,7 +132,7 @@
                 <li class="sidebar-section">DATA MASTER</li>
                 <li>
                     <a class="sidebar-link d-flex justify-content-between align-items-center
-                        {{ request()->routeIs('admin.balita.*') || request()->routeIs('admin.pemeriksaan-balita.*') ? 'active' : '' }}"
+                        {{ request()->routeIs($role.'.balita.*') || request()->routeIs($role.'.pemeriksaan-balita.*') ? 'active' : '' }}"
                         data-bs-toggle="collapse"
                         href="#menuBalita"
                         role="button"
@@ -140,17 +142,17 @@
                         </span>
                         <i class="bi bi-chevron-down small"></i>
                     </a>
-                    <div class="collapse {{ request()->routeIs('admin.balita.*') || request()->routeIs('admin.pemeriksaan-balita.*') ? 'show' : '' }}"
+                    <div class="collapse {{ request()->routeIs($role.'.balita.*') || request()->routeIs($role.'.pemeriksaan-balita.*') ? 'show' : '' }}"
                         id="menuBalita">
                         <ul class="nav flex-column ms-4 mt-1 border-start ps-3">
                             <li>
-                                <a href="{{ route('admin.balita.index') }}"
+                                <a href="{{ route($role.'.balita.index') }}"
                                     class="sidebar-link">
                                     Data Balita
                                 </a>
                             </li>
                             <li>
-                                <a href="{{ route('admin.balita.pemeriksaan.create') }}"
+                                <a href="{{ route($role.'.balita.pemeriksaan.create') }}"
                                     class="sidebar-link">
                                     Pemeriksaan
                                 </a>
@@ -161,7 +163,7 @@
 
                 <li>
                     <a class="sidebar-link d-flex justify-content-between align-items-center
-                        {{ request()->routeIs('admin.ibu.*') || request()->routeIs('admin.pemeriksaan-ibu.*') ? 'active' : '' }}"
+                        {{ request()->routeIs($role.'.ibu.*') || request()->routeIs($role.'.pemeriksaan-ibu.*') ? 'active' : '' }}"
                         data-bs-toggle="collapse"
                         href="#menuIbu"
                         role="button"
@@ -172,17 +174,17 @@
                         <i class="bi bi-chevron-down small"></i>
                     </a>
 
-                    <div class="collapse {{ request()->routeIs('admin.ibu.*') || request()->routeIs('admin.pemeriksaan-ibu.*') ? 'show' : '' }}"
+                    <div class="collapse {{ request()->routeIs($role.'.ibu.*') || request()->routeIs($role.'.pemeriksaan-ibu.*') ? 'show' : '' }}"
                         id="menuIbu">
                         <ul class="nav flex-column ms-4 mt-1 border-start ps-3">
                             <li>
-                                <a href="{{ route('admin.ibu.index') }}"
+                                <a href="{{ route($role.'.ibu.index') }}"
                                     class="sidebar-link">
                                     Data Ibu Hamil
                                 </a>
                             </li>
                             <li>
-                                <a href="{{ route('admin.ibu.pemeriksaan.create') }}"
+                                <a href="{{ route($role.'.ibu.pemeriksaan.create') }}"
                                     class=" sidebar-link">
                                     Pemeriksaan
                                 </a>
@@ -191,6 +193,7 @@
                     </div>
                 </li>
 
+                @if($role === 'admin')
                 <li>
                     <a href="{{ route('admin.pegawai.index') }}"
                         class="sidebar-link {{ request()->routeIs('admin.pegawai.*') ? 'active' : '' }}">
@@ -210,12 +213,19 @@
                     </a>
                 </li>
                 <li>
+                    <a href="{{ route('admin.pengumuman.index') }}"
+                        class="sidebar-link {{ request()->routeIs('admin.pengumuman.*') ? 'active' : '' }}">
+                        <i class="bi bi-megaphone"></i>
+                        Pengumuman
+                    </a>
+                </li>
+                <li>
                     <a href="#" class="sidebar-link">
                         <i class="bi bi-graph-up"></i>
                         Laporan
                     </a>
                 </li>
-
+                @endif
             </ul>
         </div>
 

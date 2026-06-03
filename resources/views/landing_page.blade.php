@@ -159,30 +159,20 @@
             <div class="row">
                 <div class="col-lg-7 mb-4">
                     <h3 class="fw-bold text-primary mb-4">Jadwal Posyandu Terdekat</h3>
+                    @foreach($jadwal as $j)
                     <div class="card border-0 shadow-sm rounded-4 mb-3">
                         <div class="card-body d-flex justify-content-between align-items-center p-4">
                             <div>
-                                <h5 class="fw-bold mb-1">Penimbangan & Imunisasi Balita</h5>
-                                <p class="text-muted mb-0 small"><i class="bi bi-clock me-1"></i> 08:00 - 11:00 WIB | <i class="bi bi-geo-alt ms-2 me-1"></i> Balai Desa Kunir</p>
+                                <h5 class="fw-bold mb-1">{{ $j->judul_kegiatan }}</h5>
+                                <p class="text-muted mb-0 small"><i class="bi bi-clock me-1"></i> {{ $j->waktu_mulai }} - {{ $j->waktu_selesai }} WIB | <i class="bi bi-geo-alt ms-2 me-1"></i> {{ $j->lokasi }}</p>
                             </div>
                             <div class="bg-primary text-white text-center rounded-3 p-2 px-3">
-                                <span class="d-block fw-bold fs-5">15</span>
-                                <span class="d-block small">Jun 26</span>
+                                <span class="d-block fw-bold fs-5">{{ $j->hari }}</span>
+                                <span class="d-block small">{{ $j->bulan_tahun }}</span>
                             </div>
                         </div>
                     </div>
-                    <div class="card border-0 shadow-sm rounded-4">
-                        <div class="card-body d-flex justify-content-between align-items-center p-4">
-                            <div>
-                                <h5 class="fw-bold mb-1">Pemeriksaan Ibu Hamil</h5>
-                                <p class="text-muted mb-0 small"><i class="bi bi-clock me-1"></i> 09:00 - 12:00 WIB | <i class="bi bi-geo-alt ms-2 me-1"></i> Polindes</p>
-                            </div>
-                            <div class="bg-primary text-white text-center rounded-3 p-2 px-3">
-                                <span class="d-block fw-bold fs-5">20</span>
-                                <span class="d-block small">Jun 26</span>
-                            </div>
-                        </div>
-                    </div>
+                    @endforeach
                 </div>
 
                 <div class="col-lg-5" id="pengumuman">

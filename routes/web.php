@@ -4,13 +4,13 @@ use App\Http\Controllers\BalitaController;
 use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\IbuHamilController;
 use App\Http\Controllers\JadwalController;
+use App\Http\Controllers\LandingPageController;
 use App\Http\Controllers\LoginController;
 use App\Http\Controllers\PegawaiController;
+use App\Http\Controllers\PengumumanController;
 use Illuminate\Support\Facades\Route;
 
-Route::get('/', function () {
-    return view('landing_page');
-});
+Route::get('/', [LandingPageController::class, 'index']);
 
 
 Route::controller(LoginController::class)->group(function () {
@@ -75,6 +75,11 @@ Route::prefix('admin')->middleware(['auth', 'role:admin'])->group(function () {
         Route::get('/layanan/view/{id}', 'view')->name('admin.layanan.view');
         Route::post('/layanan/status/{id}', 'change_status')->name('admin.layanan.change_status');
     });
+
+    // pengumuman
+    Route::controller(PengumumanController::class)->group(function () {
+        Route::get('/pengumuman', 'index')->name('admin.pengumuman.index');
+    });
 });
 
 // kader
@@ -84,12 +89,16 @@ Route::prefix('kader')->middleware(['auth', 'role:kader'])->group(function () {
     });
 
     Route::controller(BalitaController::class)->group(function () {
-        Route::get('/balita/pemeriksaan/tambah', 'create_pemeriksaan')->name('kader.balita.pemeriksaan.create');
-        Route::post('/balita/pemeriksaan/simpan', 'store_pemeriksaan')->name('kader.balita.pemeriksaan.store');
+        Route::get('/balita', 'index')->name('kader.balita.index');
+        Route::get('/balita/view/{id}', 'view')->name('kader.balita.view');
+        Route::get('/balita/pemeriksaan/create', 'create_pemeriksaan')->name('kader.balita.pemeriksaan.create');
+        Route::post('/balita/pemeriksaan/store', 'store_pemeriksaan')->name('kader.balita.pemeriksaan.store');
     });
 
     Route::controller(IbuHamilController::class)->group(function () {
-        Route::get('/ibuhamil/pemeriksaan/tambah', 'create_pemeriksaan')->name('kader.ibu.pemeriksaan.create');
-        Route::post('/ibuhamil/pemeriksaan/simpan', 'store_pemeriksaan')->name('kader.ibu.pemeriksaan.store');
+        Route::get('/ibuhamil', 'index')->name('kader.ibu.index');
+        Route::get('/ibuhamil/view/{id}', 'view')->name('kader.ibu.view');
+        Route::get('/ibuhamil/pemeriksaan/create', 'create_pemeriksaan')->name('kader.ibu.pemeriksaan.create');
+        Route::post('/ibuhamil/pemeriksaan/store', 'store_pemeriksaan')->name('kader.ibu.pemeriksaan.store');
     });
 });
