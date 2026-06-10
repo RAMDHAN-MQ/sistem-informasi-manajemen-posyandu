@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\Layanan;
+use App\Models\Pengumuman;
 use Illuminate\Http\Request;
 use Carbon\Carbon;
 
@@ -19,6 +20,8 @@ class LandingPageController extends Controller
             return $j;
         });
 
-        return view('landing_page', compact('jadwal'));
+        $pengumuman = Pengumuman::where('status', 'active')->get();
+
+        return view('landing_page', compact('jadwal', 'pengumuman'));
     }
 }
