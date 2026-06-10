@@ -79,6 +79,8 @@ Route::prefix('admin')->middleware(['auth', 'role:admin'])->group(function () {
     // pengumuman
     Route::controller(PengumumanController::class)->group(function () {
         Route::get('/pengumuman', 'index')->name('admin.pengumuman.index');
+        Route::post('/pengumuman', 'store')->name('admin.pengumuman.store');
+        Route::put('/pengumuman/{id}', 'update')->name('admin.pengumuman.update');
     });
 });
 

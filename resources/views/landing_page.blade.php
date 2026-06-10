@@ -83,9 +83,15 @@
                 @csrf
                 <div class="mb-3">
                     <label class="form-label">Username</label>
-                    <input type="text" name="username" class="form-control" value="{{ old('username') }}">
+                    <input type="text"
+                        name="username"
+                        class="form-control @error('username') is-invalid @enderror"
+                        value="{{ old('username') }}">
+
                     @error('username')
-                    <div class="text-danger">{{ $message }}</div>
+                    <div class="invalid-feedback">
+                        {{ $message }}
+                    </div>
                     @enderror
                 </div>
                 <div class="mb-3">
@@ -95,9 +101,15 @@
                             <i id="eyeIcon" class="bi bi-eye"></i>
                         </button>
                     </div>
-                    <input type="password" id="passwordInput" name="password" class="form-control">
+                    <input type="password"
+                        id="passwordInput"
+                        name="password"
+                        class="form-control @error('password') is-invalid @enderror">
+
                     @error('password')
-                    <div class="text-danger">{{ $message }}</div>
+                    <div class="invalid-feedback">
+                        {{ $message }}
+                    </div>
                     @enderror
                 </div>
                 <div class="text-center">
@@ -138,9 +150,62 @@
                 </div>
             </div>
             <div class="row align-items-center">
-                <div class="col-lg-5 text-center mb-4 mb-lg-0">
-                    <div class="bg-light p-5 rounded-4 border" style="height: 250px;">
-                        <span class="text-muted">Foto Kader / Kegiatan Posyandu</span>
+                <div class="col-lg-5 mb-4 mb-lg-0">
+                    <div id="profilCarousel" class="carousel slide" data-bs-ride="carousel">
+
+                        <div class="carousel-indicators">
+                            <button type="button" data-bs-target="#profilCarousel" data-bs-slide-to="0" class="active"></button>
+                            <button type="button" data-bs-target="#profilCarousel" data-bs-slide-to="1"></button>
+                            <button type="button" data-bs-target="#profilCarousel" data-bs-slide-to="2"></button>
+                            <button type="button" data-bs-target="#profilCarousel" data-bs-slide-to="3"></button>
+                        </div>
+
+                        <div class="carousel-inner rounded-4 shadow">
+
+                            <div class="carousel-item active">
+                                <img src="{{ asset('storage/images/a (1).jpeg') }}"
+                                    class="d-block w-100"
+                                    style="height: 300px; object-fit: cover;"
+                                    alt="Profil Posyandu 1">
+                            </div>
+
+                            <div class="carousel-item">
+                                <img src="{{ asset('storage/images/a (2).jpeg') }}"
+                                    class="d-block w-100"
+                                    style="height: 300px; object-fit: cover;"
+                                    alt="Profil Posyandu 2">
+                            </div>
+
+                            <div class="carousel-item">
+                                <img src="{{ asset('storage/images/a (3).jpeg') }}"
+                                    class="d-block w-100"
+                                    style="height: 300px; object-fit: cover;"
+                                    alt="Profil Posyandu 3">
+                            </div>
+
+                            <div class="carousel-item">
+                                <img src="{{ asset('storage/images/a (4).jpeg') }}"
+                                    class="d-block w-100"
+                                    style="height: 300px; object-fit: cover;"
+                                    alt="Profil Posyandu 4">
+                            </div>
+
+                        </div>
+
+                        <button class="carousel-control-prev"
+                            type="button"
+                            data-bs-target="#profilCarousel"
+                            data-bs-slide="prev">
+                            <span class="carousel-control-prev-icon"></span>
+                        </button>
+
+                        <button class="carousel-control-next"
+                            type="button"
+                            data-bs-target="#profilCarousel"
+                            data-bs-slide="next">
+                            <span class="carousel-control-next-icon"></span>
+                        </button>
+
                     </div>
                 </div>
                 <div class="col-lg-7">
@@ -161,7 +226,7 @@
                     <h3 class="fw-bold text-primary mb-4">Jadwal Posyandu Terdekat</h3>
                     @foreach($jadwal as $j)
                     <div class="card border-0 shadow-sm rounded-4 mb-3">
-                        <div class="card-body d-flex justify-content-between align-items-center p-4">
+                        <div class="card-body d-flex justify-content-between align-items-center p-4" style="min-height: 130px;">
                             <div>
                                 <h5 class="fw-bold mb-1">{{ $j->judul_kegiatan }}</h5>
                                 <p class="text-muted mb-0 small"><i class="bi bi-clock me-1"></i> {{ $j->waktu_mulai }} - {{ $j->waktu_selesai }} WIB | <i class="bi bi-geo-alt ms-2 me-1"></i> {{ $j->lokasi }}</p>
@@ -177,14 +242,24 @@
 
                 <div class="col-lg-5" id="pengumuman">
                     <h3 class="fw-bold text-primary mb-4">Pengumuman Kegiatan</h3>
-                    <div class="alert alert-warning border-0 shadow-sm rounded-4 p-4" role="alert">
-                        <h6 class="alert-heading fw-bold"><i class="bi bi-info-circle me-2"></i>Pemberian Vitamin A</h6>
-                        <p class="mb-0 small text-dark">Mohon kehadiran ibu balita pada bulan Agustus untuk penerimaan Vitamin A secara gratis.</p>
+                    @php
+                    $colors = [
+                    'bg-primary-subtle',
+                    'bg-success-subtle',
+                    'bg-warning-subtle',
+                    'bg-danger-subtle',
+                    'bg-info-subtle',
+                    ];
+                    @endphp
+
+                    @foreach($pengumuman as $p)
+                    <div class="alert {{ $colors[$p->id % count($colors)] }} border-0 shadow-sm rounded-4 p-4" style="min-height: 130px;">
+                        <h6 class="alert-heading fw-bold">
+                            <i class="bi bi-megaphone me-2"></i>{{ $p->judul }}
+                        </h6>
+                        <p class="mb-0 small text-dark">{{ $p->keterangan }}</p>
                     </div>
-                    <div class="alert alert-info border-0 shadow-sm rounded-4 p-4 mt-3" role="alert">
-                        <h6 class="alert-heading fw-bold"><i class="bi bi-megaphone me-2"></i>Kelas Ibu Hamil Baru</h6>
-                        <p class="mb-0 small text-dark">Pendaftaran kelas ibu hamil untuk trimester 1 sudah dibuka. Silakan hubungi kader.</p>
-                    </div>
+                    @endforeach
                 </div>
             </div>
         </div>
@@ -295,9 +370,12 @@
 
     @if ($errors->any())
     <script>
-        document.addEventListener("DOMContentLoaded", function() {
-            const loginSidebar = new bootstrap.Offcanvas('#loginSidebar');
-            loginSidebar.show();
+        document.addEventListener('DOMContentLoaded', function() {
+            const offcanvasElement = document.getElementById('loginSidebar');
+
+            const offcanvas = new bootstrap.Offcanvas(offcanvasElement);
+
+            offcanvas.show();
         });
     </script>
     @endif
