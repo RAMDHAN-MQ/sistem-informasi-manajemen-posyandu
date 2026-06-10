@@ -6,7 +6,7 @@ use Illuminate\Database\Eloquent\Model;
 
 class PemeriksaanIbuHamil extends Model
 {
-     protected $table = 'pemeriksaan_ibuhamil';
+    protected $table = 'pemeriksaan_ibuhamil';
 
     protected $fillable = [
         'ibuhamil_id',
@@ -15,6 +15,7 @@ class PemeriksaanIbuHamil extends Model
         'tensi',
         'berat',
         'pemeriksaan_darah',
+        'tanggal_pemeriksaan',
     ];
 
     public function ibuhamil()

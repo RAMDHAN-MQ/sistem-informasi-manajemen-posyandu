@@ -21,9 +21,20 @@ $role = auth()->user()->role;
 </a>
 
 <div class="row my-4">
-    <div class="col-12">
-        <div class="card p-4">
-            <h2 class="fw-bold">{{ $ibuhamil->nama }}</h2>
+    <div class="col-md-6">
+        <div class="card p-4 h-100">
+            <div class="d-flex flex-column align-items-center">
+                <div class="rounded-circle d-flex align-items-center justify-content-center"
+                    style="width: 80px; height: 80px; background-color: #ff69b4;">
+                    <i class="fa-solid fa-person-pregnant text-white fs-1"></i>
+                </div>
+
+                <h4 class="fw-bold mt-3">{{ $ibuhamil->nama }}</h4>
+
+                <h5 class="text-muted">
+                    <i class="bi bi-person-fill"></i> {{$umur}} Tahun
+                </h5>
+            </div>
             <table class="table">
                 <tr>
                     <th style="width: 200px;">NIK</th>
@@ -44,45 +55,53 @@ $role = auth()->user()->role;
             </table>
         </div>
     </div>
-</div>
 
-
-<div class="row my-4">
-    <div class="col-12">
-        <div class="card p-4">
-            <table class="table table-hover">
-                <thead class="table-primary">
-                    <tr>
-                        <th>NO</th>
-                        <th>HPHT</th>
-                        <th>HPL</th>
-                        <th>Tensi</th>
-                        <th>Berat</th>
-                        <th>PEMERIKSAAN DARAH</th>
-                        <th>TANGGAL PERIKSA</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    @forelse($pemeriksaan as $data)
-                    <tr>
-                        <td>{{ $loop->iteration }}</td>
-                        <td>{{ $data->hpht }}</td>
-                        <td>{{ $data->hpl }}</td>
-                        <td>{{ $data->tensi }} mmHg</td>
-                        <td>{{ $data->berat }} kg</td>
-                        <td>{{ $data->pemeriksaan_darah }}</td>
-                        <td>{{ $data->created_at }}</td>
-                    </tr>
-                    @empty
-                    <tr>
-                        <td colspan="4" class="text-center text-muted">
-                            Belum ada data pemeriksaan
-                        </td>
-                    </tr>
-                    @endforelse
-                </tbody>
+    <div class="col-md-6">
+        <div class="card p-4 h-100">
+            <h5 class="fw-bold mb-3">Data Pemeriksaan Terakhir</h5>
+            <table class="table">
+                @if($pemeriksaan)
+                <tr>
+                    <th>HPHT</th>
+                    <td class="fw-bold">{{ \Carbon\Carbon::parse($pemeriksaan->hpht)->translatedFormat('d F Y') }}</td>
+                </tr>
+                <tr>
+                    <th>HPL</th>
+                    <td class="fw-bold">{{ \Carbon\Carbon::parse($pemeriksaan->hpl)->translatedFormat('d F Y') }}</td>
+                </tr>
+                <tr>
+                    <th>Tensi</th>
+                    <td class="fw-bold">{{ $pemeriksaan->tensi }} mmHg</td>
+                </tr>
+                <tr>
+                    <th>Berat</th>
+                    <td class="fw-bold">{{ $pemeriksaan->berat }} kg</td>
+                </tr>
+                <tr>
+                    <th>Pemeriksaan Darah</th>
+                    <td class="fw-bold">{{ $pemeriksaan->pemeriksaan_darah }}</td>
+                </tr>
+                <tr>
+                    <th>Tanggal Periksa</th>
+                    <td class="fw-bold">{{ \Carbon\Carbon::parse($pemeriksaan->tanggal_pemeriksaan)->translatedFormat('d F Y') }}</td>
+                </tr>
             </table>
+            @else
+            <div class="d-flex flex-column justify-content-center align-items-center text-center"
+                style="min-height: 300px;">
+                <i class="fa-solid fa-file-medical fs-1 text-muted mb-3"></i>
+
+                <h6 class="fw-bold">Belum Ada Data Pemeriksaan</h6>
+
+                <a href="{{ route($role.'.ibu.pemeriksaan.create', $ibuhamil->id) }}"
+                    class="btn btn-primary">
+                    <i class="fa-solid fa-plus me-1"></i>
+                    Tambah Pemeriksaan
+                </a>
+            </div>
+            @endif
         </div>
     </div>
 </div>
+
 @endsection

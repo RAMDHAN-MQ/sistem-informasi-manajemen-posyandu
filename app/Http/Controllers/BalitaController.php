@@ -5,10 +5,10 @@ namespace App\Http\Controllers;
 use App\Models\Balita;
 use App\Models\PemeriksaanBalita;
 use Illuminate\Http\Request;
+use Illuminate\Support\Carbon;
 
 class BalitaController extends Controller
 {
-    // --- FUNGSI DASAR ---
     public function index()
     {
         $balita = Balita::latest()->get();
@@ -30,7 +30,6 @@ class BalitaController extends Controller
             'tgl_lahir' => 'required',
             'alamat' => 'required',
         ]);
-
         Balita::create($request->all());
         return redirect()->route('admin.balita.index')->with('success', 'Data balita berhasil ditambahkan');
     }
@@ -57,10 +56,18 @@ class BalitaController extends Controller
     {
         $balita = Balita::findOrFail($id);
         $pemeriksaan = PemeriksaanBalita::where('balita_id', $id)->get();
-        return view('admin.balita.view', compact('balita', 'pemeriksaan'));
+        $umur = Carbon::parse($balita->tgl_lahir)->age;
+
+        $chartData = $pemeriksaan->sortBy('tanggal_pemeriksaan')->values();
+        $labels = $chartData->map(function ($item) {
+            return Carbon::parse($item->tanggal_pemeriksaan)->translatedFormat('d M Y');
+        });
+        $beratData = $chartData->pluck('berat');
+        $tinggiData = $chartData->pluck('tinggi');
+
+        return view('admin.balita.view', compact('balita', 'pemeriksaan', 'umur', 'labels', 'beratData', 'tinggiData'));
     }
 
-    // --- FUNGSI PEMERIKSAAN ---
     public function create_pemeriksaan()
     {
         $balita = Balita::all();
@@ -69,32 +76,34 @@ class BalitaController extends Controller
 
     public function store_pemeriksaan(Request $request)
     {
-        // 1. Validasi
         $request->validate([
             'balita_id' => 'required',
             'berat' => 'required',
             'tinggi' => 'required',
             'tanggal_pemeriksaan' => 'required',
+            'imunisasi' => 'required',
         ]);
 
-        // 2. Mengolah Checklist Imunisasi (Menghindari error NULL)
-        $imunisasiData = $request->has('imunisasi')
-            ? implode(', ', $request->imunisasi)
-            : 'Tidak ada';
 
-        // 3. Simpan ke Database
+        $catatanGabungan = '';
+        if ($request->catatan_0_11) {
+            $catatanGabungan .= $request->catatan_0_11 . " ";
+        }
+        if ($request->catatan_18_24) {
+            $catatanGabungan .= $request->catatan_18_24;
+        }
+
+        // Simpan ke database
         PemeriksaanBalita::create([
             'balita_id'           => $request->balita_id,
             'berat'               => $request->berat,
             'tinggi'              => $request->tinggi,
             'tanggal_pemeriksaan' => $request->tanggal_pemeriksaan,
-            'riwayat_kesehatan'   => $imunisasiData,
+            'riwayat_kesehatan'   => $request->imunisasi,
+            'catatan'             => trim($catatanGabungan) ?: null,
         ]);
 
-        // 4. Redirect dengan pesan sukses
-        $role = auth()->user()->role;
-
-        return redirect()->route($role.'.balita.pemeriksaan.create')
+        return redirect()->route(auth()->user()->role . '.balita.pemeriksaan.create')
             ->with('success', 'Pemeriksaan berhasil disimpan!');
     }
 }

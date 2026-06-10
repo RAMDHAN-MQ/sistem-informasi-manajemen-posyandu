@@ -9,9 +9,7 @@
 @endsection
 
 @section('content')
-@php
-$role = auth()->user()->role;
-@endphp
+@php $role = auth()->user()->role; @endphp
 <div class="row">
     <div class="col-12">
         <div class="card border-0 shadow-sm rounded-3">
@@ -56,32 +54,45 @@ $role = auth()->user()->role;
 
                     <div class="row mb-4">
                         <div class="col-md-12">
-                            <label class="form-label fw-semibold">Checklist Imunisasi Wajib</label>
+                            <label class="form-label fw-semibold">Pilih Imunisasi & Catatan <span class="text-danger">*</span></label>
                             <div class="row g-3">
-                                @php
-                                $imunisasiData = [
-                                'Usia 0-11 Bulan' => ['HB-0', 'Polio 1,2,3,4', 'BCG', 'DPT-HB-Hib 1,2,3', 'PCV 1,2,3', 'Polio Suntik (IPV)', 'MR'],
-                                'Usia 18-24 Bulan' => ['DPT-HB-Hib Booster', 'MR Booster', 'JE (dosis 2)']
-                                ];
-                                @endphp
-
-                                @foreach($imunisasiData as $kategori => $list)
                                 <div class="col-md-6">
                                     <div class="card border-0 bg-light p-3 h-100">
-                                        <h6 class="fw-bold text-primary mb-2 border-bottom pb-2">{{ $kategori }}</h6>
+                                        <h6 class="fw-bold text-primary mb-2 border-bottom pb-2">Usia 0-11 Bulan</h6>
                                         <div class="row">
-                                            @foreach($list as $item)
+                                            @foreach(['HB-0', 'Polio 1,2,3,4', 'BCG', 'DPT-HB-Hib 1,2,3', 'PCV 1,2,3', 'Polio Suntik (IPV)', 'MR'] as $item)
                                             <div class="col-md-6">
-                                                <div class="form-check">
-                                                    <input class="form-check-input" type="checkbox" name="imunisasi[]" value="{{ $item }}" id="imun_{{ Str::slug($item) }}">
-                                                    <label class="form-check-label" for="imun_{{ Str::slug($item) }}" style="font-size: 0.85rem;">{{ $item }}</label>
+                                                <div class="form-check mb-2">
+                                                    <input class="form-check-input" type="radio" name="imunisasi" value="{{ $item }}" id="imun_{{ Str::slug($item) }}" required>
+                                                    <label class="form-check-label" style="font-size: 0.85rem;" for="imun_{{ Str::slug($item) }}">{{ $item }}</label>
                                                 </div>
                                             </div>
                                             @endforeach
                                         </div>
+                                        <div class="mt-2">
+                                            <textarea class="form-control form-control-sm" name="catatan_0_11" rows="2" placeholder="Tulis catatan (opsional)..."></textarea>
+                                        </div>
                                     </div>
                                 </div>
-                                @endforeach
+
+                                <div class="col-md-6">
+                                    <div class="card border-0 bg-light p-3 h-100">
+                                        <h6 class="fw-bold text-primary mb-2 border-bottom pb-2">Usia 18-24 Bulan</h6>
+                                        <div class="row">
+                                            @foreach(['DPT-HB-Hib Booster', 'MR Booster', 'JE (dosis 2)'] as $item)
+                                            <div class="col-md-6">
+                                                <div class="form-check mb-2">
+                                                    <input class="form-check-input" type="radio" name="imunisasi" value="{{ $item }}" id="imun_{{ Str::slug($item) }}" required>
+                                                    <label class="form-check-label" style="font-size: 0.85rem;" for="imun_{{ Str::slug($item) }}">{{ $item }}</label>
+                                                </div>
+                                            </div>
+                                            @endforeach
+                                        </div>
+                                        <div class="mt-2">
+                                            <textarea class="form-control form-control-sm" name="catatan_18_24" rows="2" placeholder="Tulis catatan (opsional)..."></textarea>
+                                        </div>
+                                    </div>
+                                </div>
                             </div>
                         </div>
                     </div>
@@ -110,7 +121,6 @@ $role = auth()->user()->role;
             if (result.isConfirmed) form.submit();
         });
     });
-
     $(document).ready(function() {
         $('.select2').select2({
             theme: 'bootstrap-5',
@@ -118,7 +128,6 @@ $role = auth()->user()->role;
         });
     });
 </script>
-
 @if(session('success'))
 <script>
     Swal.fire({

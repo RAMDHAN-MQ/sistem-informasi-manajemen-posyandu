@@ -20,7 +20,12 @@
         <div class="card p-4">
             <div class="d-flex justify-content-start mb-4 align-items-center">
                 @if ($pegawai->foto)
-                <img src="{{ Storage::url($pegawai->foto) }}" alt="Foto {{ $pegawai->name }}" class="rounded-circle me-3" style="max-height: 100px; max-width: 100px; object-fit: cover;">
+                <img src="{{ Storage::url($pegawai->foto) }}"
+                    alt="Foto {{ $pegawai->name }}"
+                    class="rounded-circle me-3"
+                    width="100"
+                    height="100"
+                    style="object-fit: cover;">
                 @endif
                 <div class="">
                     <h2 class="fw-bold">{{ $pegawai->name }}</h2>

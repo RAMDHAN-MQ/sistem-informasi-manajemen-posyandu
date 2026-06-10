@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\IbuHamil;
 use App\Models\PemeriksaanIbuHamil;
 use Illuminate\Http\Request;
+use Illuminate\Support\Carbon;
 
 class IbuHamilController extends Controller
 {
@@ -45,6 +46,11 @@ class IbuHamilController extends Controller
         $ibuhamil = IbuHamil::findOrFail($id);
         return view('admin.ibu.edit', compact('ibuhamil'));
     }
+    public function create_pemeriksaan()
+    {
+        $ibuhamil = IbuHamil::all();
+        return view('admin.ibu.pemeriksaan', compact('ibuhamil'));
+    }
 
     public function update(Request $request, $id)
     {
@@ -64,28 +70,22 @@ class IbuHamilController extends Controller
     public function view($id)
     {
         $ibuhamil = IbuHamil::findOrFail($id);
-        $pemeriksaan = PemeriksaanIbuHamil::where('ibuhamil_id', $id)->get();
-        return view('admin.ibu.view', compact('ibuhamil', 'pemeriksaan'));
-    }
-
-    public function create_pemeriksaan()
-    {
-        $ibuhamil = IbuHamil::all();
-        return view('admin.ibu.pemeriksaan', compact('ibuhamil'));
+        $pemeriksaan = PemeriksaanIbuHamil::where('ibuhamil_id', $id)->latest()->first();
+        $umur = Carbon::parse($ibuhamil->tgl_lahir)->age;
+        return view('admin.ibu.view', compact('ibuhamil', 'pemeriksaan', 'umur'));
     }
 
     public function store_pemeriksaan(Request $request)
     {
         $request->validate([
             'ibuhamil_id' => 'required',
-            'hpht' => 'required',
-            'hpl' => 'required',
+            'hpht' => 'required|date',
+            'hpl' => 'required|date',
             'tensi' => 'required',
             'berat' => 'required',
             'pemeriksaan_darah' => 'required',
         ]);
 
-        // Perbaikan: Menggunakan $request->hpl (bukan hpht)
         PemeriksaanIbuHamil::create([
             'ibuhamil_id'       => $request->ibuhamil_id,
             'hpht'              => $request->hpht,
@@ -93,10 +93,9 @@ class IbuHamilController extends Controller
             'tensi'             => $request->tensi,
             'berat'             => $request->berat,
             'pemeriksaan_darah' => $request->pemeriksaan_darah,
+            'tanggal_pemeriksaan' => now(),
         ]);
 
-        $role = auth()->user()->role;
-
-        return redirect()->route($role . '.ibu.pemeriksaan.create')->with('success', 'Pemeriksaan berhasil disimpan');
+        return redirect()->route('admin.ibu.pemeriksaan.create')->with('success', 'Pemeriksaan berhasil disimpan');
     }
 }

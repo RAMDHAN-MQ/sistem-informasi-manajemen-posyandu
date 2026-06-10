@@ -30,7 +30,7 @@ $role = auth()->user()->role;
                     <tr>
                         <th>NIK</th>
                         <th>NAMA</th>
-                        <th>AKSI</th>
+                        <th class="text-center">AKSI</th>
                     </tr>
                 </thead>
                 <tbody>

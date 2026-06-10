@@ -38,7 +38,7 @@
                         <th>USER</th>
                         <th>USERNAME</th>
                         <th>ROLE</th>
-                        <th>AKSI</th>
+                        <th class="text-center">AKSI</th>
                     </tr>
                 </thead>
                 <tbody>

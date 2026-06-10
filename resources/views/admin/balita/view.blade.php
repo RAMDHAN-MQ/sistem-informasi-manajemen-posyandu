@@ -21,9 +21,20 @@ $role = auth()->user()->role;
 </a>
 
 <div class="row my-4">
-    <div class="col-12">
-        <div class="card p-4">
-            <h2 class="fw-bold">{{ $balita->nama }}</h2>
+    <div class="col-md-5 mb-4">
+        <div class="card p-4 h-100">
+            <div class="d-flex flex-column align-items-center">
+                <div class="rounded-circle d-flex align-items-center justify-content-center bg-primary"
+                    style="width: 80px; height: 80px;">
+                    <i class="fa-solid fa-baby text-white fs-1"></i>
+                </div>
+
+                <h4 class="fw-bold mt-3">{{ $balita->nama }}</h4>
+
+                <h5 class="text-muted">
+                    <i class="bi bi-person-fill"></i> {{$umur}} Tahun
+                </h5>
+            </div>
             <table class="table">
                 <tr>
                     <th style="width: 200px;">NIK</th>
@@ -39,7 +50,7 @@ $role = auth()->user()->role;
                 </tr>
                 <tr>
                     <th>Tanggal Lahir</th>
-                    <td class="fw-bold">{{ $balita->tgl_lahir }}</td>
+                    <td class="fw-bold">{{ \Carbon\Carbon::parse($balita->tgl_lahir)->translatedFormat('d F Y') }}</td>
                 </tr>
                 <tr>
                     <th>Alamat</th>
@@ -48,49 +59,159 @@ $role = auth()->user()->role;
             </table>
         </div>
     </div>
+
+    <div class="col-md-7 mb-4">
+        <div class="card p-4 h-100">
+            <h5 class="fw-bold mb-3">Grafik Pertumbuhan Balita</h6>
+                <div style="position: relative; height: 100%; width: 100%;">
+                    <canvas id="pertumbuhanChart"></canvas>
+                </div>
+        </div>
+    </div>
 </div>
 
 <div class="row my-4">
     <div class="col-12">
         <div class="card p-4">
-            <table class="table table-hover">
-                <thead class="table-primary">
-                    <tr>
-                        <th>NO</th>
-                        <th>BERAT</th>
-                        <th>TINGGI</th>
-                        <th>RIWAYAT KESEHATAN (IMUNISASI)</th>
-                        <th>TANGGAL PERIKSA</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    @forelse($pemeriksaan as $data)
-                    <tr>
-                        <td>{{ $loop->iteration }}</td>
-                        <td>{{ $data->berat }} kg</td>
-                        <td>{{ $data->tinggi }} cm</td>
-                        <td>
-                            @if($data->riwayat_kesehatan == 'Tidak ada' || empty($data->riwayat_kesehatan))
-                            <span class="text-muted small">Tidak ada</span>
-                            @else
-                            {{-- Memecah string menjadi array berdasarkan koma untuk dijadikan badge --}}
-                            @foreach(explode(', ', $data->riwayat_kesehatan) as $imun)
-                            <span class="badge bg-info text-dark mb-1">{{ $imun }}</span>
-                            @endforeach
-                            @endif
-                        </td>
-                        <td>{{ \Carbon\Carbon::parse($data->tanggal_pemeriksaan)->translatedFormat('d F Y') }}</td>
-                    </tr>
-                    @empty
-                    <tr>
-                        <td colspan="5" class="text-center text-muted">
-                            Belum ada data pemeriksaan
-                        </td>
-                    </tr>
-                    @endforelse
-                </tbody>
-            </table>
+            <h5 class="fw-bold mb-3">Riwayat Pemeriksaan</h5>
+            <div class="table-responsive">
+                <table class="table table-hover align-middle">
+                    <thead class="table-primary">
+                        <tr>
+                            <th>NO</th>
+                            <th>BERAT</th>
+                            <th>TINGGI</th>
+                            <th>RIWAYAT KESEHATAN (IMUNISASI)</th>
+                            <th>TANGGAL PERIKSA</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @forelse($pemeriksaan as $data)
+                        <tr>
+                            <td>{{ $loop->iteration }}</td>
+                            <td><span class="fw-bold">{{ $data->berat }}</span> kg</td>
+                            <td><span class="fw-bold">{{ $data->tinggi }}</span> cm</td>
+                            <td>
+                                {{-- Badge Imunisasi --}}
+                                <span class="badge bg-info text-dark mb-1">
+                                    {{ str_replace(['Imunisasi: ', '.'], '', $data->riwayat_kesehatan) }}
+                                </span>
+
+                                {{-- Tampilkan Catatan --}}
+                                @if(!empty($data->catatan))
+                                <div class="mt-2 text-muted small border-top pt-1">
+                                    <strong>Catatan:</strong><br>
+                                    {{ $data->catatan }}
+                                </div>
+                                @endif
+                            </td>
+                            <td>{{ \Carbon\Carbon::parse($data->tanggal_pemeriksaan)->translatedFormat('d F Y') }}</td>
+                        </tr>
+                        @empty
+                        <tr>
+                            <td colspan="5" class="text-center text-muted py-4">
+                                <i class="fa-solid fa-file-medical fs-1 text-muted mb-3"></i>
+                                <h6 class="fw-bold">Belum Ada Data Pemeriksaan</h6>
+                                <a href="{{ route($role.'.balita.pemeriksaan.create', $balita->id) }}"
+                                    class="btn btn-primary">
+                                    <i class="fa-solid fa-plus me-1"></i>
+                                    Tambah Pemeriksaan
+                                </a>
+                            </td>
+                        </tr>
+                        @endforelse
+                    </tbody>
+                </table>
+            </div>
         </div>
     </div>
 </div>
 @endsection
+
+@push('scripts')
+<script>
+    document.addEventListener("DOMContentLoaded", function() {
+        const ctx = document.getElementById('pertumbuhanChart').getContext('2d');
+        
+        // Data dari PHP
+        const labels = {!! $labels !!};
+        const beratData = {!! $beratData !!};
+        const tinggiData = {!! $tinggiData !!};
+
+        new Chart(ctx, {
+            type: 'line',
+            data: {
+                labels: labels,
+                datasets: [
+                    {
+                        label: 'Berat Badan (kg)',
+                        data: beratData,
+                        borderColor: '#dc3545', // Warna merah
+                        backgroundColor: 'rgba(220, 53, 69, 0.1)',
+                        borderWidth: 2,
+                        pointBackgroundColor: '#dc3545',
+                        yAxisID: 'y', // Menggunakan skala kiri
+                        tension: 0.3,
+                        fill: true
+                    },
+                    {
+                        label: 'Tinggi Badan (cm)',
+                        data: tinggiData,
+                        borderColor: '#0d6efd', // Warna biru
+                        backgroundColor: 'rgba(13, 110, 253, 0.1)',
+                        borderWidth: 2,
+                        pointBackgroundColor: '#0d6efd',
+                        yAxisID: 'y1', // Menggunakan skala kanan
+                        tension: 0.3,
+                        fill: true
+                    }
+                ]
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                interaction: {
+                    mode: 'index',
+                    intersect: false,
+                },
+                plugins: {
+                    tooltip: {
+                        callbacks: {
+                            label: function(context) {
+                                let label = context.dataset.label || '';
+                                if (label) {
+                                    label += ': ';
+                                }
+                                if (context.parsed.y !== null) {
+                                    label += context.parsed.y + (context.datasetIndex === 0 ? ' kg' : ' cm');
+                                }
+                                return label;
+                            }
+                        }
+                    }
+                },
+                scales: {
+                    x: {
+                        grid: { display: false }
+                    },
+                    y: {
+                        type: 'linear',
+                        display: true,
+                        position: 'left',
+                        title: { display: true, text: 'Berat Badan (kg)' },
+                        min: 0
+                    },
+                    y1: {
+                        type: 'linear',
+                        display: true,
+                        position: 'right',
+                        title: { display: true, text: 'Tinggi Badan (cm)' },
+                        grid: { drawOnChartArea: false }, // Jangan timpa garis grid dari Y utama
+                        min: 0
+                    }
+                }
+            }
+        });
+    });
+</script>
+@endpush

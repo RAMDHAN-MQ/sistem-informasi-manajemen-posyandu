@@ -31,7 +31,7 @@ $role = auth()->user()->role;
                         <th>NIK</th>
                         <th>NAMA</th>
                         <th>NAMA ORANG TUA</th>
-                        <th class="text-center">Aksi</th>
+                        <th class="text-center">AKSI</th>
                     </tr>
                 </thead>
                 <tbody>
