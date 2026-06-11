@@ -8,3 +8,4 @@
 6. php artisan migrate
 7. php artisan storage:link
 8. php artisan serve
+9. selesai
