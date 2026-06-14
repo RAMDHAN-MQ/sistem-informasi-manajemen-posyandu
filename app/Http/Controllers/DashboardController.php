@@ -69,9 +69,4 @@ class DashboardController extends Controller
             'grafikIbuHamil',
         ));
     }
-
-    public function dashboard_kader()
-    {
-        return view('pages.dashboard');
-    }
 }

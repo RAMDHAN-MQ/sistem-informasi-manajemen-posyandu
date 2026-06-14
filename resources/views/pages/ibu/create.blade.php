@@ -11,7 +11,11 @@
 
 @section('content')
 
-<a href="{{ route('admin.ibu.index') }}" class="btn btn-light border">
+@php
+$role = auth()->user()->role;
+@endphp
+
+<a href="{{ route($role.'.ibu.index') }}" class="btn btn-light border">
     <i class="bi bi-arrow-left-short"></i>
     Kembali
 </a>
@@ -23,7 +27,7 @@
                 Tambah Data Ibu Hamil
             </div>
             <div class="card-body">
-                <form id="formIbuHamil" action="{{ route('admin.ibu.store') }}" method="POST">
+                <form id="formIbuHamil" action="{{ route($role.'.ibu.store') }}" method="POST">
                     @csrf
                     <div class="row">
                         <div class="col-6">

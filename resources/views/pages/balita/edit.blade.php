@@ -11,7 +11,11 @@
 
 @section('content')
 
-<a href="{{ route('admin.balita.index') }}" class="btn btn-light border">
+@php
+$role = auth()->user()->role;
+@endphp
+
+<a href="{{ route($role.'.balita.index') }}" class="btn btn-light border">
     <i class="bi bi-arrow-left-short"></i>
     Kembali
 </a>
@@ -23,7 +27,7 @@
                 Update Data Balita
             </div>
             <div class="card-body">
-                <form id="formBalita" action="{{ route('admin.balita.update', $balita->id) }}" method="POST">
+                <form id="formBalita" action="{{ route($role.'.balita.update', $balita->id) }}" method="POST">
                     @csrf
                     @method('PUT')
                     <div class="row">

@@ -18,7 +18,7 @@ $role = auth()->user()->role;
     <h2 class="fw-bold">Data Balita</h2>
     <div class="d-flex">
         <button class="btn btn-light me-2 border"><i class="bi bi-download me-2"></i>Export</button>
-        <a href="{{ route('admin.balita.create') }}" class="btn btn-primary"><i class="bi bi-plus me-2"></i>Tambah</a>
+        <a href="{{ route($role.'.balita.create') }}" class="btn btn-primary"><i class="bi bi-plus me-2"></i>Tambah</a>
     </div>
 </div>
 
@@ -42,9 +42,8 @@ $role = auth()->user()->role;
                         <td>{{$data->nama_ortu}}</td>
                         <td class="text-center">
                             <a href="{{ route($role.'.balita.view', $data->id) }}"><i class="bi bi-eye me-2"></i></a>
-                            @if(auth()->user()->role === 'admin')
-                            <a href="{{ route('admin.balita.edit', $data->id) }}"><i class="bi bi-pencil me-2"></i></a>
-                            <form action="{{ route('admin.balita.destroy', $data->id) }}"
+                            <a href="{{ route($role.'.balita.edit', $data->id) }}"><i class="bi bi-pencil me-2"></i></a>
+                            <form action="{{ route($role.'.balita.destroy', $data->id) }}"
                                 method="POST"
                                 class="d-inline formDelete">
 
@@ -56,7 +55,6 @@ $role = auth()->user()->role;
                                 </button>
 
                             </form>
-                            @endif
                         </td>
                     </tr>
                     @endforeach

@@ -33,13 +33,13 @@ class IbuHamilController extends Controller
 
         IbuHamil::create($request->all());
 
-        return redirect()->route('admin.ibu.index')->with('success', 'Data ibu hamil berhasil ditambahkan');
+        return redirect()->route(auth()->user()->role . '.ibu.index')->with('success', 'Data ibu hamil berhasil ditambahkan');
     }
 
     public function destroy($id)
     {
         IbuHamil::findOrFail($id)->delete();
-        return redirect()->route('admin.ibu.index')->with('success', 'Data ibu hamil berhasil dihapus');
+        return redirect()->route(auth()->user()->role . '.ibu.index')->with('success', 'Data ibu hamil berhasil dihapus');
     }
 
     public function edit($id)
@@ -60,7 +60,7 @@ class IbuHamilController extends Controller
 
         IbuHamil::findOrFail($id)->update($request->all());
 
-        return redirect()->route('admin.ibu.index')->with('success', 'Data ibu hamil berhasil diupdate');
+        return redirect()->route(auth()->user()->role . '.ibu.index')->with('success', 'Data ibu hamil berhasil diupdate');
     }
 
     public function view($id)
@@ -103,7 +103,7 @@ class IbuHamilController extends Controller
             'tanggal_periksa'   => now(),
         ]);
 
-        return redirect()->route('admin.ibu.pemeriksaan.create')->with('success', 'Pemeriksaan berhasil disimpan');
+        return redirect()->route(auth()->user()->role . '.ibu.pemeriksaan.create')->with('success', 'Pemeriksaan berhasil disimpan');
     }
 
     public function create_tensi()
@@ -126,6 +126,6 @@ class IbuHamilController extends Controller
             'tanggal_periksa'   => $request->tanggal_periksa,
         ]);
 
-        return redirect()->route('admin.ibu.tensi.create')->with('success', 'Tensi berhasil disimpan');
+        return redirect()->route(auth()->user()->role . '.ibu.tensi.create')->with('success', 'Tensi berhasil disimpan');
     }
 }

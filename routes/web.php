@@ -101,20 +101,37 @@ Route::prefix('admin')->middleware(['auth', 'role:admin'])->group(function () {
 // kader
 Route::prefix('kader')->middleware(['auth', 'role:kader'])->group(function () {
     Route::controller(DashboardController::class)->group(function () {
-        Route::get('/dashboard', 'dashboard_kader')->name('kader.dashboard');
+        Route::get('/dashboard', 'dashboard')->name('kader.dashboard');
     });
 
+    // balita
     Route::controller(BalitaController::class)->group(function () {
         Route::get('/balita', 'index')->name('kader.balita.index');
+        Route::get('/balita/create', 'create')->name('kader.balita.create');
+        Route::post('/balita/store', 'store')->name('kader.balita.store');
+        Route::delete('/balita/destroy/{id}', 'destroy')->name('kader.balita.destroy');
+        Route::get('/balita/edit/{id}', 'edit')->name('kader.balita.edit');
+        Route::put('/balita/update/{id}', 'update')->name('kader.balita.update');
         Route::get('/balita/view/{id}', 'view')->name('kader.balita.view');
+
         Route::get('/balita/pemeriksaan/create', 'create_pemeriksaan')->name('kader.balita.pemeriksaan.create');
         Route::post('/balita/pemeriksaan/store', 'store_pemeriksaan')->name('kader.balita.pemeriksaan.store');
     });
 
+    // ibu hamil
     Route::controller(IbuHamilController::class)->group(function () {
         Route::get('/ibuhamil', 'index')->name('kader.ibu.index');
+        Route::get('/ibuhamil/create', 'create')->name('kader.ibu.create');
+        Route::post('/ibuhamil/store', 'store')->name('kader.ibu.store');
+        Route::delete('/ibuhamil/destroy/{id}', 'destroy')->name('kader.ibu.destroy');
+        Route::get('/ibuhamil/edit/{id}', 'edit')->name('kader.ibu.edit');
+        Route::put('/ibuhamil/update/{id}', 'update')->name('kader.ibu.update');
         Route::get('/ibuhamil/view/{id}', 'view')->name('kader.ibu.view');
+
         Route::get('/ibuhamil/pemeriksaan/create', 'create_pemeriksaan')->name('kader.ibu.pemeriksaan.create');
         Route::post('/ibuhamil/pemeriksaan/store', 'store_pemeriksaan')->name('kader.ibu.pemeriksaan.store');
+
+        Route::get('/ibuhamil/tensi/create', 'create_tensi')->name('kader.ibu.tensi.create');
+        Route::post('/ibuhamil/tensi/store', 'store_tensi')->name('kader.ibu.tensi.store');
     });
 });

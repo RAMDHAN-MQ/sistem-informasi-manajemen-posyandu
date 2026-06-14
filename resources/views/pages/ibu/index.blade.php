@@ -18,7 +18,7 @@ $role = auth()->user()->role;
     <h2 class="fw-bold">Data Ibu Hamil</h2>
     <div class="d-flex">
         <button class="btn btn-light me-2 border">Export</button>
-        <a href="{{ route('admin.ibu.create') }}" class="btn btn-primary">+ Tambah</a>
+        <a href="{{ route($role.'.ibu.create') }}" class="btn btn-primary">+ Tambah</a>
     </div>
 </div>
 
@@ -40,9 +40,8 @@ $role = auth()->user()->role;
                         <td>{{ $data->nama }}</td>
                         <td class="text-center">
                             <a href="{{ route($role.'.ibu.view', $data->id) }}"><i class="bi bi-eye me-2"></i></a>
-                            @if(auth()->user()->role === 'admin')
-                            <a href="{{ route('admin.ibu.edit', $data->id) }}"><i class="bi bi-pencil me-2"></i></a>
-                            <form action="{{ route('admin.ibu.destroy', $data->id) }}"
+                            <a href="{{ route($role.'.ibu.edit', $data->id) }}"><i class="bi bi-pencil me-2"></i></a>
+                            <form action="{{ route($role.'.ibu.destroy', $data->id) }}"
                                 method="POST"
                                 class="d-inline formDelete">
                                 @csrf
@@ -51,7 +50,6 @@ $role = auth()->user()->role;
                                     <i class="bi bi-trash"></i>
                                 </button>
                             </form>
-                            @endif
                         </td>
                     </tr>
                     @endforeach

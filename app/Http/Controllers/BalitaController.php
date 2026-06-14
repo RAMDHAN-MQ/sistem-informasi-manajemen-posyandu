@@ -32,13 +32,13 @@ class BalitaController extends Controller
             'alamat' => 'required',
         ]);
         Balita::create($request->all());
-        return redirect()->route('admin.balita.index')->with('success', 'Data balita berhasil ditambahkan');
+        return redirect()->route(auth()->user()->role . '.balita.index')->with('success', 'Data balita berhasil ditambahkan');
     }
 
     public function destroy($id)
     {
         Balita::findOrFail($id)->delete();
-        return redirect()->route('admin.balita.index')->with('success', 'Data balita berhasil dihapus');
+        return redirect()->route(auth()->user()->role . '.balita.index')->with('success', 'Data balita berhasil dihapus');
     }
 
     public function edit($id)
@@ -50,7 +50,7 @@ class BalitaController extends Controller
     public function update(Request $request, $id)
     {
         Balita::findOrFail($id)->update($request->all());
-        return redirect()->route('admin.balita.index')->with('success', 'Data balita berhasil diupdate');
+        return redirect()->route(auth()->user()->role . '.balita.index')->with('success', 'Data balita berhasil diupdate');
     }
 
     public function view($id)
