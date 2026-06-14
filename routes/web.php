@@ -3,6 +3,7 @@
 use App\Http\Controllers\BalitaController;
 use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\IbuHamilController;
+use App\Http\Controllers\ImunisasiController;
 use App\Http\Controllers\JadwalController;
 use App\Http\Controllers\LandingPageController;
 use App\Http\Controllers\LoginController;
@@ -51,6 +52,17 @@ Route::prefix('admin')->middleware(['auth', 'role:admin'])->group(function () {
 
         Route::get('/ibuhamil/pemeriksaan/create', 'create_pemeriksaan')->name('admin.ibu.pemeriksaan.create');
         Route::post('/ibuhamil/pemeriksaan/store', 'store_pemeriksaan')->name('admin.ibu.pemeriksaan.store');
+
+        Route::get('/ibuhamil/tensi/create', 'create_tensi')->name('admin.ibu.tensi.create');
+        Route::post('/ibuhamil/tensi/store', 'store_tensi')->name('admin.ibu.tensi.store');
+    });
+
+    // imunisasi
+    Route::controller(ImunisasiController::class)->group(function () {
+        Route::get('/imunisasi', 'index')->name('admin.imunisasi.index');
+        Route::post('/imunisasi', 'store')->name('admin.imunisasi.store');
+        Route::put('/imunisasi/{id}', 'update')->name('admin.imunisasi.update');
+        Route::delete('/imunisasi/destroy/{id}', 'destroy')->name('admin.imunisasi.destroy');
     });
 
     // pegawai
@@ -81,6 +93,8 @@ Route::prefix('admin')->middleware(['auth', 'role:admin'])->group(function () {
         Route::get('/pengumuman', 'index')->name('admin.pengumuman.index');
         Route::post('/pengumuman', 'store')->name('admin.pengumuman.store');
         Route::put('/pengumuman/{id}', 'update')->name('admin.pengumuman.update');
+        Route::delete('/pengumuman/destroy/{id}', 'destroy')->name('admin.pengumuman.destroy');
+        Route::post('/pengumuman/status/{id}', 'change_status')->name('admin.pengumuman.change_status');
     });
 });
 

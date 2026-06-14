@@ -10,7 +10,7 @@ class PengumumanController extends Controller
     public function index()
     {
         $pengumuman = Pengumuman::all();
-        return view('admin.pengumuman.index', compact('pengumuman'));
+        return view('pages.pengumuman.index', compact('pengumuman'));
     }
 
     public function store(Request $request)
@@ -48,5 +48,26 @@ class PengumumanController extends Controller
         return redirect()
             ->route('admin.pengumuman.index')
             ->with('success', 'Pengumuman berhasil diperbarui.');
+    }
+
+    public function destroy($id)
+    {
+        Pengumuman::findOrFail($id)->delete();
+        return redirect()
+            ->route('admin.pengumuman.index')
+            ->with('success', 'Pengumuman berhasil dihapus.');
+    }
+
+    public function change_status(Request $request, $id)
+    {
+        $pengumuman = Pengumuman::findOrFail($id);
+
+        $pengumuman->status = $request->status;
+        $pengumuman->save();
+
+        return response()->json([
+            'success' => true,
+            'message' => 'Status berhasil diubah'
+        ]);
     }
 }

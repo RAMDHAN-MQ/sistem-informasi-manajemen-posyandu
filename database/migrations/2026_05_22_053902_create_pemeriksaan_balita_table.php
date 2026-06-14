@@ -16,7 +16,9 @@ return new class extends Migration
             $table->foreignId('balita_id')->constrained('balita')->onDelete('cascade');
             $table->decimal('berat');
             $table->decimal('tinggi');
-            $table->string('riwayat_kesehatan');
+            $table->foreignId('imunisasi_id')->nullable()->constrained('imunisasi')->nullOnDelete();
+            $table->date('tanggal_pemeriksaan');
+            $table->text('catatan')->nullable();
             $table->timestamps();
         });
     }

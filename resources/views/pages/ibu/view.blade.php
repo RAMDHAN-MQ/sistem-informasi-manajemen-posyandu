@@ -21,7 +21,7 @@ $role = auth()->user()->role;
 </a>
 
 <div class="row my-4">
-    <div class="col-md-6">
+    <div class="col-md-5">
         <div class="card p-4 h-100">
             <div class="d-flex flex-column align-items-center">
                 <div class="rounded-circle d-flex align-items-center justify-content-center"
@@ -56,11 +56,11 @@ $role = auth()->user()->role;
         </div>
     </div>
 
-    <div class="col-md-6">
+    <div class="col-md-7">
         <div class="card p-4 h-100">
             <h5 class="fw-bold mb-3">Data Pemeriksaan Terakhir</h5>
+            @if($pemeriksaan)
             <table class="table">
-                @if($pemeriksaan)
                 <tr>
                     <th>HPHT</th>
                     <td class="fw-bold">{{ \Carbon\Carbon::parse($pemeriksaan->hpht)->translatedFormat('d F Y') }}</td>
@@ -70,16 +70,12 @@ $role = auth()->user()->role;
                     <td class="fw-bold">{{ \Carbon\Carbon::parse($pemeriksaan->hpl)->translatedFormat('d F Y') }}</td>
                 </tr>
                 <tr>
-                    <th>Tensi</th>
-                    <td class="fw-bold">{{ $pemeriksaan->tensi }} mmHg</td>
-                </tr>
-                <tr>
                     <th>Berat</th>
                     <td class="fw-bold">{{ $pemeriksaan->berat }} kg</td>
                 </tr>
                 <tr>
                     <th>Pemeriksaan Darah</th>
-                    <td class="fw-bold">{{ $pemeriksaan->pemeriksaan_darah }}</td>
+                    <td class="fw-bold">{{ $pemeriksaan->pemeriksaan_darah ?? '-' }}</td>
                 </tr>
                 <tr>
                     <th>Tanggal Periksa</th>
@@ -104,4 +100,35 @@ $role = auth()->user()->role;
     </div>
 </div>
 
+<div class="row my-4">
+    <div class="col-md-3"></div>
+    <div class="col-md-6">
+        <div class="card p-4 h-100">
+            <h5 class="fw-bold mb-3">Tensi</h5>
+            <table class="table">
+                <thead>
+                    <tr>
+                        <th>No</th>
+                        <th class="text-center">Tensi</th>
+                        <th class="text-center">Tanggal</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @forelse ($tensi as $t)
+                    <tr>
+                        <td>{{ $loop->iteration  }}</td>
+                        <td class="text-center">{{ $t->tensi  }}</td>
+                        <td class="text-center">{{ \Carbon\Carbon::parse($t->tanggal_periksa)->translatedFormat('d F Y')  }}</td>
+                    </tr>
+                    @empty
+                    <tr>
+                        <td colspan="3" class="text-muted text-center">Belum ada data</td>
+                    </tr>
+                    @endforelse
+                </tbody>
+            </table>
+        </div>
+    </div>
+    <div class="col-md-3"></div>
+</div>
 @endsection

@@ -35,6 +35,13 @@
         }
 
         /* sidebar */
+        .sidebar {
+            width: 260px;
+            height: 100vh;
+            overflow-y: auto;
+            overflow-x: hidden;
+        }
+
         .sidebar-link {
             display: flex;
             align-items: center;
@@ -104,7 +111,7 @@
     $role = auth()->user()->role;
     @endphp
     <div class="d-flex vh-100 overflow-hidden">
-        <div class="d-flex flex-column flex-shrink-0 px-4 py-3 bg-white border-end" style="width: 260px;">
+        <div class="d-flex flex-column flex-shrink-0 px-4 py-3 bg-white border-end sidebar" style="width: 260px;">
             <div href="#" class="d-flex align-items-center text-dark fw-bold pb-2 border-bottom">
                 <img src="{{ asset('storage/images/Logo_Posyandu.png') }}"
                     alt=""
@@ -194,6 +201,15 @@
                 </li>
 
                 @if($role === 'admin')
+                <li>
+                    <a href="{{ route('admin.imunisasi.index') }}"
+                        class="sidebar-link {{ request()->routeIs('admin.imunisasi.*') ? 'active' : '' }}">
+
+                        <i class="fa-solid fa-syringe"></i>
+                        Imunisasi
+                    </a>
+                </li>
+                
                 <li>
                     <a href="{{ route('admin.pegawai.index') }}"
                         class="sidebar-link {{ request()->routeIs('admin.pegawai.*') ? 'active' : '' }}">

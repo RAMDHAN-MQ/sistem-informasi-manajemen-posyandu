@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\IbuHamil;
 use App\Models\PemeriksaanIbuHamil;
+use App\Models\Tensi;
 use Illuminate\Http\Request;
 use Illuminate\Support\Carbon;
 
@@ -12,12 +13,12 @@ class IbuHamilController extends Controller
     public function index()
     {
         $ibuhamil = IbuHamil::latest()->get();
-        return view('admin.ibu.index', compact('ibuhamil'));
+        return view('pages.ibu.index', compact('ibuhamil'));
     }
 
     public function create()
     {
-        return view('admin.ibu.create');
+        return view('pages.ibu.create');
     }
 
     public function store(Request $request)
@@ -44,12 +45,7 @@ class IbuHamilController extends Controller
     public function edit($id)
     {
         $ibuhamil = IbuHamil::findOrFail($id);
-        return view('admin.ibu.edit', compact('ibuhamil'));
-    }
-    public function create_pemeriksaan()
-    {
-        $ibuhamil = IbuHamil::all();
-        return view('admin.ibu.pemeriksaan', compact('ibuhamil'));
+        return view('pages.ibu.edit', compact('ibuhamil'));
     }
 
     public function update(Request $request, $id)
@@ -72,7 +68,14 @@ class IbuHamilController extends Controller
         $ibuhamil = IbuHamil::findOrFail($id);
         $pemeriksaan = PemeriksaanIbuHamil::where('ibuhamil_id', $id)->latest()->first();
         $umur = Carbon::parse($ibuhamil->tgl_lahir)->age;
-        return view('admin.ibu.view', compact('ibuhamil', 'pemeriksaan', 'umur'));
+        $tensi = Tensi::where('ibuhamil_id', $id)->get();
+        return view('pages.ibu.view', compact('ibuhamil', 'pemeriksaan', 'umur', 'tensi'));
+    }
+
+    public function create_pemeriksaan()
+    {
+        $ibuhamil = IbuHamil::whereNotIn('id', PemeriksaanIbuHamil::select('ibuhamil_id'))->get();
+        return view('pages.ibu.pemeriksaan', compact('ibuhamil'));
     }
 
     public function store_pemeriksaan(Request $request)
@@ -81,21 +84,48 @@ class IbuHamilController extends Controller
             'ibuhamil_id' => 'required',
             'hpht' => 'required|date',
             'hpl' => 'required|date',
-            'tensi' => 'required',
             'berat' => 'required',
-            'pemeriksaan_darah' => 'required',
+            'tensi' => 'required',
         ]);
 
         PemeriksaanIbuHamil::create([
             'ibuhamil_id'       => $request->ibuhamil_id,
             'hpht'              => $request->hpht,
             'hpl'               => $request->hpl,
-            'tensi'             => $request->tensi,
             'berat'             => $request->berat,
             'pemeriksaan_darah' => $request->pemeriksaan_darah,
             'tanggal_pemeriksaan' => now(),
         ]);
 
+        Tensi::create([
+            'ibuhamil_id'   => $request->ibuhamil_id,
+            'tensi' => $request->tensi,
+            'tanggal_periksa'   => now(),
+        ]);
+
         return redirect()->route('admin.ibu.pemeriksaan.create')->with('success', 'Pemeriksaan berhasil disimpan');
+    }
+
+    public function create_tensi()
+    {
+        $ibuhamil = Ibuhamil::all();
+        return view('pages.ibu.tensi', compact('ibuhamil'));
+    }
+
+    public function store_tensi(Request $request)
+    {
+        $request->validate([
+            'ibuhamil_id' => 'required',
+            'tensi' => 'required',
+            'tanggal_periksa' => 'required',
+        ]);
+
+        Tensi::create([
+            'ibuhamil_id'   => $request->ibuhamil_id,
+            'tensi' => $request->tensi,
+            'tanggal_periksa'   => $request->tanggal_periksa,
+        ]);
+
+        return redirect()->route('admin.ibu.tensi.create')->with('success', 'Tensi berhasil disimpan');
     }
 }

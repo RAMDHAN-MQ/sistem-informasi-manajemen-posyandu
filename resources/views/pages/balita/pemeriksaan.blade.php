@@ -60,17 +60,14 @@
                                     <div class="card border-0 bg-light p-3 h-100">
                                         <h6 class="fw-bold text-primary mb-2 border-bottom pb-2">Usia 0-11 Bulan</h6>
                                         <div class="row">
-                                            @foreach(['HB-0', 'Polio 1,2,3,4', 'BCG', 'DPT-HB-Hib 1,2,3', 'PCV 1,2,3', 'Polio Suntik (IPV)', 'MR'] as $item)
+                                            @foreach($imunisasi_dasar as $item)
                                             <div class="col-md-6">
                                                 <div class="form-check mb-2">
-                                                    <input class="form-check-input" type="radio" name="imunisasi" value="{{ $item }}" id="imun_{{ Str::slug($item) }}" required>
-                                                    <label class="form-check-label" style="font-size: 0.85rem;" for="imun_{{ Str::slug($item) }}">{{ $item }}</label>
+                                                    <input class="form-check-input" type="radio" name="imunisasi" value="{{ $item->id }}" id="imun_{{ $item->id }}" required>
+                                                    <label class="form-check-label" style="font-size: 0.85rem;" for="imun_{{ $item->id }}">{{ $item->imunisasi }}</label>
                                                 </div>
                                             </div>
                                             @endforeach
-                                        </div>
-                                        <div class="mt-2">
-                                            <textarea class="form-control form-control-sm" name="catatan_0_11" rows="2" placeholder="Tulis catatan (opsional)..."></textarea>
                                         </div>
                                     </div>
                                 </div>
@@ -79,25 +76,26 @@
                                     <div class="card border-0 bg-light p-3 h-100">
                                         <h6 class="fw-bold text-primary mb-2 border-bottom pb-2">Usia 18-24 Bulan</h6>
                                         <div class="row">
-                                            @foreach(['DPT-HB-Hib Booster', 'MR Booster', 'JE (dosis 2)'] as $item)
+                                            @foreach($imunisasi_lanjutan as $item)
                                             <div class="col-md-6">
                                                 <div class="form-check mb-2">
-                                                    <input class="form-check-input" type="radio" name="imunisasi" value="{{ $item }}" id="imun_{{ Str::slug($item) }}" required>
-                                                    <label class="form-check-label" style="font-size: 0.85rem;" for="imun_{{ Str::slug($item) }}">{{ $item }}</label>
+                                                    <input class="form-check-input" type="radio" name="imunisasi" value="{{ $item->id }}" id="imun_{{ $item->id }}" required>
+                                                    <label class="form-check-label" style="font-size: 0.85rem;" for="imun_{{ $item->id }}">{{ $item->imunisasi }}</label>
                                                 </div>
                                             </div>
                                             @endforeach
-                                        </div>
-                                        <div class="mt-2">
-                                            <textarea class="form-control form-control-sm" name="catatan_18_24" rows="2" placeholder="Tulis catatan (opsional)..."></textarea>
                                         </div>
                                     </div>
                                 </div>
                             </div>
                         </div>
+
+                        <div class="mt-2">
+                            <textarea class="form-control form-control-sm" name="catatan" rows="2" placeholder="Tulis catatan (opsional)..."></textarea>
+                        </div>
                     </div>
 
-                    <button type="submit" class="btn btn-primary px-4 shadow-sm"><i class="bi bi-save me-1"></i> Simpan Data</button>
+                    <button type="submit" class="btn btn-primary">Simpan</button>
                 </form>
             </div>
         </div>

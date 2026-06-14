@@ -70,7 +70,7 @@
                         </div>
                         <div class="col-4">
                             <div class="d-flex justify-content-between align-items-center mb-1">
-                                <label class="form-label mb-0">Password</label>
+                                <label class="form-label mb-0">Password <span class="text-danger">*</span></label>
                                 <button type="button"
                                     class="btn btn-sm btn-link p-0 text-decoration-none"
                                     onclick="togglePassword()">

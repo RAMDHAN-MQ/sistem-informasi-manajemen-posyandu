@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\Balita;
+use App\Models\Imunisasi;
 use App\Models\PemeriksaanBalita;
 use Illuminate\Http\Request;
 use Illuminate\Support\Carbon;
@@ -12,12 +13,12 @@ class BalitaController extends Controller
     public function index()
     {
         $balita = Balita::latest()->get();
-        return view('admin.balita.index', compact('balita'));
+        return view('pages.balita.index', compact('balita'));
     }
 
     public function create()
     {
-        return view('admin.balita.create');
+        return view('pages.balita.create');
     }
 
     public function store(Request $request)
@@ -43,7 +44,7 @@ class BalitaController extends Controller
     public function edit($id)
     {
         $balita = Balita::findOrFail($id);
-        return view('admin.balita.edit', compact('balita'));
+        return view('pages.balita.edit', compact('balita'));
     }
 
     public function update(Request $request, $id)
@@ -65,13 +66,15 @@ class BalitaController extends Controller
         $beratData = $chartData->pluck('berat');
         $tinggiData = $chartData->pluck('tinggi');
 
-        return view('admin.balita.view', compact('balita', 'pemeriksaan', 'umur', 'labels', 'beratData', 'tinggiData'));
+        return view('pages.balita.view', compact('balita', 'pemeriksaan', 'umur', 'labels', 'beratData', 'tinggiData'));
     }
 
     public function create_pemeriksaan()
     {
         $balita = Balita::all();
-        return view('admin.balita.pemeriksaan', compact('balita'));
+        $imunisasi_dasar = Imunisasi::where('jenis', 'dasar')->get();
+        $imunisasi_lanjutan = Imunisasi::where('jenis', 'lanjutan')->get();
+        return view('pages.balita.pemeriksaan', compact('balita', 'imunisasi_dasar', 'imunisasi_lanjutan'));
     }
 
     public function store_pemeriksaan(Request $request)
@@ -84,23 +87,13 @@ class BalitaController extends Controller
             'imunisasi' => 'required',
         ]);
 
-
-        $catatanGabungan = '';
-        if ($request->catatan_0_11) {
-            $catatanGabungan .= $request->catatan_0_11 . " ";
-        }
-        if ($request->catatan_18_24) {
-            $catatanGabungan .= $request->catatan_18_24;
-        }
-
-        // Simpan ke database
         PemeriksaanBalita::create([
             'balita_id'           => $request->balita_id,
             'berat'               => $request->berat,
             'tinggi'              => $request->tinggi,
             'tanggal_pemeriksaan' => $request->tanggal_pemeriksaan,
-            'riwayat_kesehatan'   => $request->imunisasi,
-            'catatan'             => trim($catatanGabungan) ?: null,
+            'imunisasi_id'   => $request->imunisasi,
+            'catatan'             => $request->catatan,
         ]);
 
         return redirect()->route(auth()->user()->role . '.balita.pemeriksaan.create')

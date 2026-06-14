@@ -11,8 +11,11 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::table('pemeriksaan_ibuhamil', function (Blueprint $table) {
-            $table->string('tanggal_pemeriksaan')->nullable()->after('pemeriksaan_darah');
+        Schema::create('tensi', function (Blueprint $table) {
+            $table->id();
+            $table->foreignId('ibuhamil_id')->constrained('ibuhamil')->onDelete('cascade');
+            $table->string('tensi');
+            $table->date('tanggal_periksa');
         });
     }
 
@@ -21,8 +24,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::table('pemeriksaan_ibuhamil', function (Blueprint $table) {
-            $table->dropColumn('tanggal_pemeriksaan');
-        });
+        Schema::dropIfExists('tensi');
     }
 };

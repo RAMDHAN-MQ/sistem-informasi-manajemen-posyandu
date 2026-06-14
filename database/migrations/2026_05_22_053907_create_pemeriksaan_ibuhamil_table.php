@@ -16,9 +16,9 @@ return new class extends Migration
             $table->foreignId('ibuhamil_id')->constrained('ibuhamil')->onDelete('cascade');
             $table->date('hpht');
             $table->date('hpl');
-            $table->string('tensi');
             $table->decimal('berat');
             $table->string('pemeriksaan_darah');
+            $table->date('tanggal_pemeriksaan');
             $table->timestamps();
         });
     }

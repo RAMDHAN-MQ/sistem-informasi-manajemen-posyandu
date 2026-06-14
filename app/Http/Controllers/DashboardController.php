@@ -6,39 +6,72 @@ use Illuminate\Http\Request;
 use App\Models\Balita;
 use App\Models\IbuHamil;
 use App\Models\Layanan;
+use App\Models\PemeriksaanBalita;
+use App\Models\PemeriksaanIbuHamil;
 
 class DashboardController extends Controller
 {
     public function dashboard()
     {
-        return $this->getData('admin.dashboard');
+        $bulan = now()->month;
+        $tahun = now()->year;
+
+        $jumlahBalita = Balita::count();
+
+        $jumlahIbuHamil = IbuHamil::count();
+
+        $kegiatanAkanDatang = Layanan::whereDate('tanggal', '>=', now())
+            ->count();
+
+        $kegiatanSelesai = Layanan::whereDate('tanggal', '<', now())
+            ->count();
+
+        $balitaBelumDiperiksa = Balita::whereDoesntHave('pemeriksaan', function ($query) use ($bulan, $tahun) {
+            $query->whereMonth('tanggal_pemeriksaan', $bulan)
+                ->whereYear('tanggal_pemeriksaan', $tahun);
+        })->take(5)->get();
+
+        $ibuHamilBelumDiperiksa = IbuHamil::whereDoesntHave('pemeriksaan', function ($q) use ($bulan, $tahun) {
+            $q->whereMonth('tanggal_pemeriksaan', $bulan)
+                ->whereYear('tanggal_pemeriksaan', $tahun);
+        })->take(5)->get();
+
+        $jadwalTerdekat = Layanan::whereDate('tanggal', '>=', now())
+            ->orderBy('tanggal')
+            ->take(5)
+            ->get();
+
+        $grafikBalita = [];
+
+        for ($i = 1; $i <= 12; $i++) {
+            $grafikBalita[] = PemeriksaanBalita::whereYear('tanggal_pemeriksaan', now()->year)
+                ->whereMonth('tanggal_pemeriksaan', $i)
+                ->count();
+        }
+
+        $grafikIbuHamil = [];
+
+        for ($i = 1; $i <= 12; $i++) {
+            $grafikIbuHamil[] = PemeriksaanIbuHamil::whereYear('tanggal_pemeriksaan', now()->year)
+                ->whereMonth('tanggal_pemeriksaan', $i)
+                ->count();
+        }
+
+        return view('pages.dashboard', compact(
+            'jumlahBalita',
+            'jumlahIbuHamil',
+            'kegiatanAkanDatang',
+            'kegiatanSelesai',
+            'balitaBelumDiperiksa',
+            'ibuHamilBelumDiperiksa',
+            'jadwalTerdekat',
+            'grafikBalita',
+            'grafikIbuHamil',
+        ));
     }
 
     public function dashboard_kader()
     {
-        return $this->getData('kader.dashboard');
-    }
-
-    private function getData($viewName)
-    {
-        $jumlahBalita = Balita::count();
-        $jumlahIbuHamil = IbuHamil::count();
-    
-        $kegiatanAkanDatang = Layanan::whereDate('created_at', '>=', now())->count();
-        $kegiatanSelesai = Layanan::whereDate('created_at', '<', now())->count();
-        
-        $chartLabels = ['Jan', 'Feb', 'Mar', 'Apr', 'Mei', 'Jun'];
-        $dataSehat = [110, 112, 115, 118, 120, $jumlahBalita]; 
-        $dataStunting = [10, 8, 5, 5, 4, 2];
-
-        return view($viewName, compact(
-            'jumlahBalita', 
-            'jumlahIbuHamil', 
-            'kegiatanAkanDatang', 
-            'kegiatanSelesai',
-            'chartLabels',
-            'dataSehat',
-            'dataStunting'
-        ));
+        return view('pages.dashboard');
     }
 }

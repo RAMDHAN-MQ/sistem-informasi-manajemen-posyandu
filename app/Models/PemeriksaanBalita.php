@@ -15,8 +15,8 @@ class PemeriksaanBalita extends Model
         'balita_id',
         'berat',
         'tinggi',
+        'imunisasi_id',
         'tanggal_pemeriksaan',
-        'riwayat_kesehatan',
         'catatan'
     ];
 
@@ -24,5 +24,10 @@ class PemeriksaanBalita extends Model
     public function balita()
     {
         return $this->belongsTo(Balita::class, 'balita_id');
+    }
+
+    public function imunisasi()
+    {
+        return $this->belongsTo(Imunisasi::class, 'imunisasi_id');
     }
 }

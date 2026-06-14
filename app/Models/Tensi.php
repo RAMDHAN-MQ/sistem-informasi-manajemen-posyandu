@@ -4,17 +4,16 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
 
-class PemeriksaanIbuHamil extends Model
+class Tensi extends Model
 {
-    protected $table = 'pemeriksaan_ibuhamil';
+    protected $table = 'tensi';
+
+    public $timestamps = false;
 
     protected $fillable = [
         'ibuhamil_id',
-        'hpht',
-        'hpl',
-        'berat',
-        'pemeriksaan_darah',
-        'tanggal_pemeriksaan',
+        'tensi',
+        'tanggal_periksa',
     ];
 
     public function ibuhamil()

@@ -48,7 +48,6 @@
                                 </div>
                             </td>
                             <td class="text-center">
-                                <a href="{{ route('admin.layanan.view', $data->id) }}"><i class="bi bi-eye me-2"></i></a>
                                 <a href="#"
                                     class="editPengumuman text-decoration-none"
                                     data-id="{{ $data->id }}"
@@ -56,7 +55,7 @@
                                     data-keterangan="{{ $data->keterangan }}">
                                     <i class="bi bi-pencil me-2"></i>
                                 </a>
-                                <form action="{{ route('admin.layanan.destroy', $data->id) }}"
+                                <form action="{{ route('admin.pengumuman.destroy', $data->id) }}"
                                     method="POST"
                                     class="d-inline formDelete">
                                     @csrf
@@ -92,7 +91,7 @@
                 <div class="modal-body">
 
                     <div class="mb-3">
-                        <label class="form-label">Judul</label>
+                        <label class="form-label">Judul <span class="text-danger">*</span></label>
                         <input type="text"
                             name="judul"
                             class="form-control"
@@ -100,7 +99,7 @@
                     </div>
 
                     <div class="mb-3">
-                        <label class="form-label">Keterangan</label>
+                        <label class="form-label">Keterangan <span class="text-danger">*</span></label>
                         <textarea name="keterangan"
                             rows="4"
                             class="form-control"
@@ -145,7 +144,7 @@
                 <div class="modal-body">
 
                     <div class="mb-3">
-                        <label class="form-label">Judul</label>
+                        <label class="form-label">Judul <span class="text-danger">*</span></label>
                         <input type="text"
                             id="editJudul"
                             name="judul"
@@ -154,7 +153,7 @@
                     </div>
 
                     <div class="mb-3">
-                        <label class="form-label">Keterangan</label>
+                        <label class="form-label">Keterangan <span class="text-danger">*</span></label>
                         <textarea id="editKeterangan"
                             name="keterangan"
                             rows="4"
@@ -267,7 +266,7 @@
         let id = $(this).data('id');
         let status = $(this).is(':checked') ? 'active' : 'inactive';
         $.ajax({
-            url: `/admin/layanan/status/${id}`,
+            url: `/admin/pengumuman/status/${id}`,
             type: 'POST',
             data: {
                 _token: '{{ csrf_token() }}',

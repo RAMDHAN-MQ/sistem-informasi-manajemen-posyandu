@@ -12,16 +12,34 @@
 @php
 $role = auth()->user()->role;
 @endphp
-<div class="row">
+
+<a href="{{ route($role.'.ibu.pemeriksaan.create') }}" class="btn btn-outline-primary me-2">Pemeriksaan Awal</a>
+<a href="{{ route($role.'.ibu.tensi.create') }}" class="btn btn-primary">Rutinan</a>
+
+@if ($errors->any())
+<div class="alert alert-danger mt-4">
+    <ul class="mb-0">
+        @foreach ($errors->all() as $error)
+        <li>{{ $error }}</li>
+        @endforeach
+    </ul>
+</div>
+@endif
+
+<div class="row mt-4">
     <div class="col-12">
         <div class="card shadow-sm border-0 rounded-3">
             <div class="card-header bg-primary text-white py-3">
-                <h5 class="mb-0 fw-bold"><i class="bi bi-gender-female me-2"></i>Form Pemeriksaan Ibu Hamil</h5>
+                <h5 class="mb-0 fw-bold"><i class="fa-solid fa-droplet me-2"></i>Form Tensi</h5>
             </div>
             <div class="card-body p-4">
-                <form id="formPemeriksaanIbuHamil" action="{{ route($role.'.ibu.pemeriksaan.store') }}" method="POST">
+                <form id="formPemeriksaanIbuHamil" action="{{ route($role.'.ibu.tensi.store') }}" method="POST">
                     @csrf
                     <div class="row mb-3">
+                        <div class="col-md-4">
+                            <label class="form-label fw-semibold">Tanggal Pemeriksaan</label>
+                            <input type="date" name="tanggal_periksa" class="form-control" value="{{ date('Y-m-d') }}" required>
+                        </div>
                         <div class="col-md-4">
                             <label class="form-label fw-semibold">Pilih Ibu Hamil <span class="text-danger">*</span></label>
                             <select class="form-select select2" name="ibuhamil_id" required>
@@ -32,39 +50,14 @@ $role = auth()->user()->role;
                             </select>
                         </div>
                         <div class="col-md-4">
-                            <label class="form-label fw-semibold">Hari Pertama Haid Terakhir (HPHT) <span class="text-danger">*</span></label>
-                            <input type="date" class="form-control" name="hpht" id="hpht" required>
-                        </div>
-                        <div class="col-md-4">
-                            <label class="form-label fw-semibold"> Hari Perkiraan Lahir (HPL) </label>
-                            <input type="date" class="form-control" name="hpl" id="hpl" readonly required>
-                            <small class="text-muted">Terisi otomatis dari Hari Pertama Haid Terakhir (HPHT)</small>
-                        </div>
-                    </div>
-
-                    <div class="row mb-3">
-                        <div class="col-md-6">
                             <label class="form-label fw-semibold">Tekanan Darah <span class="text-danger">*</span></label>
                             <div class="input-group">
                                 <input type="text" class="form-control" name="tensi" placeholder="Contoh: 120/80" required>
                                 <span class="input-group-text">mmHg</span>
                             </div>
                         </div>
-                        <div class="col-md-6">
-                            <label class="form-label fw-semibold">Berat Badan <span class="text-danger">*</span></label>
-                            <div class="input-group">
-                                <input type="number" step="0.1" class="form-control" name="berat" placeholder="Contoh: 65.5" required>
-                                <span class="input-group-text">kg</span>
-                            </div>
-                        </div>
                     </div>
-
-                    <div class="mb-4">
-                        <label class="form-label fw-semibold">Pemeriksaan Darah</label>
-                        <textarea class="form-control" name="pemeriksaan_darah" rows="3" placeholder="Masukkan hasil pemeriksaan darah..."></textarea>
-                    </div>
-
-                    <button type="submit" class="btn btn-primary px-4 shadow-sm"><i class="bi bi-save me-1"></i> Simpan Data</button>
+                    <button type="submit" class="btn btn-primary">Simpan</button>
                 </form>
             </div>
         </div>

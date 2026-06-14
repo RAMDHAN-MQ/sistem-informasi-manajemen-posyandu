@@ -12,12 +12,12 @@ class PegawaiController extends Controller
     public function index()
     {
         $pegawai = User::latest()->get();
-        return view('admin.pegawai.index', compact('pegawai'));
+        return view('pages.pegawai.index', compact('pegawai'));
     }
 
     public function create()
     {
-        return view('admin.pegawai.create');
+        return view('pages.pegawai.create');
     }
 
     public function store(Request $request)
@@ -73,7 +73,7 @@ class PegawaiController extends Controller
     public function edit($id)
     {
         $pegawai = User::findOrFail($id);
-        return view('admin.pegawai.edit', compact('pegawai'));
+        return view('pages.pegawai.edit', compact('pegawai'));
     }
 
 
@@ -127,6 +127,6 @@ class PegawaiController extends Controller
     public function view($id)
     {
         $pegawai = User::findOrFail($id);
-        return view('admin.pegawai.view', compact('pegawai'));
+        return view('pages.pegawai.view', compact('pegawai'));
     }
 }

@@ -12,13 +12,13 @@ class JadwalController extends Controller
     {
         $petugas = User::whereHas('layanan')->distinct()->get();
         $layanan = Layanan::all();
-        return view('admin.jadwal.index', compact('layanan', 'petugas'));
+        return view('pages.jadwal.index', compact('layanan', 'petugas'));
     }
 
     public function create()
     {
         $petugas = User::where('role', 'kader')->get();
-        return view('admin.jadwal.create', compact('petugas'));
+        return view('pages.jadwal.create', compact('petugas'));
     }
 
     public function store(Request $request)
@@ -63,7 +63,7 @@ class JadwalController extends Controller
     {
         $petugas = User::where('role', 'kader')->get();
         $layanan = Layanan::findOrFail($id);
-        return view('admin.jadwal.edit', compact('petugas', 'layanan'));
+        return view('pages.jadwal.edit', compact('petugas', 'layanan'));
     }
 
     public function update(Request $request, $id)
@@ -96,7 +96,7 @@ class JadwalController extends Controller
     public function view($id)
     {
         $layanan = Layanan::findOrFail($id);
-        return view('admin.jadwal.view', compact('layanan'));
+        return view('pages.jadwal.view', compact('layanan'));
     }
 
     public function change_status(Request $request, $id)

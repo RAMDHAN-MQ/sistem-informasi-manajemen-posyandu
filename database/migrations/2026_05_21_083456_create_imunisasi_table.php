@@ -11,8 +11,11 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::table('users', function (Blueprint $table) {
-            $table->string('foto')->nullable()->after('email');
+        Schema::create('imunisasi', function (Blueprint $table) {
+            $table->id();
+            $table->string('imunisasi');
+            $table->enum('jenis', ['dasar','lanjutan'])->default('dasar');
+            $table->timestamps();
         });
     }
 
@@ -21,8 +24,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::table('users', function (Blueprint $table) {
-            $table->dropColumn('foto');
-        });
+        Schema::dropIfExists('imunisasi');
     }
 };

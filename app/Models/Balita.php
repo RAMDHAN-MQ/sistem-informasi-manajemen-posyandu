@@ -21,4 +21,6 @@ class Balita extends Model
     {
         return $this->hasMany(PemeriksaanBalita::class);
     }
+
+    
 }

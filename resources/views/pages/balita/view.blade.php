@@ -92,12 +92,12 @@ $role = auth()->user()->role;
                             <td><span class="fw-bold">{{ $data->berat }}</span> kg</td>
                             <td><span class="fw-bold">{{ $data->tinggi }}</span> cm</td>
                             <td>
-                                {{-- Badge Imunisasi --}}
+                                
                                 <span class="badge bg-info text-dark mb-1">
-                                    {{ str_replace(['Imunisasi: ', '.'], '', $data->riwayat_kesehatan) }}
+                                    {{ str_replace(['Imunisasi: ', '.'], '', $data->imunisasi->imunisasi) }}
                                 </span>
 
-                                {{-- Tampilkan Catatan --}}
+                                
                                 @if(!empty($data->catatan))
                                 <div class="mt-2 text-muted small border-top pt-1">
                                     <strong>Catatan:</strong><br>
@@ -146,11 +146,11 @@ $role = auth()->user()->role;
                     {
                         label: 'Berat Badan (kg)',
                         data: beratData,
-                        borderColor: '#dc3545', // Warna merah
+                        borderColor: '#dc3545',
                         backgroundColor: 'rgba(220, 53, 69, 0.1)',
                         borderWidth: 2,
                         pointBackgroundColor: '#dc3545',
-                        yAxisID: 'y', // Menggunakan skala kiri
+                        yAxisID: 'y',
                         tension: 0.3,
                         fill: true
                     },
@@ -161,7 +161,7 @@ $role = auth()->user()->role;
                         backgroundColor: 'rgba(13, 110, 253, 0.1)',
                         borderWidth: 2,
                         pointBackgroundColor: '#0d6efd',
-                        yAxisID: 'y1', // Menggunakan skala kanan
+                        yAxisID: 'y1',
                         tension: 0.3,
                         fill: true
                     }
@@ -206,7 +206,7 @@ $role = auth()->user()->role;
                         display: true,
                         position: 'right',
                         title: { display: true, text: 'Tinggi Badan (cm)' },
-                        grid: { drawOnChartArea: false }, // Jangan timpa garis grid dari Y utama
+                        grid: { drawOnChartArea: false },
                         min: 0
                     }
                 }

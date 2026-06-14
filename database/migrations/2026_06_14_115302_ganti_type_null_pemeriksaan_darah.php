@@ -11,8 +11,8 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::table('pemeriksaan_balita', function (Blueprint $table) {
-            $table->string('tanggal_pemeriksaan')->nullable()->after('riwayat_kesehatan');
+        Schema::table('pemeriksaan_ibuhamil', function (Blueprint $table) {
+            $table->string('pemeriksaan_darah')->nullable()->change();
         });
     }
 
@@ -21,8 +21,8 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::table('pemeriksaan_balita', function (Blueprint $table) {
-            $table->dropColumn('tanggal_pemeriksaan');
+        Schema::table('pemeriksaan_ibuhamil', function (Blueprint $table) {
+            $table->string('pemeriksaan_darah')->nullable(false)->change();
         });
     }
 };
