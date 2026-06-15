@@ -2,11 +2,13 @@
 
 namespace App\Http\Controllers;
 
+use App\Exports\IbuHamilExport;
 use App\Models\IbuHamil;
 use App\Models\PemeriksaanIbuHamil;
 use App\Models\Tensi;
 use Illuminate\Http\Request;
 use Illuminate\Support\Carbon;
+use Maatwebsite\Excel\Facades\Excel;
 
 class IbuHamilController extends Controller
 {
@@ -127,5 +129,16 @@ class IbuHamilController extends Controller
         ]);
 
         return redirect()->route(auth()->user()->role . '.ibu.tensi.create')->with('success', 'Tensi berhasil disimpan');
+    }
+
+    public function export(Request $request)
+    {
+        return Excel::download(
+            new IbuHamilExport(
+                $request->jenis,
+                $request->keterangan
+            ),
+            'laporan-ibu-hamil.xlsx'
+        );
     }
 }

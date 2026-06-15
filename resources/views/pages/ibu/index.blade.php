@@ -17,8 +17,12 @@ $role = auth()->user()->role;
 <div class="d-flex justify-content-between align-items-center">
     <h2 class="fw-bold">Data Ibu Hamil</h2>
     <div class="d-flex">
-        <button class="btn btn-light me-2 border">Export</button>
-        <a href="{{ route($role.'.ibu.create') }}" class="btn btn-primary">+ Tambah</a>
+        <button class="btn btn-light me-2 border"
+            data-bs-toggle="modal"
+            data-bs-target="#exporModel">
+            <i class="bi bi-download me-2"></i>Export
+        </button>
+        <a href="{{ route($role.'.ibu.create') }}" class="btn btn-primary"><i class="bi bi-plus me-2"></i>Tambah</a>
     </div>
 </div>
 
@@ -58,6 +62,51 @@ $role = auth()->user()->role;
         </div>
     </div>
 </div>
+
+<!-- modal export -->
+<form action="{{ route($role.'.ibu.export') }}" method="GET">
+    <div class="modal fade" id="exporModel" tabindex="-1">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title">Export Excel</h5>
+                    <button type="button"
+                        class="btn-close"
+                        data-bs-dismiss="modal"></button>
+                </div>
+                <div class="modal-body">
+                    <div class="mb-3">
+                        <label class="form-label">Jenis</label>
+                        <select name="jenis" id="jenis" class="form-select">
+                            <option value="master">Data Master</option>
+                            <option value="pemeriksaan">Data Pemeriksaan</option>
+                        </select>
+                    </div>
+                    <div class="mb-3">
+                        <label class="form-label">Keterangan</label>
+                        <select name="keterangan" id="keterangan" class="form-select select2">
+                            <option value="semua">Semua Ibu Hamil</option>
+                            @foreach($ibuhamil as $data)
+                            <option value="{{$data->id}}">{{$data->nama}}</option>
+                            @endforeach
+                        </select>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button"
+                        class="btn btn-light"
+                        data-bs-dismiss="modal">
+                        Batal
+                    </button>
+                    <button type="submit"
+                        class="btn btn-primary">
+                        Export
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+</form>
 
 @endsection
 
@@ -118,4 +167,15 @@ $role = auth()->user()->role;
     });
 </script>
 @endif
+
+<!-- select2 -->
+<script>
+    $(document).ready(function() {
+        $('.select2').select2({
+            theme: 'bootstrap-5',
+            width: '100%',
+            dropdownParent: $('#exporModel')
+        });
+    });
+</script>
 @endpush

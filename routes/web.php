@@ -35,6 +35,7 @@ Route::prefix('admin')->middleware(['auth', 'role:admin'])->group(function () {
         Route::get('/balita/edit/{id}', 'edit')->name('admin.balita.edit');
         Route::put('/balita/update/{id}', 'update')->name('admin.balita.update');
         Route::get('/balita/view/{id}', 'view')->name('admin.balita.view');
+        Route::get('/balita/export', 'export')->name('admin.balita.export');
 
         Route::get('/balita/pemeriksaan/create', 'create_pemeriksaan')->name('admin.balita.pemeriksaan.create');
         Route::post('/balita/pemeriksaan/store', 'store_pemeriksaan')->name('admin.balita.pemeriksaan.store');
@@ -49,6 +50,7 @@ Route::prefix('admin')->middleware(['auth', 'role:admin'])->group(function () {
         Route::get('/ibuhamil/edit/{id}', 'edit')->name('admin.ibu.edit');
         Route::put('/ibuhamil/update/{id}', 'update')->name('admin.ibu.update');
         Route::get('/ibuhamil/view/{id}', 'view')->name('admin.ibu.view');
+        Route::get('/ibuhamil/export', 'export')->name('admin.ibu.export');
 
         Route::get('/ibuhamil/pemeriksaan/create', 'create_pemeriksaan')->name('admin.ibu.pemeriksaan.create');
         Route::post('/ibuhamil/pemeriksaan/store', 'store_pemeriksaan')->name('admin.ibu.pemeriksaan.store');

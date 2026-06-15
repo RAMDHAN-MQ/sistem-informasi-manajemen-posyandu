@@ -2,11 +2,13 @@
 
 namespace App\Http\Controllers;
 
+use App\Exports\BalitaExport;
 use App\Models\Balita;
 use App\Models\Imunisasi;
 use App\Models\PemeriksaanBalita;
 use Illuminate\Http\Request;
 use Illuminate\Support\Carbon;
+use Maatwebsite\Excel\Facades\Excel;
 
 class BalitaController extends Controller
 {
@@ -98,5 +100,16 @@ class BalitaController extends Controller
 
         return redirect()->route(auth()->user()->role . '.balita.pemeriksaan.create')
             ->with('success', 'Pemeriksaan berhasil disimpan!');
+    }
+
+    public function export(Request $request)
+    {
+        return Excel::download(
+            new BalitaExport(
+                $request->jenis,
+                $request->keterangan
+            ),
+            'laporan-balita.xlsx'
+        );
     }
 }

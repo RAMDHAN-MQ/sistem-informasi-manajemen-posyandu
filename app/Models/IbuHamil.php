@@ -18,7 +18,7 @@ class IbuHamil extends Model
 
     public function pemeriksaan()
     {
-        return $this->hasMany(PemeriksaanIbuHamil::class, 'ibuhamil_id');
+        return $this->hasOne(PemeriksaanIbuHamil::class, 'ibuhamil_id');
     }
 
     public function tensi()
