@@ -115,6 +115,7 @@ Route::prefix('kader')->middleware(['auth', 'role:kader'])->group(function () {
         Route::get('/balita/edit/{id}', 'edit')->name('kader.balita.edit');
         Route::put('/balita/update/{id}', 'update')->name('kader.balita.update');
         Route::get('/balita/view/{id}', 'view')->name('kader.balita.view');
+        Route::get('/balita/export', 'export')->name('kader.balita.export');
 
         Route::get('/balita/pemeriksaan/create', 'create_pemeriksaan')->name('kader.balita.pemeriksaan.create');
         Route::post('/balita/pemeriksaan/store', 'store_pemeriksaan')->name('kader.balita.pemeriksaan.store');
@@ -129,6 +130,7 @@ Route::prefix('kader')->middleware(['auth', 'role:kader'])->group(function () {
         Route::get('/ibuhamil/edit/{id}', 'edit')->name('kader.ibu.edit');
         Route::put('/ibuhamil/update/{id}', 'update')->name('kader.ibu.update');
         Route::get('/ibuhamil/view/{id}', 'view')->name('kader.ibu.view');
+        Route::get('/ibuhamil/export', 'export')->name('kader.ibu.export');
 
         Route::get('/ibuhamil/pemeriksaan/create', 'create_pemeriksaan')->name('kader.ibu.pemeriksaan.create');
         Route::post('/ibuhamil/pemeriksaan/store', 'store_pemeriksaan')->name('kader.ibu.pemeriksaan.store');
