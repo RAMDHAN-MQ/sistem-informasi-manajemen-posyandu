@@ -13,6 +13,11 @@ class PengumumanController extends Controller
         return view('pages.pengumuman.index', compact('pengumuman'));
     }
 
+    public function create()
+    {
+        return view('pages.pengumuman.create');
+    }
+
     public function store(Request $request)
     {
         $request->validate([
@@ -29,6 +34,12 @@ class PengumumanController extends Controller
         return redirect()
             ->route('admin.pengumuman.index')
             ->with('success', 'Pengumuman berhasil ditambahkan.');
+    }
+
+    public function edit($id)
+    {
+        $pengumuman = Pengumuman::findOrFail($id);
+        return view('pages.pengumuman.edit', compact('pengumuman'));
     }
 
     public function update(Request $request, $id)

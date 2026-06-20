@@ -18,14 +18,14 @@ class LandingPageController extends Controller
 {
     public function index(Request $request)
     {
-        $jadwal = Layanan::where('status', 'active')->get();
+        $jadwal = Layanan::where('status', 'active')->orderBy('tanggal', 'desc')->take(2)->get();
         $jadwal->map(function ($j) {
             $carbonDate = Carbon::parse($j->tanggal);
             $j->hari = $carbonDate->format('d');
             $j->bulan_tahun = $carbonDate->translatedFormat('M y');
             return $j;
         });
-        $pengumuman = Pengumuman::where('status', 'active')->get();
+        $pengumuman = Pengumuman::where('status', 'active')->orderBy('created_at', 'desc')->take(2)->get();
         $edukasi = Edukasi::latest()->get();
         $komentar = Komentar::latest()
             ->take(5)
@@ -76,10 +76,20 @@ class LandingPageController extends Controller
         ));
     }
 
-    public function show($id)
+    public function edukasi($id)
     {
-        $edukasi = \App\Models\Edukasi::findOrFail($id);
+        $edukasi = Edukasi::findOrFail($id);
         return view('edukasi_detail', compact('edukasi'));
+    }
+
+    public function pengumuman($id)
+    {
+        $pengumuman = Pengumuman::findOrFail($id);
+        $pengumumanLain = Pengumuman::where('id', '!=', $id)
+        ->latest()
+        ->take(5)
+        ->get();
+        return view('pengumuman_detail', compact('pengumuman', 'pengumumanLain'));
     }
 
     public function kirim_komentar(Request $request)

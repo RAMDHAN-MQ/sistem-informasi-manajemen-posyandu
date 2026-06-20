@@ -58,6 +58,56 @@
             color: #25D366 !important;
             opacity: 1 !important;
         }
+
+        /* wa */
+        .wa-float {
+            position: fixed;
+            width: 60px;
+            height: 60px;
+            bottom: 20px;
+            right: 20px;
+            background-color: #25D366;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.3);
+            z-index: 1000;
+            transition: transform 0.2s ease;
+        }
+
+        .wa-float img {
+            width: 35px;
+            height: 35px;
+        }
+
+        .wa-float:hover {
+            transform: scale(1.1);
+        }
+
+        /* responsive */
+        @media (max-width: 768px) {
+
+            h3 {
+                font-size: 1.2rem;
+            }
+
+            .card-body {
+                padding: 1rem !important;
+            }
+
+            table {
+                font-size: 13px;
+            }
+
+            th, td {
+                white-space: nowrap;
+            }
+
+            .bg-primary.text-white {
+                font-size: 0.8rem;
+            }
+        }
     </style>
 </head>
 
@@ -220,26 +270,34 @@
     <section id="jadwal" class="bg-body-tertiary">
         <div class="container">
             <div class="row">
-                <div class="col-lg-7">
-                    <h3 class="fw-bold text-primary mb-4">Jadwal Posyandu Terdekat</h3>
+                <div class="col-12 col-lg-7 mb-4">
+                    <h3 class="fw-bold text-primary mb-4 text-center text-lg-start">Jadwal Posyandu Terdekat</h3>
                     @foreach($jadwal as $j)
                     <div class="card border-0 shadow-sm rounded-4 mb-3 bg-body">
-                        <div class="card-body d-flex justify-content-between align-items-center p-4" style="min-height: 130px;">
-                            <div>
-                                <h5 class="fw-bold mb-1">{{ $j->judul_kegiatan }}</h5>
-                                <p class="text-body-secondary mb-0 small"><i class="bi bi-clock me-1"></i> {{ $j->waktu_mulai }} - {{ $j->waktu_selesai }} WIB | <i class="bi bi-geo-alt ms-2 me-1"></i> {{ $j->lokasi }}</p>
-                            </div>
-                            <div class="bg-primary text-white text-center rounded-3 p-2 px-3">
-                                <span class="d-block fw-bold fs-5">{{ $j->hari }}</span>
-                                <span class="d-block small">{{ $j->bulan_tahun }}</span>
+                        <div class="card-body p-4" style="min-height: 130px;">
+                            <div class="d-flex flex-column flex-md-row justify-content-between gap-3">
+                                <div>
+                                    <h5 class="fw-bold mb-1">{{ $j->judul_kegiatan }}</h5>
+                                    <p class="text-body-secondary mb-0 small"><i class="bi bi-clock me-1"></i> {{ $j->waktu_mulai }} - {{ $j->waktu_selesai }} WIB | <i class="bi bi-geo-alt ms-2 me-1"></i> {{ $j->lokasi }}</p>
+                                </div>
+                                <div class="bg-primary text-white text-center rounded-3 p-2 px-3 align-self-start">
+                                    <span class="d-block fw-bold fs-5">{{ $j->hari }}</span>
+                                    <span class="d-block small">{{ $j->bulan_tahun }}</span>
+                                </div>
                             </div>
                         </div>
                     </div>
                     @endforeach
+                    <div class="text-center mt-3">
+                        <a href=""
+                        class="btn btn-outline-primary rounded-3 px-4">
+                            Lihat Selengkapnya
+                        </a>
+                    </div>
                 </div>
 
-                <div class="col-lg-5">
-                    <h3 class="fw-bold text-primary mb-4">Pengumuman Kegiatan</h3>
+                <div class="col-12 col-lg-5 mb-4">
+                    <h3 class="fw-bold text-primary mb-4 text-center text-lg-start">Pengumuman Kegiatan</h3>
                     @php
                     $colors = [
                     'text-bg-primary',
@@ -251,16 +309,31 @@
                     @endphp
 
                     @foreach($pengumuman as $p)
-                    <div class="card {{ $colors[$p->id % count($colors)] }} border-0 shadow-sm rounded-4 p-4 mb-3 bg-opacity-75" style="min-height: 130px;">
-                        <h6 class="card-title fw-bold">
-                            <i class="bi bi-megaphone me-2"></i>{{ $p->judul }}
-                        </h6>
-                        <p class="mb-0 small">{{ $p->keterangan }}</p>
-                    </div>
+                    <a href="{{ route('landing.pengumuman', $p->id) }}" style="text-decoration: none;">
+                        <div class="card {{ $colors[$p->id % count($colors)] }} border-0 shadow-sm rounded-4 p-4 mb-3 bg-opacity-75" style="min-height: 130px;">
+                            <div class="d-flex justify-content-between mb-2">
+                                <span class="card-title fw-bold">
+                                    <i class="bi bi-megaphone me-2"></i>Pengumuman
+                                </span>
+                                <small class="text-muted">
+                                    {{ $p->created_at->format('d M Y') }}
+                                </small>
+                            </div>
+                            <h5 class="fw-bold mb-2">
+                                "{{ $p->judul }}"
+                            </h5>
+                        </div>
+                    </a>
                     @endforeach
+                    <div class="text-center mt-3">
+                        <a href=""
+                        class="btn btn-outline-primary rounded-3 px-4">
+                            Lihat Selengkapnya
+                        </a>
+                    </div>
                 </div>
 
-                <div class="col-lg-12 mt-3">
+                <div class="col-12 mt-3">
                     <div class="card border-0 shadow-sm rounded-4 mb-3 bg-body">
                         <div class="card-body p-4">
                             <form action="{{ route('landing') }}#jadwal" method="GET">
@@ -284,107 +357,117 @@
                                     </div>
                                 @elseif($jenis=='Balita')
                                     <h4 class="mt-4">Data Diri Balita</h4>
-                                    <table class="table">
-                                        <tr>
-                                            <th style="width: 250px;">Nama</th>
-                                            <td>{{ $data->nama }}</td>
-                                        </tr>
-                                        <tr>
-                                            <th>NIK</th>
-                                            <td>{{ $data->nik }}</td>
-                                        </tr>
-                                        <tr>
-                                            <th>Tanggal Lahir</th>
-                                            <td>{{ \Carbon\Carbon::parse($data->tgl_lahir)->translatedFormat('d F Y') }}</td>
-                                        </tr>
-                                    </table>
+                                    <div class="table-responsive">
+                                        <table class="table">
+                                            <tr>
+                                                <th style="width: 250px;">Nama</th>
+                                                <td>{{ $data->nama }}</td>
+                                            </tr>
+                                            <tr>
+                                                <th>NIK</th>
+                                                <td>{{ $data->nik }}</td>
+                                            </tr>
+                                            <tr>
+                                                <th>Tanggal Lahir</th>
+                                                <td>{{ \Carbon\Carbon::parse($data->tgl_lahir)->translatedFormat('d F Y') }}</td>
+                                            </tr>
+                                        </table>
+                                    </div>
 
                                     <h4>Riwayat Pemeriksaan Balita</h4>
-                                    <table class="table table-striped">
-                                        <thead>
-                                            <tr>
-                                                <th>Tanggal</th>
-                                                <th>Berat</th>
-                                                <th>Tinggi</th>
-                                                <th>Riwayat Kesehatan</th>
-                                            </tr>
-                                        </thead>
-                                        <tbody>
-                                            @foreach($hasil as $item)
-                                            <tr>
-                                                <td>{{ \Carbon\Carbon::parse($item->tanggal_pemeriksaan)->translatedFormat('d F Y') }}</td>
-                                                <td>{{ $item->berat }} kg</td>
-                                                <td>{{ $item->tinggi }} cm</td>
-                                                <td>
-                                                    {{ $item->imunisasi->imunisasi }} <br>
-                                                    <small>catatan: {{$item->catatan}}</small>
-                                                </td>
-                                            </tr>
-                                            @endforeach
-                                        </tbody>
-                                    </table>
+                                    <div class="table-responsive">
+                                        <table class="table table-striped">
+                                            <thead>
+                                                <tr>
+                                                    <th>Tanggal</th>
+                                                    <th>Berat</th>
+                                                    <th>Tinggi</th>
+                                                    <th>Riwayat Kesehatan</th>
+                                                </tr>
+                                            </thead>
+                                            <tbody>
+                                                @foreach($hasil as $item)
+                                                <tr>
+                                                    <td>{{ \Carbon\Carbon::parse($item->tanggal_pemeriksaan)->translatedFormat('d F Y') }}</td>
+                                                    <td>{{ $item->berat }} kg</td>
+                                                    <td>{{ $item->tinggi }} cm</td>
+                                                    <td>
+                                                        {{ $item->imunisasi->imunisasi }} <br>
+                                                        <small>catatan: {{$item->catatan}}</small>
+                                                    </td>
+                                                </tr>
+                                                @endforeach
+                                            </tbody>
+                                        </table>
+                                    </div>
                                 @elseif($jenis=='Ibu Hamil')
                                     <h4 class="mt-4">Data Diri Ibu Hamil</h4>
-                                    <table class="table">
-                                        <tr>
-                                            <th style="width: 250px;">Nama</th>
-                                            <td>{{ $data->nama }}</td>
-                                        </tr>
-                                        <tr>
-                                            <th>NIK</th>
-                                            <td>{{ $data->nik }}</td>
-                                        </tr>
-                                        <tr>
-                                            <th>Tanggal Lahir</th>
-                                            <td>{{ \Carbon\Carbon::parse($data->tgl_lahir)->translatedFormat('d F Y') }}</td>
-                                        </tr>
-                                    </table>
+                                    <div class="table-responsive">
+                                        <table class="table">
+                                            <tr>
+                                                <th style="width: 250px;">Nama</th>
+                                                <td>{{ $data->nama }}</td>
+                                            </tr>
+                                            <tr>
+                                                <th>NIK</th>
+                                                <td>{{ $data->nik }}</td>
+                                            </tr>
+                                            <tr>
+                                                <th>Tanggal Lahir</th>
+                                                <td>{{ \Carbon\Carbon::parse($data->tgl_lahir)->translatedFormat('d F Y') }}</td>
+                                            </tr>
+                                        </table>
+                                    </div>
 
                                     <h4 class="mt-4">Riwayat Pemeriksaan</h4>
                                     @if ($hasil)
-                                        <table class="table">
-                                            <tr>
-                                                <th style="width: 250px;">HPHT</th>
-                                                <td>{{ $hasil->hpht }}</td>
-                                            </tr>
-                                            <tr>
-                                                <th>HPL</th>
-                                                <td>{{ $hasil->hpl }}</td>
-                                            </tr>
-                                            <tr>
-                                                <th>berat</th>
-                                                <td>{{ $hasil->berat }} kg</td>
-                                            </tr>
-                                            <tr>
-                                                <th>Pemeriksaan darah</th>
-                                                <td>{{ $hasil->pemeriksaan_darah }}</td>
-                                            </tr>
-                                            <tr>
-                                                <th>Tanggal Pemeriksaan</th>
-                                                <td>{{ \Carbon\Carbon::parse($hasil->tanggal_pemeriksaan)->translatedFormat('d F Y') }}</td>
-                                            </tr>
-                                        </table>
+                                        <div class="table-responsive">
+                                            <table class="table">
+                                                <tr>
+                                                    <th style="width: 250px;">HPHT</th>
+                                                    <td>{{ $hasil->hpht }}</td>
+                                                </tr>
+                                                <tr>
+                                                    <th>HPL</th>
+                                                    <td>{{ $hasil->hpl }}</td>
+                                                </tr>
+                                                <tr>
+                                                    <th>berat</th>
+                                                    <td>{{ $hasil->berat }} kg</td>
+                                                </tr>
+                                                <tr>
+                                                    <th>Pemeriksaan darah</th>
+                                                    <td>{{ $hasil->pemeriksaan_darah }}</td>
+                                                </tr>
+                                                <tr>
+                                                    <th>Tanggal Pemeriksaan</th>
+                                                    <td>{{ \Carbon\Carbon::parse($hasil->tanggal_pemeriksaan)->translatedFormat('d F Y') }}</td>
+                                                </tr>
+                                            </table>
+                                        </div>
                                     @else
                                         Belum ada data
                                     @endif
 
                                     <h4 class="mt-4">Riwayat Tensi</h4>
-                                    <table class="table table-striped">
-                                        <thead>
-                                            <tr>
-                                                <th>Tanggal</th>
-                                                <th>Tensi</th>
-                                            </tr>
-                                        </thead>
-                                        <tbody>
-                                            @foreach($tensi as $item)
-                                            <tr>
-                                                <td>{{ \Carbon\Carbon::parse($item->tanggal_periksa)->translatedFormat('d F Y') }}</td>
-                                                <td>{{ $item->tensi }}</td>
-                                            </tr>
-                                            @endforeach
-                                        </tbody>
-                                    </table>
+                                    <div class="table-responsive">
+                                        <table class="table table-striped">
+                                            <thead>
+                                                <tr>
+                                                    <th>Tanggal</th>
+                                                    <th>Tensi</th>
+                                                </tr>
+                                            </thead>
+                                            <tbody>
+                                                @foreach($tensi as $item)
+                                                <tr>
+                                                    <td>{{ \Carbon\Carbon::parse($item->tanggal_periksa)->translatedFormat('d F Y') }}</td>
+                                                    <td>{{ $item->tensi }}</td>
+                                                </tr>
+                                                @endforeach
+                                            </tbody>
+                                        </table>
+                                    </div>
                                 @endif
                             </div>
                         </div>
@@ -527,6 +610,10 @@
             </div>
         </div>
     </section>
+
+    <a href="https://wa.me/6282232799979" class="wa-float" target="_blank">
+        <img src="{{ asset('storage/images/whatsapp.png') }}" alt="WhatsApp">
+    </a>
 
     <!-- SweetAlert2 js -->
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>

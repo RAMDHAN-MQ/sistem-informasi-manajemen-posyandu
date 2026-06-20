@@ -12,11 +12,7 @@
 <div class="d-flex flex-column flex-md-row justify-content-between align-items-md-center gap-3">
     <h2 class="fw-bold">Pengumuman</h2>
     <div class="d-flex flex-wrap gap-2">
-        <button class="btn btn-primary"
-            data-bs-toggle="modal"
-            data-bs-target="#createPengumumanModal">
-            + Tambah
-        </button>
+        <a href="{{ route('admin.pengumuman.create') }}" class="btn btn-primary">+ Tambah</a>
     </div>
 </div>
 
@@ -38,8 +34,16 @@
                         @foreach($pengumuman as $data)
                         <tr>
                             <td>{{ $loop->iteration }}</td>
-                            <td>{{ $data->judul }}</td>
-                            <td>{{ $data->keterangan }}</td>
+                            <td>
+                                <div class="text-truncate" style="max-width: 300px;">
+                                    {{ $data->judul }}
+                                </div>
+                            </td>
+                            <td>
+                                <div class="text-truncate" style="max-width: 300px;">
+                                    {{ $data->keterangan }}
+                                </div>
+                            </td>
                             <td>
                                 <div class="form-check form-switch">
                                     <input
@@ -50,13 +54,7 @@
                                 </div>
                             </td>
                             <td class="text-center">
-                                <a href="#"
-                                    class="editPengumuman text-decoration-none"
-                                    data-id="{{ $data->id }}"
-                                    data-judul="{{ $data->judul }}"
-                                    data-keterangan="{{ $data->keterangan }}">
-                                    <i class="bi bi-pencil me-2"></i>
-                                </a>
+                                <a href="{{ route('admin.pengumuman.edit', $data->id) }}"><i class="bi bi-pencil me-2"></i></a>
                                 <form action="{{ route('admin.pengumuman.destroy', $data->id) }}"
                                     method="POST"
                                     class="d-inline formDelete">
@@ -75,100 +73,6 @@
         </div>
     </div>
 </div>
-
-<!-- tambah -->
-<div class="modal fade" id="createPengumumanModal" tabindex="-1">
-    <div class="modal-dialog">
-        <form action="{{ route('admin.pengumuman.store') }}" method="POST">
-            @csrf
-            <div class="modal-content">
-                <div class="modal-header bg-primary text-white">
-                    <h5 class="modal-title" id="modalTitle">Tambah Pengumuman</h5>
-                </div>
-                <div class="modal-body">
-                    <div class="mb-3">
-                        <label class="form-label">Judul <span class="text-danger">*</span></label>
-                        <input type="text"
-                            name="judul"
-                            class="form-control"
-                            required>
-                    </div>
-                    <div class="mb-3">
-                        <label class="form-label">Keterangan <span class="text-danger">*</span></label>
-                        <textarea name="keterangan"
-                            rows="4"
-                            class="form-control"
-                            required></textarea>
-                    </div>
-                </div>
-                <div class="modal-footer">
-                    <button type="button"
-                        class="btn btn-light"
-                        data-bs-dismiss="modal">
-                        Batal
-                    </button>
-                    <button type="submit"
-                        class="btn btn-primary">
-                        Simpan
-                    </button>
-                </div>
-            </div>
-
-        </form>
-    </div>
-</div>
-
-<!-- edit -->
-<div class="modal fade" id="editPengumumanModal" tabindex="-1">
-    <div class="modal-dialog">
-        <form id="editPengumumanForm" method="POST">
-            @csrf
-            @method('PUT')
-
-            <div class="modal-content">
-                <div class="modal-header bg-primary text-white">
-                    <h5 class="modal-title" id="modalTitle">Edit Pengumuman</h5>
-                </div>
-
-                <div class="modal-body">
-
-                    <div class="mb-3">
-                        <label class="form-label">Judul <span class="text-danger">*</span></label>
-                        <input type="text"
-                            id="editJudul"
-                            name="judul"
-                            class="form-control"
-                            required>
-                    </div>
-
-                    <div class="mb-3">
-                        <label class="form-label">Keterangan <span class="text-danger">*</span></label>
-                        <textarea id="editKeterangan"
-                            name="keterangan"
-                            rows="4"
-                            class="form-control"
-                            required></textarea>
-                    </div>
-
-                </div>
-
-                <div class="modal-footer">
-                    <button type="button"
-                        class="btn btn-light"
-                        data-bs-dismiss="modal">
-                        Batal
-                    </button>
-
-                    <button type="submit"
-                        class="btn btn-primary">
-                        Update
-                    </button>
-                </div>
-            </div>
-
-        </form>
-    </div>
-</div>
 @endsection
 
 @push('scripts')
@@ -177,6 +81,8 @@
     $(document).ready(function() {
         let table = $('#pengumumanTable').DataTable({
             order: [],
+            responsive: true,
+            autoWidth: false,
             pagingType: "simple_numbers",
             language: {
                 search: "_INPUT_",
@@ -212,26 +118,6 @@
             if (result.isConfirmed) {
                 form.submit();
             }
-        });
-    });
-</script>
-
-<script>
-    document.addEventListener('DOMContentLoaded', function() {
-        const editButtons = document.querySelectorAll('.editPengumuman');
-        editButtons.forEach(button => {
-            button.addEventListener('click', function() {
-                const id = this.dataset.id;
-                const judul = this.dataset.judul;
-                const keterangan = this.dataset.keterangan;
-                document.getElementById('editJudul').value = judul;
-                document.getElementById('editKeterangan').value = keterangan;
-                document.getElementById('editPengumumanForm').action =
-                    `/admin/pengumuman/${id}`;
-                new bootstrap.Modal(
-                    document.getElementById('editPengumumanModal')
-                ).show();
-            });
         });
     });
 </script>

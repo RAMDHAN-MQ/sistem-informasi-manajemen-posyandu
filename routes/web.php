@@ -15,7 +15,8 @@ use Illuminate\Support\Facades\Route;
 
 Route::controller(LandingPageController::class)->group(function () {
     Route::get('/', 'index')->name('landing');
-    Route::get('/edukasi/{id}', 'show')->name('edukasi.show');
+    Route::get('/pengumuman/{id}', 'pengumuman')->name('landing.pengumuman');
+    Route::get('/edukasi/{id}', 'edukasi')->name('edukasi.show');
     Route::post('/kirim_komentar', 'kirim_komentar')->name('landing.kirim_komentar');
     Route::get('/komentar/load', 'load_komentar')->name('landing.load_komentar');
 });
@@ -97,6 +98,8 @@ Route::prefix('admin')->middleware(['auth', 'role:admin'])->group(function () {
     // pengumuman
     Route::controller(PengumumanController::class)->group(function () {
         Route::get('/pengumuman', 'index')->name('admin.pengumuman.index');
+        Route::get('/pengumuman/create', 'create')->name('admin.pengumuman.create');
+        Route::get('/pengumuman/edit/{id}', 'edit')->name('admin.pengumuman.edit');
         Route::post('/pengumuman', 'store')->name('admin.pengumuman.store');
         Route::put('/pengumuman/{id}', 'update')->name('admin.pengumuman.update');
         Route::delete('/pengumuman/destroy/{id}', 'destroy')->name('admin.pengumuman.destroy');
