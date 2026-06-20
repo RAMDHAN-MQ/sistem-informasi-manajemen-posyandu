@@ -1,61 +1,53 @@
 @extends('layouts.master')
 
-@section('title', 'Pengumuman')
+@section('title', 'Edukasi Kesehatan')
 
 @section('page-breadcrumb')
 <li class="breadcrumb-item text-muted">Layanan</li>
-<li class="breadcrumb-item fw-bold">Pengumuman</li>
+<li class="breadcrumb-item fw-bold">Edukasi Kesehatan</li>
 @endsection
 
 @section('content')
 
 <div class="d-flex justify-content-between align-items-center">
-    <h2 class="fw-bold">Pengumuman</h2>
-    <button class="btn btn-primary"
-        data-bs-toggle="modal"
-        data-bs-target="#createPengumumanModal">
-        + Tambah
-    </button>
+    <h2 class="fw-bold">Data Edukasi Kesehatan</h2>
+    <div class="d-flex">
+        <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#modalEdukasi" onclick="resetForm()"></i>+ Tambah</button>
+    </div>
 </div>
 
 <div class="row my-4">
     <div class="col-12">
         <div class="card p-4">
-            <div class="row">
-                <table id="pengumumanTable" class="table table-hover">
+            <div class="table-responsive">
+                <table id="edukasiTable" class="table table-hover align-middle">
                     <thead class="table-primary">
                         <tr>
-                            <th>NO</th>
-                            <th>JUDUL</th>
-                            <th>KETERANGAN</th>
-                            <th>STATUS</th>
-                            <th>AKSI</th>
+                            <th class="text-center" style="width: 5%;">NO</th>
+                            <th style="width: 20%;">GAMBAR</th>
+                            <th style="width: 60%;">JUDUL & ISI</th>
+                            <th class="text-center" style="width: 15%;">AKSI</th>
                         </tr>
                     </thead>
                     <tbody>
-                        @foreach($pengumuman as $data)
+                        @forelse($edukasi as $data)
                         <tr>
-                            <td>{{ $loop->iteration }}</td>
-                            <td>{{ $data->judul }}</td>
-                            <td>{{ $data->keterangan }}</td>
+                            <td class="text-center">{{ $loop->iteration }}</td>
+                            <td><img src="{{ asset('storage/' . $data->gambar) }}" style="height: 50px; width: 50px; object-fit: cover;"></td>
                             <td>
-                                <div class="form-check form-switch">
-                                    <input
-                                        class="form-check-input change-status"
-                                        type="checkbox"
-                                        data-id="{{ $data->id }}"
-                                        {{ $data->status == 'active' ? 'checked' : '' }}>
-                                </div>
+                                <h6 class="fw-bold">{{ $data->judul }}</h6>
+                                <small class="text-muted">{{ Str::limit($data->isi, 50) }}</small>
                             </td>
                             <td class="text-center">
                                 <a href="#"
-                                    class="editPengumuman text-decoration-none"
+                                    class="editEdukasi text-decoration-none"
                                     data-id="{{ $data->id }}"
                                     data-judul="{{ $data->judul }}"
-                                    data-keterangan="{{ $data->keterangan }}">
+                                    data-gambar="{{ $data->gambar }}"
+                                    data-isi="{{ $data->isi }}">
                                     <i class="bi bi-pencil me-2"></i>
                                 </a>
-                                <form action="{{ route('admin.pengumuman.destroy', $data->id) }}"
+                                <form action="{{ route('admin.edukasi.destroy', $data->id) }}"
                                     method="POST"
                                     class="d-inline formDelete">
                                     @csrf
@@ -66,7 +58,11 @@
                                 </form>
                             </td>
                         </tr>
-                        @endforeach
+                        @empty
+                        <tr>
+                            <td colspan="4" class="text-center">Data tidak ditemukan</td>
+                        </tr>
+                        @endforelse
                     </tbody>
                 </table>
             </div>
@@ -75,57 +71,48 @@
 </div>
 
 <!-- tambah -->
-<div class="modal fade" id="createPengumumanModal" tabindex="-1">
-    <div class="modal-dialog">
-        <form action="{{ route('admin.pengumuman.store') }}" method="POST">
-            @csrf
-            <div class="modal-content">
-                <div class="modal-header bg-primary text-white">
-                    <h5 class="modal-title" id="modalTitle">Tambah Pengumuman</h5>
-                </div>
+<div class="modal fade" id="modalEdukasi" tabindex="-1" aria-hidden="true">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <div class="modal-header bg-primary text-white">
+                <h5 class="modal-title" id="modalTitle">Tambah Artikel</h5>
+            </div>
+            <form id="formEdukasi" action="{{ route('admin.edukasi.store') }}" method="POST" enctype="multipart/form-data">
+                @csrf
+                <div id="methodField"></div>
                 <div class="modal-body">
                     <div class="mb-3">
-                        <label class="form-label">Judul <span class="text-danger">*</span></label>
-                        <input type="text"
-                            name="judul"
-                            class="form-control"
-                            required>
+                        <label>Judul Artikel</label>
+                        <input type="text" class="form-control" name="judul" id="judul" required>
                     </div>
                     <div class="mb-3">
-                        <label class="form-label">Keterangan <span class="text-danger">*</span></label>
-                        <textarea name="keterangan"
-                            rows="4"
-                            class="form-control"
-                            required></textarea>
+                        <label>Gambar</label>
+                        <input type="file" class="form-control" name="gambar" id="gambar">
+                    </div>
+                    <div class="mb-3">
+                        <label>Isi Artikel</label>
+                        <textarea class="form-control" name="isi" id="isi" rows="6" required></textarea>
                     </div>
                 </div>
                 <div class="modal-footer">
-                    <button type="button"
-                        class="btn btn-light"
-                        data-bs-dismiss="modal">
-                        Batal
-                    </button>
-                    <button type="submit"
-                        class="btn btn-primary">
-                        Simpan
-                    </button>
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Batal</button>
+                    <button type="submit" class="btn btn-primary">Simpan</button>
                 </div>
-            </div>
-
-        </form>
+            </form>
+        </div>
     </div>
 </div>
 
 <!-- edit -->
-<div class="modal fade" id="editPengumumanModal" tabindex="-1">
-    <div class="modal-dialog">
-        <form id="editPengumumanForm" method="POST">
+<div class="modal fade" id="editEdukasiModal" tabindex="-1" aria-hidden="true">
+    <div class="modal-dialog modal-lg">
+        <form id="editEdukasiForm" method="POST">
             @csrf
             @method('PUT')
 
             <div class="modal-content">
                 <div class="modal-header bg-primary text-white">
-                    <h5 class="modal-title" id="modalTitle">Edit Pengumuman</h5>
+                    <h5 class="modal-title" id="modalTitle">Edit Edukasi</h5>
                 </div>
 
                 <div class="modal-body">
@@ -140,9 +127,16 @@
                     </div>
 
                     <div class="mb-3">
-                        <label class="form-label">Keterangan <span class="text-danger">*</span></label>
-                        <textarea id="editKeterangan"
-                            name="keterangan"
+                        <label>Gambar</label>
+                        <input type="file"
+                            name="gambar"
+                            class="form-control">
+                    </div>
+
+                    <div class="mb-3">
+                        <label class="form-label">Isi <span class="text-danger">*</span></label>
+                        <textarea id="editIsi"
+                            name="isi"
                             rows="4"
                             class="form-control"
                             required></textarea>
@@ -173,7 +167,7 @@
 <!-- datatable -->
 <script>
     $(document).ready(function() {
-        let table = $('#pengumumanTable').DataTable({
+        let table = $('#edukasiTable').DataTable({
             order: [],
             pagingType: "simple_numbers",
             language: {
@@ -216,18 +210,18 @@
 
 <script>
     document.addEventListener('DOMContentLoaded', function() {
-        const editButtons = document.querySelectorAll('.editPengumuman');
+        const editButtons = document.querySelectorAll('.editEdukasi');
         editButtons.forEach(button => {
             button.addEventListener('click', function() {
                 const id = this.dataset.id;
                 const judul = this.dataset.judul;
-                const keterangan = this.dataset.keterangan;
+                const isi = this.dataset.isi;
                 document.getElementById('editJudul').value = judul;
-                document.getElementById('editKeterangan').value = keterangan;
-                document.getElementById('editPengumumanForm').action =
-                    `/admin/pengumuman/${id}`;
+                document.getElementById('editIsi').value = isi;
+                document.getElementById('editEdukasiForm').action =
+                    `/admin/edukasi/${id}`;
                 new bootstrap.Modal(
-                    document.getElementById('editPengumumanModal')
+                    document.getElementById('editEdukasiModal')
                 ).show();
             });
         });
@@ -246,37 +240,4 @@
     });
 </script>
 @endif
-
-<!-- ganti status -->
-<script>
-    $('.change-status').change(function() {
-        let id = $(this).data('id');
-        let status = $(this).is(':checked') ? 'active' : 'inactive';
-        $.ajax({
-            url: `/admin/pengumuman/status/${id}`,
-            type: 'POST',
-            data: {
-                _token: '{{ csrf_token() }}',
-                status: status
-            },
-            success: function(response) {
-                Swal.fire({
-                    icon: 'success',
-                    title: 'Berhasil',
-                    text: response.message,
-                    timer: 1500,
-                    showConfirmButton: false
-                });
-            },
-            error: function() {
-                Swal.fire({
-                    icon: 'error',
-                    title: 'Gagal',
-                    text: 'Status gagal diubah'
-                });
-            }
-        });
-    });
-</script>
-
 @endpush

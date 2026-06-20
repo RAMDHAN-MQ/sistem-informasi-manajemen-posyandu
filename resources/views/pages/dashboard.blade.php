@@ -25,6 +25,9 @@
 </style>
 
 @section('content')
+@php
+$role = auth()->user()->role;
+@endphp
 
 <h2 class="fw-bold mb-4">Selamat Datang, <span class="text-primary">{{ auth()->user()->name }}</span></h2>
 
@@ -76,7 +79,7 @@
             <h5 class="fw-bold mb-4">Balita Belum Diperiksa</h5>
 
             @forelse($balitaBelumDiperiksa as $balita)
-            <a href="{{ route('admin.balita.view', $balita->id) }}" class="list-periksa mb-2">
+            <a href="{{ route($role.'.balita.view', $balita->id) }}" class="list-periksa mb-2">
                 <div class="d-flex justify-content-between border-bottom pb-2">
                     <span>{{ $balita->nama }}</span>
                 </div>
@@ -93,7 +96,7 @@
             <h5 class="fw-bold mb-4">Ibu Hamil Belum Diperiksa</h5>
 
             @forelse($ibuHamilBelumDiperiksa as $ibu)
-            <a href="{{ route('admin.ibu.view', $ibu->id) }}" class="list-periksa mb-2">
+            <a href="{{ route($role.'.ibu.view', $ibu->id) }}" class="list-periksa mb-2">
                 <div class="d-flex justify-content-between border-bottom pb-2">
                     <span>{{ $ibu->nama }}</span>
                 </div>

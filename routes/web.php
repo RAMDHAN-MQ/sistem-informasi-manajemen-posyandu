@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\BalitaController;
 use App\Http\Controllers\DashboardController;
+use App\Http\Controllers\EdukasiController;
 use App\Http\Controllers\IbuHamilController;
 use App\Http\Controllers\ImunisasiController;
 use App\Http\Controllers\JadwalController;
@@ -12,7 +13,7 @@ use App\Http\Controllers\PengumumanController;
 use Illuminate\Support\Facades\Route;
 
 Route::get('/', [LandingPageController::class, 'index']);
-
+Route::get('/edukasi/{id}', [LandingPageController::class, 'show'])->name('edukasi.show');
 
 Route::controller(LoginController::class)->group(function () {
     Route::post('/login', 'login')->name('login');
@@ -22,9 +23,7 @@ Route::controller(LoginController::class)->group(function () {
 // admin
 Route::prefix('admin')->middleware(['auth', 'role:admin'])->group(function () {
     // dashboard
-    Route::controller(DashboardController::class)->group(function () {
-        Route::get('/dashboard', 'dashboard')->name('admin.dashboard');
-    });
+    Route::get('/dashboard', [DashboardController::class, 'dashboard'])->name('admin.dashboard');
 
     // balita
     Route::controller(BalitaController::class)->group(function () {
@@ -97,6 +96,14 @@ Route::prefix('admin')->middleware(['auth', 'role:admin'])->group(function () {
         Route::put('/pengumuman/{id}', 'update')->name('admin.pengumuman.update');
         Route::delete('/pengumuman/destroy/{id}', 'destroy')->name('admin.pengumuman.destroy');
         Route::post('/pengumuman/status/{id}', 'change_status')->name('admin.pengumuman.change_status');
+    });
+
+    Route::controller(EdukasiController::class)->group(function () {
+        Route::get('/edukasi', 'index')->name('admin.edukasi.index');
+        Route::post('/edukasi', 'store')->name('admin.edukasi.store');
+        Route::get('/edukasi/edit/{id}', 'edit')->name('admin.edukasi.edit');
+        Route::put('/edukasi/{id}', 'update')->name('admin.edukasi.update');
+        Route::delete('/edukasi/{id}', 'destroy')->name('admin.edukasi.destroy');
     });
 });
 

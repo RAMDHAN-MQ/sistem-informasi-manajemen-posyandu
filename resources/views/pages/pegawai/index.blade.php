@@ -12,7 +12,6 @@
 <div class="d-flex justify-content-between align-items-center">
     <h2 class="fw-bold">Data Pegawai</h2>
     <div class="d-flex">
-        <button class="btn btn-light me-2 border">Export</button>
         <a href="{{ route('admin.pegawai.create') }}" class="btn btn-primary">+ Tambah</a>
     </div>
 </div>

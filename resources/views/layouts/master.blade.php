@@ -229,6 +229,13 @@
                     </a>
                 </li>
                 <li>
+                    <a href="{{ route('admin.edukasi.index') }}"
+                        class="sidebar-link {{ request()->routeIs('admin.edukasi.*') ? 'active' : '' }}">
+                        <i class="bi bi-journal-medical"></i>
+                        Edukasi
+                    </a>
+                </li>
+                <li>
                     <a href="{{ route('admin.pengumuman.index') }}"
                         class="sidebar-link {{ request()->routeIs('admin.pengumuman.*') ? 'active' : '' }}">
                         <i class="bi bi-megaphone"></i>
