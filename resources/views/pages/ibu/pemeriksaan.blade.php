@@ -36,7 +36,7 @@ $role = auth()->user()->role;
                 <form id="formPemeriksaanIbuHamil" action="{{ route($role.'.ibu.pemeriksaan.store') }}" method="POST">
                     @csrf
                     <div class="row mb-3">
-                        <div class="col-md-4">
+                        <div class="col-12 col-md-4 mb-3 mb-md-0">
                             <label class="form-label fw-semibold">Pilih Ibu Hamil <span class="text-danger">*</span></label>
                             <select class="form-select select2" name="ibuhamil_id" required>
                                 <option value="">-- Cari Nama Ibu Hamil --</option>
@@ -45,11 +45,11 @@ $role = auth()->user()->role;
                                 @endforeach
                             </select>
                         </div>
-                        <div class="col-md-4">
+                        <div class="col-12 col-md-4 mb-3 mb-md-0">
                             <label class="form-label fw-semibold">Hari Pertama Haid Terakhir (HPHT) <span class="text-danger">*</span></label>
                             <input type="date" class="form-control" name="hpht" id="hpht" required>
                         </div>
-                        <div class="col-md-4">
+                        <div class="col-12 col-md-4 mb-3 mb-md-0">
                             <label class="form-label fw-semibold"> Hari Perkiraan Lahir (HPL) </label>
                             <input type="date" class="form-control" name="hpl" id="hpl" readonly required>
                             <small class="text-muted">Terisi otomatis dari Hari Pertama Haid Terakhir (HPHT)</small>
@@ -57,14 +57,14 @@ $role = auth()->user()->role;
                     </div>
 
                     <div class="row mb-3">
-                        <div class="col-md-6">
+                        <div class="col-12 col-md-6 mb-3 mb-md-0">
                             <label class="form-label fw-semibold">Tekanan Darah (Tensi) <span class="text-danger">*</span></label>
                             <div class="input-group">
                                 <input type="text" class="form-control" name="tensi" placeholder="Contoh: 120/80" required>
                                 <span class="input-group-text">mmHg</span>
                             </div>
                         </div>
-                        <div class="col-md-6">
+                        <div class="col-12 col-md-6 mb-3 mb-md-0">
                             <label class="form-label fw-semibold">Berat Badan <span class="text-danger">*</span></label>
                             <div class="input-group">
                                 <input type="number" step="0.1" class="form-control" name="berat" placeholder="Contoh: 65.5" required>

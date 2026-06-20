@@ -36,11 +36,11 @@ $role = auth()->user()->role;
                 <form id="formPemeriksaanIbuHamil" action="{{ route($role.'.ibu.tensi.store') }}" method="POST">
                     @csrf
                     <div class="row mb-3">
-                        <div class="col-md-4">
+                        <div class="col-12 col-md-4 mb-3 mb-md-0">
                             <label class="form-label fw-semibold">Tanggal Pemeriksaan</label>
                             <input type="date" name="tanggal_periksa" class="form-control" value="{{ date('Y-m-d') }}" required>
                         </div>
-                        <div class="col-md-4">
+                        <div class="col-12 col-md-4 mb-3 mb-md-0">
                             <label class="form-label fw-semibold">Pilih Ibu Hamil <span class="text-danger">*</span></label>
                             <select class="form-select select2" name="ibuhamil_id" required>
                                 <option value="">-- Cari Nama Ibu Hamil --</option>
@@ -49,7 +49,7 @@ $role = auth()->user()->role;
                                 @endforeach
                             </select>
                         </div>
-                        <div class="col-md-4">
+                        <div class="col-12 col-md-4 mb-3 mb-md-0">
                             <label class="form-label fw-semibold">Tekanan Darah <span class="text-danger">*</span></label>
                             <div class="input-group">
                                 <input type="text" class="form-control" name="tensi" placeholder="Contoh: 120/80" required>
@@ -67,19 +67,6 @@ $role = auth()->user()->role;
 
 @push('scripts')
 <script>
-    // 1. Perhitungan HPL Otomatis (Rumus Naegele)
-    document.getElementById('hpht').addEventListener('change', function() {
-        if (this.value) {
-            let date = new Date(this.value);
-            date.setDate(date.getDate() + 7); // +7 hari
-            date.setMonth(date.getMonth() - 3); // -3 bulan
-            date.setFullYear(date.getFullYear() + 1); // +1 tahun
-
-            document.getElementById('hpl').value = date.toISOString().split('T')[0];
-        }
-    });
-
-    // 2. Konfirmasi Submit
     const form = document.getElementById('formPemeriksaanIbuHamil');
     form.addEventListener('submit', function(e) {
         e.preventDefault();
@@ -95,7 +82,6 @@ $role = auth()->user()->role;
         });
     });
 
-    // 3. Select2
     $(document).ready(function() {
         $('.select2').select2({
             theme: 'bootstrap-5',

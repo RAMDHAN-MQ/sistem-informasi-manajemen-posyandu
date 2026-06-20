@@ -9,13 +9,15 @@
 
 @section('content')
 
-<div class="d-flex justify-content-between align-items-center">
+<div class="d-flex flex-column flex-md-row justify-content-between align-items-md-center gap-3">
     <h2 class="fw-bold">Data Imunisasi</h2>
-    <button class="btn btn-primary"
-        data-bs-toggle="modal"
-        data-bs-target="#createImunisasi">
-        + Tambah
-    </button>
+    <div class="d-flex flex-wrap gap-2">
+        <button class="btn btn-primary"
+            data-bs-toggle="modal"
+            data-bs-target="#createImunisasi">
+            + Tambah
+        </button>
+    </div>
 </div>
 
 @if ($errors->any())
@@ -30,60 +32,62 @@
 
 <div class="row my-4">
     <div class="col-12">
-        <div class="card p-4">
+        <div class="card shadow-sm border-0 p-3 p-md-4">
             <div class="row">
-                <div class="col-4 mb-3">
+                <div class="col-12 col-md-4 mb-3">
                     <select name="jenis" id="jenis" class="form-select">
                         <option value="">-- Semua Jenis --</option>
                         <option value="dasar">Dasar</option>
                         <option value="lanjutan">Lanjutan</option>
                     </select>
                 </div>
-                <table id="imunisasiTable" class="table table-hover align-middle">
-                    <thead class="table-primary">
-                        <tr>
-                            <th class="text-center" style="width: 5%;">NO</th>
-                            <th>IMUNISASI</th>
-                            <th>JENIS</th>
-                            <th class="text-center">AKSI</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        @foreach($imunisasi as $data)
-                        <tr>
-                            <td class="text-center">{{ $loop->iteration }}</td>
-                            <td>{{ $data->imunisasi }}</td>
-                            <td>
-                                <span class="badge rounded-pill px-3 py-2
-                                {{ $data->jenis == 'dasar' 
-                                    ? 'bg-primary-subtle text-primary' 
-                                    : 'bg-success-subtle text-success' }}">
+                <div class="table-responsive">
+                    <table id="imunisasiTable" class="table table-hover align-middle nowrap w-100">
+                        <thead class="table-primary">
+                            <tr>
+                                <th class="text-center" style="width: 5%;">NO</th>
+                                <th>IMUNISASI</th>
+                                <th>JENIS</th>
+                                <th class="text-center">AKSI</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @foreach($imunisasi as $data)
+                            <tr>
+                                <td class="text-center">{{ $loop->iteration }}</td>
+                                <td>{{ $data->imunisasi }}</td>
+                                <td>
+                                    <span class="badge rounded-pill px-3 py-2
+                                    {{ $data->jenis == 'dasar' 
+                                        ? 'bg-primary-subtle text-primary' 
+                                        : 'bg-success-subtle text-success' }}">
 
-                                    {{ ucfirst($data->jenis) }}
-                                </span>
-                            </td>
-                            <td class="text-center">
-                                <a href="#"
-                                    class="editImunisasi text-decoration-none"
-                                    data-id="{{ $data->id }}"
-                                    data-imunisasi="{{ $data->imunisasi }}"
-                                    data-jenis="{{ $data->jenis }}">
-                                    <i class="bi bi-pencil me-2"></i>
-                                </a>
-                                <form action="{{ route('admin.imunisasi.destroy', $data->id) }}"
-                                    method="POST"
-                                    class="d-inline formDelete">
-                                    @csrf
-                                    @method('DELETE')
-                                    <button type="submit" class="border-0 bg-transparent text-primary p-0 m-0">
-                                        <i class="bi bi-trash"></i>
-                                    </button>
-                                </form>
-                            </td>
-                        </tr>
-                        @endforeach
-                    </tbody>
-                </table>
+                                        {{ ucfirst($data->jenis) }}
+                                    </span>
+                                </td>
+                                <td class="text-center">
+                                    <a href="#"
+                                        class="editImunisasi text-decoration-none"
+                                        data-id="{{ $data->id }}"
+                                        data-imunisasi="{{ $data->imunisasi }}"
+                                        data-jenis="{{ $data->jenis }}">
+                                        <i class="bi bi-pencil me-2"></i>
+                                    </a>
+                                    <form action="{{ route('admin.imunisasi.destroy', $data->id) }}"
+                                        method="POST"
+                                        class="d-inline formDelete">
+                                        @csrf
+                                        @method('DELETE')
+                                        <button type="submit" class="border-0 bg-transparent text-primary p-0 m-0">
+                                            <i class="bi bi-trash"></i>
+                                        </button>
+                                    </form>
+                                </td>
+                            </tr>
+                            @endforeach
+                        </tbody>
+                    </table>
+                </div>
             </div>
         </div>
     </div>
@@ -240,6 +244,8 @@
     $(document).ready(function() {
         let table = $('#imunisasiTable').DataTable({
             order: [],
+            responsive: true,
+            autoWidth: false,
             pagingType: "simple_numbers",
             language: {
                 search: "_INPUT_",

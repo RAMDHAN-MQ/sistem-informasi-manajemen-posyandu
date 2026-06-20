@@ -11,6 +11,20 @@
 
 @section('content')
 
+<style>
+    .chart-container{
+        position: relative;
+        height: 350px;
+        width: 100%;
+    }
+
+    @media (max-width: 768px){
+        .chart-container{
+            height: 250px;
+        }
+    }
+</style>
+
 @php
 $role = auth()->user()->role;
 @endphp
@@ -21,7 +35,7 @@ $role = auth()->user()->role;
 </a>
 
 <div class="row my-4">
-    <div class="col-md-5 mb-4">
+    <div class="col-12 col-lg-5 mb-4">
         <div class="card p-4 h-100">
             <div class="d-flex flex-column align-items-center">
                 <div class="rounded-circle d-flex align-items-center justify-content-center bg-primary"
@@ -35,35 +49,37 @@ $role = auth()->user()->role;
                     <i class="bi bi-person-fill"></i> {{$umur}} Tahun
                 </h5>
             </div>
-            <table class="table">
-                <tr>
-                    <th style="width: 200px;">NIK</th>
-                    <td class="fw-bold">{{ $balita->nik }}</td>
-                </tr>
-                <tr>
-                    <th>Nama Ortu</th>
-                    <td class="fw-bold">{{ $balita->nama_ortu }}</td>
-                </tr>
-                <tr>
-                    <th>Tempat Lahir</th>
-                    <td class="fw-bold">{{ $balita->tempat_lahir }}</td>
-                </tr>
-                <tr>
-                    <th>Tanggal Lahir</th>
-                    <td class="fw-bold">{{ \Carbon\Carbon::parse($balita->tgl_lahir)->translatedFormat('d F Y') }}</td>
-                </tr>
-                <tr>
-                    <th>Alamat</th>
-                    <td class="fw-bold">{{ $balita->alamat }}</td>
-                </tr>
-            </table>
+            <div class="table-responsive">
+                <table class="table table-borderless mb-0">
+                    <tr>
+                        <th style="width: 200px;">NIK</th>
+                        <td class="fw-bold">{{ $balita->nik }}</td>
+                    </tr>
+                    <tr>
+                        <th>Nama Ortu</th>
+                        <td class="fw-bold">{{ $balita->nama_ortu }}</td>
+                    </tr>
+                    <tr>
+                        <th>Tempat Lahir</th>
+                        <td class="fw-bold">{{ $balita->tempat_lahir }}</td>
+                    </tr>
+                    <tr>
+                        <th>Tanggal Lahir</th>
+                        <td class="fw-bold">{{ \Carbon\Carbon::parse($balita->tgl_lahir)->translatedFormat('d F Y') }}</td>
+                    </tr>
+                    <tr>
+                        <th>Alamat</th>
+                        <td class="fw-bold">{{ $balita->alamat }}</td>
+                    </tr>
+                </table>
+            </div>
         </div>
     </div>
 
-    <div class="col-md-7 mb-4">
+    <div class="col-12 col-lg-7 mb-4">
         <div class="card p-4 h-100">
-            <h5 class="fw-bold mb-3">Grafik Pertumbuhan Balita</h6>
-                <div style="position: relative; height: 100%; width: 100%;">
+            <h5 class="fw-bold mb-3">Grafik Pertumbuhan Balita</h5>
+                <div class="chart-container">
                     <canvas id="pertumbuhanChart"></canvas>
                 </div>
         </div>

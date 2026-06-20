@@ -40,7 +40,7 @@ $role = auth()->user()->role;
                             <input id="nik" type="number" name="nik" class="form-control my-2" value="{{ $balita->nik }}" required>
                         </div>
                         <div class="col-4">
-                            <label for="nama_ortu">Nama Orang Tua <span class="text-danger">*</span></label>
+                            <label for="nama_ortu">Orang Tua <span class="text-danger">*</span></label>
                             <input id="nama_ortu" type="text" name="nama_ortu" class="form-control my-2" value="{{ $balita->nama_ortu }}" required>
                         </div>
                     </div>

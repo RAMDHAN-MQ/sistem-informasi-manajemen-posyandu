@@ -14,9 +14,9 @@
 $role = auth()->user()->role;
 @endphp
 
-<div class="d-flex justify-content-between align-items-center">
+<div class="d-flex flex-column flex-md-row justify-content-between align-items-md-center gap-3">
     <h2 class="fw-bold">Data Balita</h2>
-    <div class="d-flex">
+    <div class="d-flex flex-wrap gap-2">
         <button class="btn btn-light me-2 border"
             data-bs-toggle="modal"
             data-bs-target="#exporModel">
@@ -28,42 +28,44 @@ $role = auth()->user()->role;
 
 <div class="row my-4">
     <div class="col-12">
-        <div class="card p-4 table-responsive">
-            <table id="balitaTable" class="table table-hover">
-                <thead class="table-primary">
-                    <tr>
-                        <th>NIK</th>
-                        <th>NAMA</th>
-                        <th>NAMA ORANG TUA</th>
-                        <th class="text-center">AKSI</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    @foreach($balita as $data)
-                    <tr>
-                        <td>{{$data->nik}}</td>
-                        <td>{{$data->nama}}</td>
-                        <td>{{$data->nama_ortu}}</td>
-                        <td class="text-center">
-                            <a href="{{ route($role.'.balita.view', $data->id) }}"><i class="bi bi-eye me-2"></i></a>
-                            <a href="{{ route($role.'.balita.edit', $data->id) }}"><i class="bi bi-pencil me-2"></i></a>
-                            <form action="{{ route($role.'.balita.destroy', $data->id) }}"
-                                method="POST"
-                                class="d-inline formDelete">
-
-                                @csrf
-                                @method('DELETE')
-
-                                <button type="submit" class="border-0 bg-transparent text-primary p-0 m-0">
-                                    <i class="bi bi-trash"></i>
-                                </button>
-
-                            </form>
-                        </td>
-                    </tr>
-                    @endforeach
-                </tbody>
-            </table>
+        <div class="card shadow-sm border-0 p-3 p-md-4">
+            <div class="table-responsive">
+                <table id="balitaTable" class="table table-hover align-middle nowrap w-100">
+                    <thead class="table-primary">
+                        <tr>
+                            <th>NIK</th>
+                            <th>NAMA</th>
+                            <th>NAMA ORANG TUA</th>
+                            <th class="text-center">AKSI</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @foreach($balita as $data)
+                        <tr>
+                            <td>{{$data->nik}}</td>
+                            <td>{{$data->nama}}</td>
+                            <td>{{$data->nama_ortu}}</td>
+                            <td class="text-center">
+                                <a href="{{ route($role.'.balita.view', $data->id) }}"><i class="bi bi-eye me-2"></i></a>
+                                <a href="{{ route($role.'.balita.edit', $data->id) }}"><i class="bi bi-pencil me-2"></i></a>
+                                <form action="{{ route($role.'.balita.destroy', $data->id) }}"
+                                    method="POST"
+                                    class="d-inline formDelete">
+    
+                                    @csrf
+                                    @method('DELETE')
+    
+                                    <button type="submit" class="border-0 bg-transparent text-primary p-0 m-0">
+                                        <i class="bi bi-trash"></i>
+                                    </button>
+    
+                                </form>
+                            </td>
+                        </tr>
+                        @endforeach
+                    </tbody>
+                </table>
+            </div>
         </div>
     </div>
 </div>
@@ -120,6 +122,8 @@ $role = auth()->user()->role;
 <script>
     $(document).ready(function() {
         $('#balitaTable').DataTable({
+            responsive: true,
+            autoWidth: false,
             order: [],
             pagingType: "simple_numbers",
             language: {

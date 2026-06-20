@@ -32,25 +32,25 @@ $role = auth()->user()->role;
 <h2 class="fw-bold mb-4">Selamat Datang, <span class="text-primary">{{ auth()->user()->name }}</span></h2>
 
 <div class="row my-4">
-    <div class="col-3">
+    <div class="col-12 col-sm-6 col-lg-3 mb-3">
         <div class="card p-4 shadow-sm border-0 border-start border-primary border-4 rounded-3 h-100">
             <p class="text-muted fw-bold mb-1">Total Balita</p>
             <h2 class="fw-bold mb-0 text-primary">{{ $jumlahBalita }}</h2>
         </div>
     </div>
-    <div class="col-3">
+    <div class="col-12 col-sm-6 col-lg-3 mb-3">
         <div class="card p-4 shadow-sm border-0 border-start border-success border-4 rounded-3 h-100">
             <p class="text-muted fw-bold mb-1">Total Ibu Hamil</p>
             <h2 class="fw-bold mb-0 text-success">{{ $jumlahIbuHamil }}</h2>
         </div>
     </div>
-    <div class="col-3">
+    <div class="col-12 col-sm-6 col-lg-3 mb-3">
         <div class="card p-4 shadow-sm border-0 border-start border-warning border-4 rounded-3 h-100">
             <p class="text-muted fw-bold mb-1">Kegiatan Akan Datang</p>
             <h2 class="fw-bold mb-0 text-warning">{{ $kegiatanAkanDatang }}</h2>
         </div>
     </div>
-    <div class="col-3">
+    <div class="col-12 col-sm-6 col-lg-3 mb-3">
         <div class="card p-4 shadow-sm border-0 border-start border-info border-4 rounded-3 h-100">
             <p class="text-muted fw-bold mb-1">Kegiatan Selesai</p>
             <h2 class="fw-bold mb-0 text-info">{{ $kegiatanSelesai }}</h2>
@@ -59,13 +59,13 @@ $role = auth()->user()->role;
 </div>
 
 <div class="row my-4">
-    <div class="col-6">
+    <div class="col-12 col-lg-6 mb-3">
         <div class="card p-4 shadow-sm border-0 rounded-3">
             <h5 class="fw-bold mb-4">Grafik Pemeriksaan Balita</h5>
             <canvas id="grafikBalita" height="300"></canvas>
         </div>
     </div>
-    <div class="col-6">
+    <div class="col-12 col-lg-6 mb-3">
         <div class="card p-4 shadow-sm border-0 rounded-3">
             <h5 class="fw-bold mb-4">Grafik Pemeriksaan Ibu Hamil</h5>
             <canvas id="grafikIbuHamil" height="300"></canvas>
@@ -74,7 +74,7 @@ $role = auth()->user()->role;
 </div>
 
 <div class="row my-4">
-    <div class="col-3">
+    <div class="col-12 col-sm-6 col-lg-3 mb-3">
         <div class="card p-4 shadow-sm border-0 rounded-3 h-100">
             <h5 class="fw-bold mb-4">Balita Belum Diperiksa</h5>
 
@@ -91,7 +91,7 @@ $role = auth()->user()->role;
             @endforelse
         </div>
     </div>
-    <div class="col-3">
+    <div class="col-12 col-sm-6 col-lg-3 mb-3">
         <div class="card p-4 shadow-sm border-0 rounded-3 h-100">
             <h5 class="fw-bold mb-4">Ibu Hamil Belum Diperiksa</h5>
 
@@ -108,7 +108,7 @@ $role = auth()->user()->role;
             @endforelse
         </div>
     </div>
-    <div class="col-6">
+    <div class="col-12 col-lg-6 mb-3">
         <div class="card p-4 shadow-sm border-0 rounded-3 h-100">
             <h5 class="fw-bold mb-4">Jadwal Terdekat</h5>
 

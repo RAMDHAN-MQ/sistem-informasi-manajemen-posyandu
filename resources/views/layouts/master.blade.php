@@ -102,6 +102,31 @@
         .content {
             background-color: #f0f4f8;
         }
+
+        /* responsive */
+        @media (max-width: 768px) {
+
+            body {
+                overflow: auto;
+            }
+
+            .content {
+                padding: 15px !important;
+            }
+
+            .topbar {
+                padding: 10px !important;
+            }
+
+            .breadcrumb {
+                font-size: 12px;
+            }
+
+            th {
+                font-size: 11px;
+                letter-spacing: 1px;
+            }
+        }
     </style>
 </head>
 
@@ -110,8 +135,150 @@
     @php
     $role = auth()->user()->role;
     @endphp
+
+    <!-- sidebar hp -->
+    <div class="offcanvas offcanvas-start" tabindex="-1" id="sidebarMobile">
+        <div class="offcanvas-header">
+            <h5 class="offcanvas-title">SIMANDU</h5>
+            <button type="button" class="btn-close"
+                data-bs-dismiss="offcanvas"></button>
+        </div>
+
+        <div class="offcanvas-body p-0">
+            <ul class="nav flex-column px-3">
+                <!-- section main menu -->
+                <li class="sidebar-section">MAIN MENU</li>
+                <li>
+                    <a href="{{ route($role.'.dashboard')}}"
+                        class="sidebar-link {{ request()->routeIs($role.'.dashboard') ? 'active' : '' }}">
+
+                        <i class="bi bi-house"></i>
+                        Dashboard
+                    </a>
+                </li>
+
+                <!-- section data master -->
+                <li class="sidebar-section">DATA MASTER</li>
+                <li>
+                    <a class="sidebar-link d-flex justify-content-between align-items-center
+                        {{ request()->routeIs($role.'.balita.*') || request()->routeIs($role.'.pemeriksaan-balita.*') ? 'active' : '' }}"
+                        data-bs-toggle="collapse"
+                        href="#menuBalita"
+                        role="button"
+                        aria-expanded="false">
+                        <span>
+                            <i class="fa-solid fa-baby"></i>Balita
+                        </span>
+                        <i class="bi bi-chevron-down small"></i>
+                    </a>
+                    <div class="collapse {{ request()->routeIs($role.'.balita.*') || request()->routeIs($role.'.pemeriksaan-balita.*') ? 'show' : '' }}"
+                        id="menuBalita">
+                        <ul class="nav flex-column ms-4 mt-1 border-start ps-3">
+                            <li>
+                                <a href="{{ route($role.'.balita.index') }}"
+                                    class="sidebar-link">
+                                    Data Balita
+                                </a>
+                            </li>
+                            <li>
+                                <a href="{{ route($role.'.balita.pemeriksaan.create') }}"
+                                    class="sidebar-link">
+                                    Pemeriksaan
+                                </a>
+                            </li>
+                        </ul>
+                    </div>
+                </li>
+
+                <li>
+                    <a class="sidebar-link d-flex justify-content-between align-items-center
+                        {{ request()->routeIs($role.'.ibu.*') || request()->routeIs($role.'.pemeriksaan-ibu.*') ? 'active' : '' }}"
+                        data-bs-toggle="collapse"
+                        href="#menuIbu"
+                        role="button"
+                        aria-expanded="false">
+                        <span>
+                            <i class="fa-solid fa-person-pregnant"></i>Ibu Hamil
+                        </span>
+                        <i class="bi bi-chevron-down small"></i>
+                    </a>
+
+                    <div class="collapse {{ request()->routeIs($role.'.ibu.*') || request()->routeIs($role.'.pemeriksaan-ibu.*') ? 'show' : '' }}"
+                        id="menuIbu">
+                        <ul class="nav flex-column ms-4 mt-1 border-start ps-3">
+                            <li>
+                                <a href="{{ route($role.'.ibu.index') }}"
+                                    class="sidebar-link">
+                                    Data Ibu Hamil
+                                </a>
+                            </li>
+                            <li>
+                                <a href="{{ route($role.'.ibu.pemeriksaan.create') }}"
+                                    class=" sidebar-link">
+                                    Pemeriksaan
+                                </a>
+                            </li>
+                        </ul>
+                    </div>
+                </li>
+
+                @if($role === 'admin')
+                <li>
+                    <a href="{{ route('admin.imunisasi.index') }}"
+                        class="sidebar-link {{ request()->routeIs('admin.imunisasi.*') ? 'active' : '' }}">
+
+                        <i class="fa-solid fa-syringe"></i>
+                        Imunisasi
+                    </a>
+                </li>
+
+                <li>
+                    <a href="{{ route('admin.pegawai.index') }}"
+                        class="sidebar-link {{ request()->routeIs('admin.pegawai.*') ? 'active' : '' }}">
+
+                        <i class="bi bi-people-fill"></i>
+                        Pegawai
+                    </a>
+                </li>
+
+                <!-- section layanan -->
+                <li class="sidebar-section">LAYANAN</li>
+                <li>
+                    <a href="{{ route('admin.layanan.index') }}"
+                        class="sidebar-link {{ request()->routeIs('admin.layanan.*') ? 'active' : '' }}">
+                        <i class="bi bi-calendar-event"></i>
+                        Jadwal
+                    </a>
+                </li>
+                <li>
+                    <a href="{{ route('admin.edukasi.index') }}"
+                        class="sidebar-link {{ request()->routeIs('admin.edukasi.*') ? 'active' : '' }}">
+                        <i class="bi bi-journal-medical"></i>
+                        Edukasi
+                    </a>
+                </li>
+                <li>
+                    <a href="{{ route('admin.pengumuman.index') }}"
+                        class="sidebar-link {{ request()->routeIs('admin.pengumuman.*') ? 'active' : '' }}">
+                        <i class="bi bi-megaphone"></i>
+                        Pengumuman
+                    </a>
+                </li>
+                <li>
+                    <a href="{{ route('admin.komentar.index') }}"
+                        class="sidebar-link {{ request()->routeIs('admin.komentar.*') ? 'active' : '' }}">
+                        <i class="bi bi-chat-left-dots"></i>
+                        Komentar
+                    </a>
+                </li>
+                @endif
+            </ul>
+        </div>
+    </div>
+
+    <!-- sidebar desktop -->
     <div class="d-flex vh-100 overflow-hidden">
-        <div class="d-flex flex-column flex-shrink-0 px-4 py-3 bg-white border-end sidebar" style="width: 260px;">
+        <div class="d-none d-md-flex flex-column flex-shrink-0 px-4 py-3 bg-white border-end sidebar">
             <div href="#" class="d-flex align-items-center text-dark fw-bold pb-2 border-bottom">
                 <img src="{{ asset('storage/images/Logo_Posyandu.png') }}"
                     alt=""
@@ -255,8 +422,14 @@
 
         <div class="flex-grow-1 d-flex flex-column overflow-hidden">
             <div class="topbar px-4 py-2 border-bottom">
-
                 <div class="d-flex justify-content-between align-items-center">
+
+                    <button class="btn btn-outline-primary d-md-none me-2"
+                        type="button"
+                        data-bs-toggle="offcanvas"
+                        data-bs-target="#sidebarMobile">
+                        <i class="bi bi-list"></i>
+                    </button>
 
                     <div class="flex-grow-1">
                         <nav aria-label="breadcrumb">

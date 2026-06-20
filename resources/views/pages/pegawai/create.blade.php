@@ -17,7 +17,7 @@
 
 <div class="row my-4">
     <div class="col-12">
-        <div class="card">
+        <div class="card shadow-sm border-0 rounded-3">
             <div class="card-header bg-primary text-white fw-bold">
                 Tambah Data Pegawai
             </div>
@@ -38,11 +38,11 @@
                 <form id="formPegawai" action="{{ route('admin.pegawai.store') }}" method="POST" enctype="multipart/form-data">
                     @csrf
                     <div class="row">
-                        <div class="col-6">
+                        <div class="col-12 col-md-6 mb-3 mb-md-0">
                             <label for="name">Nama <span class="text-danger">*</span></label>
                             <input id="name" type="text" name="name" value="{{ old('name') }}" class="form-control my-2" required>
                         </div>
-                        <div class="col-6">
+                        <div class="col-12 col-md-6 mb-3 mb-md-0">
                             <label for="role">Role <span class="text-danger">*</span></label>
                             <select name="role" id="role" class="form-select my-2" required>
                                 <option value="" disabled {{ old('role') ? '' : 'selected' }}>
@@ -60,15 +60,15 @@
                         </div>
                     </div>
                     <div class="row">
-                        <div class="col-4">
+                        <div class="col-12 col-md-4 mb-3 mb-md-0">
                             <label for="username">Username <span class="text-danger">*</span></label>
                             <input id="username" type="text" name="username" value="{{ old('username') }}" class="form-control my-2" required>
                         </div>
-                        <div class="col-4">
+                        <div class="col-12 col-md-4 mb-3 mb-md-0">
                             <label for="email">Email <span class="text-danger">*</span></label>
                             <input id="email" type="email" name="email" value="{{ old('email') }}" class="form-control my-2" required>
                         </div>
-                        <div class="col-4">
+                        <div class="col-12 col-md-4 mb-3 mb-md-0">
                             <div class="d-flex justify-content-between align-items-center mb-1">
                                 <label class="form-label mb-0">Password <span class="text-danger">*</span></label>
                                 <button type="button"

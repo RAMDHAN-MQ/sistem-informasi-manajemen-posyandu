@@ -9,16 +9,18 @@
 
 @section('content')
 
-<div class="d-flex justify-content-between align-items-center">
+<div class="d-flex flex-column flex-md-row justify-content-between align-items-md-center gap-3">
     <h2 class="fw-bold">Jadwal</h2>
-    <a href="{{ route('admin.layanan.create') }}" class="btn btn-primary">+ Tambah</a>
+    <div class="d-flex flex-wrap gap-2">
+        <a href="{{ route('admin.layanan.create') }}" class="btn btn-primary">+ Tambah</a>
+    </div>
 </div>
 
 <div class="row my-4">
     <div class="col-12">
-        <div class="card p-4">
+        <div class="card shadow-sm border-0 p-3 p-md-4">
             <div class="row">
-                <div class="col-4 mb-3">
+                <div class="col-12 col-md-4 mb-3">
                     <select name="petugas" id="petugas" class="form-select">
                         <option value="">-- Semua Petugas --</option>
                         @foreach($petugas as $p)
@@ -27,52 +29,54 @@
                     </select>
                 </div>
             </div>
-            <table id="jenisTable" class="table table-hover">
-                <thead class="table-primary">
-                    <tr>
-                        <th>NO</th>
-                        <th>PETUGAS</th>
-                        <th>JUDUL</th>
-                        <th>LOKASI</th>
-                        <th>TANGGAL</th>
-                        <th>STATUS</th>
-                        <th>AKSI</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    @foreach($layanan as $data)
-                    <tr>
-                        <td>{{ $loop->iteration }}</td>
-                        <td>{{ $data->user->name }}</td>
-                        <td>{{ $data->judul_kegiatan }}</td>
-                        <td>{{ $data->lokasi }}</td>
-                        <td>{{ $data->tanggal }}</td>
-                        <td>
-                            <div class="form-check form-switch">
-                                <input
-                                    class="form-check-input change-status"
-                                    type="checkbox"
-                                    data-id="{{ $data->id }}"
-                                    {{ $data->status == 'active' ? 'checked' : '' }}>
-                            </div>
-                        </td>
-                        <td class="text-center">
-                            <a href="{{ route('admin.layanan.view', $data->id) }}"><i class="bi bi-eye me-2"></i></a>
-                            <a href="{{ route('admin.layanan.edit', $data->id) }}"><i class="bi bi-pencil me-2"></i></a>
-                            <form action="{{ route('admin.layanan.destroy', $data->id) }}"
-                                method="POST"
-                                class="d-inline formDelete">
-                                @csrf
-                                @method('DELETE')
-                                <button type="submit" class="border-0 bg-transparent text-primary p-0 m-0">
-                                    <i class="bi bi-trash"></i>
-                                </button>
-                            </form>
-                        </td>
-                    </tr>
-                    @endforeach
-                </tbody>
-            </table>
+            <div class="table-responsive">
+                <table id="jenisTable" class="table table-hover align-middle nowrap w-100">
+                    <thead class="table-primary">
+                        <tr>
+                            <th>NO</th>
+                            <th>PETUGAS</th>
+                            <th>JUDUL</th>
+                            <th>LOKASI</th>
+                            <th>TANGGAL</th>
+                            <th>STATUS</th>
+                            <th>AKSI</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @foreach($layanan as $data)
+                        <tr>
+                            <td>{{ $loop->iteration }}</td>
+                            <td>{{ $data->user->name }}</td>
+                            <td>{{ $data->judul_kegiatan }}</td>
+                            <td>{{ $data->lokasi }}</td>
+                            <td>{{ $data->tanggal }}</td>
+                            <td>
+                                <div class="form-check form-switch">
+                                    <input
+                                        class="form-check-input change-status"
+                                        type="checkbox"
+                                        data-id="{{ $data->id }}"
+                                        {{ $data->status == 'active' ? 'checked' : '' }}>
+                                </div>
+                            </td>
+                            <td class="text-center">
+                                <a href="{{ route('admin.layanan.view', $data->id) }}"><i class="bi bi-eye me-2"></i></a>
+                                <a href="{{ route('admin.layanan.edit', $data->id) }}"><i class="bi bi-pencil me-2"></i></a>
+                                <form action="{{ route('admin.layanan.destroy', $data->id) }}"
+                                    method="POST"
+                                    class="d-inline formDelete">
+                                    @csrf
+                                    @method('DELETE')
+                                    <button type="submit" class="border-0 bg-transparent text-primary p-0 m-0">
+                                        <i class="bi bi-trash"></i>
+                                    </button>
+                                </form>
+                            </td>
+                        </tr>
+                        @endforeach
+                    </tbody>
+                </table>
+            </div>
         </div>
     </div>
 </div>
@@ -84,6 +88,8 @@
     $(document).ready(function() {
         let table = $('#jenisTable').DataTable({
             order: [],
+            responsive: true,
+            autoWidth: false,
             pagingType: "simple_numbers",
             language: {
                 search: "_INPUT_",

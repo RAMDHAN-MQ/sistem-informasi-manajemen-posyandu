@@ -7,10 +7,20 @@
 <li class="breadcrumb-item fw-bold">Komentar</li>
 @endsection
 
+<style>
+    #komentarTable td.komentar {
+        width: 600px;
+        white-space: normal !important;
+        word-break: break-word;
+    }
+
+    #komentarTable td:last-child {
+        white-space: nowrap;
+    }
+</style>
+
 @section('content')
-<div class="d-flex justify-content-between align-items-center">
-    <h2 class="fw-bold">Data Komentar</h2>
-</div>
+<h2 class="fw-bold">Data Komentar</h2>
 
 @if ($errors->any())
 <div class="alert alert-danger">
@@ -24,24 +34,24 @@
 
 <div class="row my-4">
     <div class="col-12">
-        <div class="card p-4">
-            <div class="row">
-                <div class="col-4 mb-3">
-                    <select name="status" id="status" class="form-select">
-                        <option value="">-- Pilih Status --</option>
-                        <option value="dibalas">Dibalas</option>
-                        <option value="belum">Belum</option>
-                    </select>
-                </div>
-                <table id="komentarTable" class="table table-hover align-middle" style="table-layout: fixed;">
+        <div class="card shadow-sm border-0 p-3 p-md-4">
+            <div class="col-12 col-md-4 mb-3">
+                <select name="status" id="status" class="form-select">
+                    <option value="">-- Pilih Status --</option>
+                    <option value="dibalas">Dibalas</option>
+                    <option value="belum">Belum</option>
+                </select>
+            </div>
+            <div class="table-responsive">
+                <table id="komentarTable" class="table table-hover align-middle w-100">
                     <thead class="table-primary">
                         <tr>
-                            <th class="text-center" style="width:5%">NO</th>
-                            <th style="width:15%">NAMA</th>
-                            <th style="width:35%">KOMENTAR</th>
-                            <th style="width:10%">STATUS</th>
-                            <th style="width:25%">BALASAN</th>
-                            <th class="text-center" style="width:10%">AKSI</th>
+                            <th class="text-center">NO</th>
+                            <th>NAMA</th>
+                            <th>KOMENTAR</th>
+                            <th>STATUS</th>
+                            <th>BALASAN</th>
+                            <th class="text-center">AKSI</th>
                         </tr>
                     </thead>
                     <tbody>
@@ -173,6 +183,8 @@
     $(document).ready(function() {
         let table = $('#komentarTable').DataTable({
             order: [],
+            responsive: true,
+            autoWidth: false,
             pagingType: "simple_numbers",
             language: {
                 search: "_INPUT_",

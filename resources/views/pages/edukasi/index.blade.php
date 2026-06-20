@@ -9,18 +9,18 @@
 
 @section('content')
 
-<div class="d-flex justify-content-between align-items-center">
+<div class="d-flex flex-column flex-md-row justify-content-between align-items-md-center gap-3">
     <h2 class="fw-bold">Data Edukasi Kesehatan</h2>
-    <div class="d-flex">
+    <div class="d-flex flex-wrap gap-2">
         <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#modalEdukasi" onclick="resetForm()"></i>+ Tambah</button>
     </div>
 </div>
 
 <div class="row my-4">
     <div class="col-12">
-        <div class="card p-4">
+        <div class="card shadow-sm border-0 p-3 p-md-4">
             <div class="table-responsive">
-                <table id="edukasiTable" class="table table-hover align-middle">
+                <table id="edukasiTable" class="table table-hover align-middle nowrap w-100">
                     <thead class="table-primary">
                         <tr>
                             <th class="text-center" style="width: 5%;">NO</th>
@@ -169,6 +169,8 @@
     $(document).ready(function() {
         let table = $('#edukasiTable').DataTable({
             order: [],
+            responsive: true,
+            autoWidth: false,
             pagingType: "simple_numbers",
             language: {
                 search: "_INPUT_",

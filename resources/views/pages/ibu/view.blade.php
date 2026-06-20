@@ -21,7 +21,7 @@ $role = auth()->user()->role;
 </a>
 
 <div class="row my-4">
-    <div class="col-md-5">
+    <div class="col-12 col-lg-5 mb-4">
         <div class="card p-4 h-100">
             <div class="d-flex flex-column align-items-center">
                 <div class="rounded-circle d-flex align-items-center justify-content-center"

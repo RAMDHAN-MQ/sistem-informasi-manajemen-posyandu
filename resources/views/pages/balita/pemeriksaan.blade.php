@@ -20,11 +20,11 @@
                 <form id="formPemeriksaanBalita" action="{{ route($role.'.balita.pemeriksaan.store') }}" method="POST">
                     @csrf
                     <div class="row mb-3">
-                        <div class="col-md-4">
+                        <div class="col-12 col-md-4 mb-3 mb-md-0">
                             <label class="form-label fw-semibold">Tanggal Pemeriksaan</label>
                             <input type="date" name="tanggal_pemeriksaan" class="form-control" value="{{ date('Y-m-d') }}" required>
                         </div>
-                        <div class="col-md-8">
+                        <div class="col-12 col-md-8">
                             <label class="form-label fw-semibold">Pilih Balita <span class="text-danger">*</span></label>
                             <select class="form-select select2" name="balita_id" required>
                                 <option value="">-- Cari Nama Balita --</option>
@@ -36,14 +36,14 @@
                     </div>
 
                     <div class="row mb-3">
-                        <div class="col-md-6">
+                        <div class="col-12 col-md-6 mb-3 mb-md-0">
                             <label class="form-label fw-semibold">Berat Badan <span class="text-danger">*</span></label>
                             <div class="input-group">
                                 <input type="number" step="0.01" class="form-control" name="berat" placeholder="Contoh: 12.5" required>
                                 <span class="input-group-text">kg</span>
                             </div>
                         </div>
-                        <div class="col-md-6">
+                        <div class="col-12 col-md-6 mb-3 mb-md-0">
                             <label class="form-label fw-semibold">Tinggi / Panjang Badan <span class="text-danger">*</span></label>
                             <div class="input-group">
                                 <input type="number" step="0.1" class="form-control" name="tinggi" placeholder="Contoh: 85.5" required>
@@ -56,12 +56,12 @@
                         <div class="col-md-12">
                             <label class="form-label fw-semibold">Pilih Imunisasi & Catatan <span class="text-danger">*</span></label>
                             <div class="row g-3">
-                                <div class="col-md-6">
+                                <div class="col-12 col-lg-6">
                                     <div class="card border-0 bg-light p-3 h-100">
                                         <h6 class="fw-bold text-primary mb-2 border-bottom pb-2">Usia 0-11 Bulan</h6>
                                         <div class="row">
                                             @foreach($imunisasi_dasar as $item)
-                                            <div class="col-md-6">
+                                            <div class="col-12 col-lg-6">
                                                 <div class="form-check mb-2">
                                                     <input class="form-check-input" type="radio" name="imunisasi" value="{{ $item->id }}" id="imun_{{ $item->id }}" required>
                                                     <label class="form-check-label" style="font-size: 0.85rem;" for="imun_{{ $item->id }}">{{ $item->imunisasi }}</label>
@@ -72,12 +72,12 @@
                                     </div>
                                 </div>
 
-                                <div class="col-md-6">
+                                <div class="col-12 col-lg-6">
                                     <div class="card border-0 bg-light p-3 h-100">
                                         <h6 class="fw-bold text-primary mb-2 border-bottom pb-2">Usia 18-24 Bulan</h6>
                                         <div class="row">
                                             @foreach($imunisasi_lanjutan as $item)
-                                            <div class="col-md-6">
+                                            <div class="col-12 col-lg-6">
                                                 <div class="form-check mb-2">
                                                     <input class="form-check-input" type="radio" name="imunisasi" value="{{ $item->id }}" id="imun_{{ $item->id }}" required>
                                                     <label class="form-check-label" style="font-size: 0.85rem;" for="imun_{{ $item->id }}">{{ $item->imunisasi }}</label>

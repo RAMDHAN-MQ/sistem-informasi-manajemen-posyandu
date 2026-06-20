@@ -17,7 +17,7 @@
 
 <div class="row my-4">
     <div class="col-12">
-        <div class="card">
+        <div class="card border-0 shadow-sm rounded-3">
             <div class="card-header bg-primary text-white fw-bold">
                 Tambah Data Jadwal Kegiatan
             </div>
@@ -25,7 +25,7 @@
                 <form id="formBalita" action="{{ route('admin.layanan.store') }}" method="POST">
                     @csrf
                     <div class="row">
-                        <div class="col-4">
+                        <div class="col-12 col-md-4 mb-3 mb-md-0">
                             <label class="form-label fw-semibold">Pilih Petugas <span class="text-danger">*</span></label></label>
                             <select class="form-select select2" name="user_id" required>
                                 <option value="">-- Cari Nama Petugas --</option>
@@ -34,25 +34,25 @@
                                 @endforeach
                             </select>
                         </div>
-                        <div class="col-8">
+                        <div class="col-12 col-md-8 mb-3 mb-md-0">
                             <label for="judul_kegiatan">Judul Kegiatan <span class="text-danger">*</span></label>
                             <input id="judul_kegiatan" type="text" name="judul_kegiatan" class="form-control my-2" required>
                         </div>
                     </div>
                     <div class="row">
-                        <div class="col-3">
+                        <div class="col-12 col-md-3 mb-3 mb-md-0">
                             <label for="lokasi">Lokasi <span class="text-danger">*</span></label>
                             <input id="lokasi" type="text" name="lokasi" class="form-control my-2" required>
                         </div>
-                        <div class="col-3">
+                        <div class="col-12 col-md-3 mb-3 mb-md-0">
                             <label for="tanggal">Tanggal <span class="text-danger">*</span></label>
                             <input id="tanggal" type="date" name="tanggal" class="form-control my-2" required>
                         </div>
-                        <div class="col-3">
+                        <div class="col-12 col-md-3 mb-3 mb-md-0">
                             <label for="waktu_mulai">Waktu Mulai <span class="text-danger">*</span></label>
                             <input id="waktu_mulai" type="time" name="waktu_mulai" class="form-control my-2" required>
                         </div>
-                        <div class="col-3">
+                        <div class="col-12 col-md-3 mb-3 mb-md-0">
                             <label for="waktu_selesai">Waktu Selesai <span class="text-danger">*</span></label>
                             <input id="waktu_selesai" type="time" name="waktu_selesai" class="form-control my-2" required>
                         </div>
