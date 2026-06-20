@@ -2,36 +2,123 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Balita;
 use App\Models\Layanan;
 use App\Models\Pengumuman;
-use App\Models\Edukasi; 
+use App\Models\Edukasi;
+use App\Models\IbuHamil;
+use App\Models\Komentar;
+use App\Models\PemeriksaanBalita;
+use App\Models\PemeriksaanIbuHamil;
+use App\Models\Tensi;
 use Illuminate\Http\Request;
 use Carbon\Carbon;
 
 class LandingPageController extends Controller
 {
-    public function index()
+    public function index(Request $request)
     {
         $jadwal = Layanan::where('status', 'active')->get();
-
         $jadwal->map(function ($j) {
             $carbonDate = Carbon::parse($j->tanggal);
             $j->hari = $carbonDate->format('d');
             $j->bulan_tahun = $carbonDate->translatedFormat('M y');
             return $j;
         });
-
         $pengumuman = Pengumuman::where('status', 'active')->get();
-        
-        // 2. Ambil data edukasi
-        $edukasi = Edukasi::latest()->get(); 
+        $edukasi = Edukasi::latest()->get();
+        $komentar = Komentar::latest()
+            ->take(5)
+            ->get();
+        $jumlah = Komentar::count();
+        $jenis = null;
+        $data = null;
+        $hasil = null;
+        $error = null;
+        $tensi = null;
+        if ($request->filled('nik')) {
+            $nik = $request->nik;
+            $balita = Balita::where('nik', $nik)->first();
+            if ($balita) {
+                $jenis = 'Balita';
+                $data = $balita;
+                $hasil = PemeriksaanBalita::where('balita_id', $balita->id)
+                    ->latest()
+                    ->get();
+            } else {
+                $ibu = IbuHamil::where('nik', $nik)->first();
+                if ($ibu) {
+                    $jenis = 'Ibu Hamil';
+                    $data = $ibu;
+                    $hasil = PemeriksaanIbuHamil::where('ibuhamil_id', $ibu->id)
+                        ->latest()
+                        ->first();
+                    $tensi = Tensi::where('ibuhamil_id', $ibu->id)
+                        ->latest('tanggal_periksa')
+                        ->get();
+                } else {
+                    $error = 'Data tidak ditemukan';
+                }
+            }
+        }
 
-        // 3. Tambahkan 'edukasi' ke dalam compact
-        return view('landing_page', compact('jadwal', 'pengumuman', 'edukasi'));
+        return view('landing_page', compact(
+            'jadwal',
+            'pengumuman',
+            'edukasi',
+            'komentar',
+            'jumlah',
+            'jenis',
+            'data',
+            'hasil',
+            'error',
+            'tensi'
+        ));
     }
 
-    public function show($id) {
+    public function show($id)
+    {
         $edukasi = \App\Models\Edukasi::findOrFail($id);
         return view('edukasi_detail', compact('edukasi'));
+    }
+
+    public function kirim_komentar(Request $request)
+    {
+        $data = $request->validate([
+            'nama' => 'required|string|max:100',
+            'komentar' => 'required|string|max:500',
+        ]);
+
+        Komentar::create($data);
+
+        return redirect()
+            ->route('landing')
+            ->with('success', 'Komentar berhasil ditambahkan.')
+            ->withFragment('komentar');
+    }
+
+    public function load_komentar(Request $request)
+    {
+        $offset = (int) $request->offset;
+        $komentar = Komentar::latest()
+            ->skip($offset)
+            ->take(5)
+            ->get();
+        return response()->json(
+            $komentar->map(function ($k) {
+                return [
+                    'nama' => $k->nama,
+                    'komentar' => $k->komentar,
+                    'created_at' =>
+                    $k->created_at->diffForHumans(),
+                    'balasan_admin' =>
+                    $k->balasan_admin,
+                    'dibalas_pada' =>
+                    $k->dibalas_pada
+                        ? $k->dibalas_pada->diffForHumans()
+                        : null,
+                ];
+            })
+        );
     }
 }

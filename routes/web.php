@@ -6,14 +6,19 @@ use App\Http\Controllers\EdukasiController;
 use App\Http\Controllers\IbuHamilController;
 use App\Http\Controllers\ImunisasiController;
 use App\Http\Controllers\JadwalController;
+use App\Http\Controllers\KomentarController;
 use App\Http\Controllers\LandingPageController;
 use App\Http\Controllers\LoginController;
 use App\Http\Controllers\PegawaiController;
 use App\Http\Controllers\PengumumanController;
 use Illuminate\Support\Facades\Route;
 
-Route::get('/', [LandingPageController::class, 'index']);
-Route::get('/edukasi/{id}', [LandingPageController::class, 'show'])->name('edukasi.show');
+Route::controller(LandingPageController::class)->group(function () {
+    Route::get('/', 'index')->name('landing');
+    Route::get('/edukasi/{id}', 'show')->name('edukasi.show');
+    Route::post('/kirim_komentar', 'kirim_komentar')->name('landing.kirim_komentar');
+    Route::get('/komentar/load', 'load_komentar')->name('landing.load_komentar');
+});
 
 Route::controller(LoginController::class)->group(function () {
     Route::post('/login', 'login')->name('login');
@@ -98,12 +103,21 @@ Route::prefix('admin')->middleware(['auth', 'role:admin'])->group(function () {
         Route::post('/pengumuman/status/{id}', 'change_status')->name('admin.pengumuman.change_status');
     });
 
+    // edukasi
     Route::controller(EdukasiController::class)->group(function () {
         Route::get('/edukasi', 'index')->name('admin.edukasi.index');
         Route::post('/edukasi', 'store')->name('admin.edukasi.store');
         Route::get('/edukasi/edit/{id}', 'edit')->name('admin.edukasi.edit');
         Route::put('/edukasi/{id}', 'update')->name('admin.edukasi.update');
         Route::delete('/edukasi/{id}', 'destroy')->name('admin.edukasi.destroy');
+    });
+
+    // komentar
+    Route::controller(KomentarController::class)->group(function () {
+        Route::get('/komentar', 'index')->name('admin.komentar.index');
+        Route::put('/komentar/balas/{id}', 'balas')->name('admin.komentar.balas');
+        Route::delete('/komentar/balas/delete/{id}', 'hapusBalasan')->name('admin.komentar.hapus_balasan');
+        Route::delete('/komentar/destroy/{id}', 'destroy')->name('admin.komentar.destroy');
     });
 });
 

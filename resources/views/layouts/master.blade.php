@@ -209,7 +209,7 @@
                         Imunisasi
                     </a>
                 </li>
-                
+
                 <li>
                     <a href="{{ route('admin.pegawai.index') }}"
                         class="sidebar-link {{ request()->routeIs('admin.pegawai.*') ? 'active' : '' }}">
@@ -243,9 +243,10 @@
                     </a>
                 </li>
                 <li>
-                    <a href="#" class="sidebar-link">
-                        <i class="bi bi-graph-up"></i>
-                        Laporan
+                    <a href="{{ route('admin.komentar.index') }}"
+                        class="sidebar-link {{ request()->routeIs('admin.komentar.*') ? 'active' : '' }}">
+                        <i class="bi bi-chat-left-dots"></i>
+                        Komentar
                     </a>
                 </li>
                 @endif

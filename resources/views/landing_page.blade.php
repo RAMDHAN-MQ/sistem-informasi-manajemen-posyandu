@@ -76,7 +76,7 @@
                     <li class="nav-item"><a class="nav-link" href="#beranda">Beranda</a></li>
                     <li class="nav-item"><a class="nav-link" href="#profil">Profil</a></li>
                     <li class="nav-item"><a class="nav-link" href="#jadwal">Jadwal</a></li>
-                    <li class="nav-item"><a class="nav-link" href="#pengumuman">Pengumuman</a></li>
+                    <li class="nav-item"><a class="nav-link" href="#jadwal">Pengumuman</a></li>
                     <li class="nav-item"><a class="nav-link" href="#informasi">Edukasi</a></li>
                     <li class="nav-item"><a class="nav-link" href="#kontak">Kontak</a></li>
                 </ul>
@@ -220,7 +220,7 @@
     <section id="jadwal" class="bg-body-tertiary">
         <div class="container">
             <div class="row">
-                <div class="col-lg-7 mb-4">
+                <div class="col-lg-7">
                     <h3 class="fw-bold text-primary mb-4">Jadwal Posyandu Terdekat</h3>
                     @foreach($jadwal as $j)
                     <div class="card border-0 shadow-sm rounded-4 mb-3 bg-body">
@@ -238,7 +238,7 @@
                     @endforeach
                 </div>
 
-                <div class="col-lg-5" id="pengumuman">
+                <div class="col-lg-5">
                     <h3 class="fw-bold text-primary mb-4">Pengumuman Kegiatan</h3>
                     @php
                     $colors = [
@@ -258,6 +258,137 @@
                         <p class="mb-0 small">{{ $p->keterangan }}</p>
                     </div>
                     @endforeach
+                </div>
+
+                <div class="col-lg-12 mt-3">
+                    <div class="card border-0 shadow-sm rounded-4 mb-3 bg-body">
+                        <div class="card-body p-4">
+                            <form action="{{ route('landing') }}#jadwal" method="GET">
+                                <div class="d-flex">
+                                    <input
+                                        type="text"
+                                        name="nik"
+                                        class="form-control"
+                                        placeholder="Masukkan NIK..."
+                                        required>
+                                    <button
+                                        class="btn btn-primary ms-2">
+                                        <i class="bi bi-search"></i>
+                                    </button>
+                                </div>
+                            </form>
+                            <div id="hasilCari">
+                                @if($error)
+                                    <div class="alert alert-danger mt-4">
+                                        {{ $error }}
+                                    </div>
+                                @elseif($jenis=='Balita')
+                                    <h4 class="mt-4">Data Diri Balita</h4>
+                                    <table class="table">
+                                        <tr>
+                                            <th style="width: 250px;">Nama</th>
+                                            <td>{{ $data->nama }}</td>
+                                        </tr>
+                                        <tr>
+                                            <th>NIK</th>
+                                            <td>{{ $data->nik }}</td>
+                                        </tr>
+                                        <tr>
+                                            <th>Tanggal Lahir</th>
+                                            <td>{{ \Carbon\Carbon::parse($data->tgl_lahir)->translatedFormat('d F Y') }}</td>
+                                        </tr>
+                                    </table>
+
+                                    <h4>Riwayat Pemeriksaan Balita</h4>
+                                    <table class="table table-striped">
+                                        <thead>
+                                            <tr>
+                                                <th>Tanggal</th>
+                                                <th>Berat</th>
+                                                <th>Tinggi</th>
+                                                <th>Riwayat Kesehatan</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            @foreach($hasil as $item)
+                                            <tr>
+                                                <td>{{ \Carbon\Carbon::parse($item->tanggal_pemeriksaan)->translatedFormat('d F Y') }}</td>
+                                                <td>{{ $item->berat }} kg</td>
+                                                <td>{{ $item->tinggi }} cm</td>
+                                                <td>
+                                                    {{ $item->imunisasi->imunisasi }} <br>
+                                                    <small>catatan: {{$item->catatan}}</small>
+                                                </td>
+                                            </tr>
+                                            @endforeach
+                                        </tbody>
+                                    </table>
+                                @elseif($jenis=='Ibu Hamil')
+                                    <h4 class="mt-4">Data Diri Ibu Hamil</h4>
+                                    <table class="table">
+                                        <tr>
+                                            <th style="width: 250px;">Nama</th>
+                                            <td>{{ $data->nama }}</td>
+                                        </tr>
+                                        <tr>
+                                            <th>NIK</th>
+                                            <td>{{ $data->nik }}</td>
+                                        </tr>
+                                        <tr>
+                                            <th>Tanggal Lahir</th>
+                                            <td>{{ \Carbon\Carbon::parse($data->tgl_lahir)->translatedFormat('d F Y') }}</td>
+                                        </tr>
+                                    </table>
+
+                                    <h4 class="mt-4">Riwayat Pemeriksaan</h4>
+                                    @if ($hasil)
+                                        <table class="table">
+                                            <tr>
+                                                <th style="width: 250px;">HPHT</th>
+                                                <td>{{ $hasil->hpht }}</td>
+                                            </tr>
+                                            <tr>
+                                                <th>HPL</th>
+                                                <td>{{ $hasil->hpl }}</td>
+                                            </tr>
+                                            <tr>
+                                                <th>berat</th>
+                                                <td>{{ $hasil->berat }} kg</td>
+                                            </tr>
+                                            <tr>
+                                                <th>Pemeriksaan darah</th>
+                                                <td>{{ $hasil->pemeriksaan_darah }}</td>
+                                            </tr>
+                                            <tr>
+                                                <th>Tanggal Pemeriksaan</th>
+                                                <td>{{ \Carbon\Carbon::parse($hasil->tanggal_pemeriksaan)->translatedFormat('d F Y') }}</td>
+                                            </tr>
+                                        </table>
+                                    @else
+                                        Belum ada data
+                                    @endif
+
+                                    <h4 class="mt-4">Riwayat Tensi</h4>
+                                    <table class="table table-striped">
+                                        <thead>
+                                            <tr>
+                                                <th>Tanggal</th>
+                                                <th>Tensi</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            @foreach($tensi as $item)
+                                            <tr>
+                                                <td>{{ \Carbon\Carbon::parse($item->tanggal_periksa)->translatedFormat('d F Y') }}</td>
+                                                <td>{{ $item->tensi }}</td>
+                                            </tr>
+                                            @endforeach
+                                        </tbody>
+                                    </table>
+                                @endif
+                            </div>
+                        </div>
+                    </div>
                 </div>
             </div>
         </div>
@@ -295,6 +426,64 @@
                     <p>Belum ada artikel edukasi kesehatan yang tersedia.</p>
                 </div>
                 @endforelse
+            </div>
+        </div>
+    </section>
+
+
+    <section id="komentar" class="bg-body-tertiary">
+        <div class="container">
+            <div class="d-flex justify-content-between align-items-center mb-2">
+                <h5 class="fw-bold me-3">{{ $jumlah }} Komentar</h5>
+            </div>
+            <div class="card h-100 border-0 shadow-sm rounded-4 bg-body">
+                <div class="card-body p-4">
+                    <div class="kirim-komentar border-bottom">
+                        <form action="{{ route('landing.kirim_komentar') }}" method="POST">
+                            @csrf
+                            <div class="mb-3">
+                                <label for="nama">Nama <span class="text-danger">*</span></label>
+                                <input type="text" name="nama" class="form-control" placeholder="Masukkan Nama..." maxlength="100" required>
+                            </div>
+                            <div class="mb-3">
+                                <label for="komentar">Komentar <span class="text-danger">*</span></label>
+                                <textarea class="form-control" name="komentar" id="komentar" rows="6" maxlength="500" required></textarea>
+                            </div>
+                            <div class="mb-2">
+                                <button class="btn btn-primary" type="submit">Kirim</button>
+                            </div>
+                        </form>
+                    </div>
+                    <div id="listKomentar" class="komentar pt-4">
+                        @foreach ($komentar as $k)
+                        <div class="mb-4">
+                            <span class="fw-bold">{{ $k->nama }}</span>
+                            <span class="text-muted">· {{ $k->created_at->diffForHumans() }}</span>
+                            <p class="mb-2">
+                                {{ $k->komentar }}
+                            </p>
+                            @if($k->balasan_admin)
+                            <div class="ms-4 border-start ps-3">
+                                <span class="fw-bold text-primary">Admin Posyandu</span>
+                                <span class="text-muted">· {{ $k->dibalas_pada?->diffForHumans() }}</span>
+                                <p class="mb-0">
+                                    {{ $k->balasan_admin }}
+                                </p>
+                            </div>
+                            @endif
+                        </div>
+                        @endforeach
+                    </div>
+                    @if($jumlah > 5)
+                    <div class="text-center">
+                        <button
+                            id="showMoreBtn"
+                            class="btn btn-outline-primary">
+                            Show More
+                        </button>
+                    </div>
+                    @endif
+                </div>
             </div>
         </div>
     </section>
@@ -338,6 +527,9 @@
             </div>
         </div>
     </section>
+
+    <!-- SweetAlert2 js -->
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 
     <!-- Bootstrap JS -->
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
@@ -398,6 +590,68 @@
         });
     </script>
     @endif
+
+    @if(session('success'))
+    <script>
+        Swal.fire({
+            icon: 'success',
+            title: 'Berhasil',
+            text: @json(session('success')),
+            timer: 2000,
+            showConfirmButton: false
+        });
+    </script>
+    @endif
+
+    <script>
+        let offset = 5;
+        const total = {{ $jumlah }};
+        const btn = document.getElementById('showMoreBtn');
+        btn?.addEventListener('click', async function () {
+            try {
+                const response = await fetch(
+                    `{{ route('landing.load_komentar') }}?offset=${offset}`
+                );
+                const data = await response.json();
+                const container = document.getElementById('listKomentar');
+                data.forEach(item => {
+                    container.innerHTML += `
+                    <div class="mb-4">
+                        <span class="fw-bold">
+                            ${item.nama}
+                        </span>
+                        <span class="text-muted">
+                            · ${item.created_at}
+                        </span>
+                        <p class="mb-2">
+                            ${item.komentar}
+                        </p>
+                        ${item.balasan_admin ?
+                        `<div class="ms-4 border-start ps-3">
+                            <span class="fw-bold text-primary">
+                                Admin Posyandu
+                            </span>
+                            <span class="text-muted">
+                                · ${item.dibalas_pada}
+                            </span>
+                            <p class="mb-0">
+                                ${item.balasan_admin}
+                            </p>
+                        </div>`
+                        : ''}
+                    </div>
+                    `;
+                });
+                offset += data.length;
+                if (data.length === 0) {
+                    btn.style.display = 'none';
+                    return;
+                }
+            } catch (error) {
+                console.error(error);
+            }
+        });
+    </script>
 </body>
 
 </html>
