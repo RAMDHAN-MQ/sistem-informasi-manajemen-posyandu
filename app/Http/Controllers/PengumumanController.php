@@ -4,28 +4,10 @@ namespace App\Http\Controllers;
 
 use App\Models\Pengumuman;
 use Illuminate\Http\Request;
-use DOMDocument;
 use Illuminate\Support\Facades\Storage;
-
-function ekstrakgambarhtml($html)
-{
-    $gambar = [];
-
-    if (!$html) return $gambar;
-
-    libxml_use_internal_errors(true);
-
-    $dom = new DOMDocument();
-    $dom->loadHTML($html, LIBXML_HTML_NOIMPLIED | LIBXML_HTML_NODEFDTD);
-
-    libxml_clear_errors();
-
-    foreach ($dom->getElementsByTagName('img') as $img) {
-        $gambar[] = $img->getAttribute('src');
-    }
-
-    return $gambar;
-}
+use Intervention\Image\ImageManager;
+use Intervention\Image\Drivers\Gd\Driver;
+use DOMDocument;
 
 class PengumumanController extends Controller
 {
@@ -67,12 +49,19 @@ class PengumumanController extends Controller
     public function update(Request $request, $id)
     {
         $pengumuman = Pengumuman::findOrFail($id);
-        $oldGambar = ekstrakgambarhtml($pengumuman->keterangan);
+        $oldGambar = $this->ekstrakgambarhtml($pengumuman->keterangan);
         $pengumuman->update([
             'judul' => $request->judul,
             'keterangan' => $request->keterangan,
         ]);
-        $newGambar = ekstrakgambarhtml($request->keterangan);
+        $newGambar = $this->ekstrakgambarhtml($request->keterangan);
+        $normalize = function ($url) {
+            return parse_url($url, PHP_URL_PATH);
+        };
+
+        $oldGambar = array_map($normalize, $oldGambar);
+        $newGambar = array_map($normalize, $newGambar);
+
         $deleteGambar = array_diff($oldGambar, $newGambar);
         foreach ($deleteGambar as $src) {
             $path = parse_url($src, PHP_URL_PATH);
@@ -88,7 +77,7 @@ class PengumumanController extends Controller
     public function destroy($id)
     {
         $pengumuman = Pengumuman::findOrFail($id);
-        $gambar = ekstrakgambarhtml($pengumuman->keterangan);
+        $gambar = $this->ekstrakgambarhtml($pengumuman->keterangan);
         foreach ($gambar as $src) {
             $path = parse_url($src, PHP_URL_PATH);
             $path = str_replace('/storage/', '', $path);
@@ -117,25 +106,43 @@ class PengumumanController extends Controller
 
     public function upload(Request $request)
     {
-        if ($request->hasFile('upload')) {
-            $file = $request->file('upload');
+        if (!$request->hasFile('upload')) {
+            return response()->json(['uploaded' => false], 400);
+        }
+        $file = $request->file('upload');
+        $filename = time() . '.webp';
+        $path = 'uploads/' . $filename;
+        $manager = new ImageManager(new Driver());
+        $image = $manager->read($file)
+            ->resize(null, null, function ($constraint) {
+                $constraint->aspectRatio();
+                $constraint->upsize();
+            })
+            ->toWebp(75);
+        Storage::disk('public')->put($path, $image);
+        return response()->json([
+            "uploaded" => true,
+            "url" => asset('storage/' . $path)
+        ]);
+    }
 
-            $filename = time() . '_' . $file->getClientOriginalName();
+    private function ekstrakgambarhtml($html)
+    {
+        $gambar = [];
 
-            // simpan ke storage/app/public/uploads
-            $path = $file->storeAs('uploads', $filename, 'public');
+        if (!$html) return $gambar;
 
-            $url = asset('storage/' . $path);
+        libxml_use_internal_errors(true);
 
-            return response()->json([
-                "uploaded" => true,
-                "url" => $url
-            ]);
+        $dom = new DOMDocument();
+        $dom->loadHTML($html, LIBXML_HTML_NOIMPLIED | LIBXML_HTML_NODEFDTD);
+
+        libxml_clear_errors();
+
+        foreach ($dom->getElementsByTagName('img') as $img) {
+            $gambar[] = $img->getAttribute('src');
         }
 
-        return response()->json([
-            "uploaded" => false,
-            "error" => ["message" => "No file uploaded"]
-        ], 400);
+        return $gambar;
     }
 }
