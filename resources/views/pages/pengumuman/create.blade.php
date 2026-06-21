@@ -10,7 +10,7 @@
 
 @section('content')
 
-<a href="{{ route('admin.layanan.index') }}" class="btn btn-light border">
+<a href="{{ route('admin.pengumuman.index') }}" class="btn btn-light border">
     <i class="bi bi-arrow-left-short"></i>
     Kembali
 </a>

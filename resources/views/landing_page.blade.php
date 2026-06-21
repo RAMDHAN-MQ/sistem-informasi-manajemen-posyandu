@@ -562,7 +562,7 @@
                         <button
                             id="showMoreBtn"
                             class="btn btn-outline-primary">
-                            Show More
+                            Lihat Lebih Banyak
                         </button>
                     </div>
                     @endif
