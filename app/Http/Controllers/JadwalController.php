@@ -11,7 +11,7 @@ class JadwalController extends Controller
     public function index()
     {
         $petugas = User::whereHas('layanan')->distinct()->get();
-        $layanan = Layanan::all();
+        $layanan = Layanan::latest()->get();
         return view('pages.jadwal.index', compact('layanan', 'petugas'));
     }
 

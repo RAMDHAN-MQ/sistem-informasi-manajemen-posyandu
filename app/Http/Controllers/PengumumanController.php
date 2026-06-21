@@ -4,6 +4,28 @@ namespace App\Http\Controllers;
 
 use App\Models\Pengumuman;
 use Illuminate\Http\Request;
+use DOMDocument;
+use Illuminate\Support\Facades\Storage;
+
+function ekstrakgambarhtml($html)
+{
+    $gambar = [];
+
+    if (!$html) return $gambar;
+
+    libxml_use_internal_errors(true);
+
+    $dom = new DOMDocument();
+    $dom->loadHTML($html, LIBXML_HTML_NOIMPLIED | LIBXML_HTML_NODEFDTD);
+
+    libxml_clear_errors();
+
+    foreach ($dom->getElementsByTagName('img') as $img) {
+        $gambar[] = $img->getAttribute('src');
+    }
+
+    return $gambar;
+}
 
 class PengumumanController extends Controller
 {
@@ -44,28 +66,39 @@ class PengumumanController extends Controller
 
     public function update(Request $request, $id)
     {
-        $request->validate([
-            'judul' => 'required|max:255',
-            'keterangan' => 'required',
-        ]);
-
         $pengumuman = Pengumuman::findOrFail($id);
-
+        $oldGambar = ekstrakgambarhtml($pengumuman->keterangan);
         $pengumuman->update([
             'judul' => $request->judul,
             'keterangan' => $request->keterangan,
         ]);
-
-        return redirect()
-            ->route('admin.pengumuman.index')
-            ->with('success', 'Pengumuman berhasil diperbarui.');
+        $newGambar = ekstrakgambarhtml($request->keterangan);
+        $deleteGambar = array_diff($oldGambar, $newGambar);
+        foreach ($deleteGambar as $src) {
+            $path = parse_url($src, PHP_URL_PATH);
+            $path = str_replace('/storage/', '', $path);
+            if (Storage::disk('public')->exists($path)) {
+                Storage::disk('public')->delete($path);
+            }
+        }
+        return redirect()->route('admin.pengumuman.index')
+            ->with('success', 'Pengumuman berhasil diupdate.');
     }
 
     public function destroy($id)
     {
-        Pengumuman::findOrFail($id)->delete();
-        return redirect()
-            ->route('admin.pengumuman.index')
+        $pengumuman = Pengumuman::findOrFail($id);
+        $gambar = ekstrakgambarhtml($pengumuman->keterangan);
+        foreach ($gambar as $src) {
+            $path = parse_url($src, PHP_URL_PATH);
+            $path = str_replace('/storage/', '', $path);
+
+            if (Storage::disk('public')->exists($path)) {
+                Storage::disk('public')->delete($path);
+            }
+        }
+        $pengumuman->delete();
+        return redirect()->route('admin.pengumuman.index')
             ->with('success', 'Pengumuman berhasil dihapus.');
     }
 
@@ -80,5 +113,29 @@ class PengumumanController extends Controller
             'success' => true,
             'message' => 'Status berhasil diubah'
         ]);
+    }
+
+    public function upload(Request $request)
+    {
+        if ($request->hasFile('upload')) {
+            $file = $request->file('upload');
+
+            $filename = time() . '_' . $file->getClientOriginalName();
+
+            // simpan ke storage/app/public/uploads
+            $path = $file->storeAs('uploads', $filename, 'public');
+
+            $url = asset('storage/' . $path);
+
+            return response()->json([
+                "uploaded" => true,
+                "url" => $url
+            ]);
+        }
+
+        return response()->json([
+            "uploaded" => false,
+            "error" => ["message" => "No file uploaded"]
+        ], 400);
     }
 }

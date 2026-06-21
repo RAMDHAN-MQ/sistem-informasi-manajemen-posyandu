@@ -34,7 +34,7 @@
                     <thead class="table-primary">
                         <tr>
                             <th>NO</th>
-                            <th>PETUGAS</th>
+                            <th>PJ</th>
                             <th>JUDUL</th>
                             <th>LOKASI</th>
                             <th>TANGGAL</th>
@@ -49,7 +49,7 @@
                             <td>{{ $data->user->name }}</td>
                             <td>{{ $data->judul_kegiatan }}</td>
                             <td>{{ $data->lokasi }}</td>
-                            <td>{{ $data->tanggal }}</td>
+                            <td>{{ $data->tanggal->format('d F Y') }}</td>
                             <td>
                                 <div class="form-check form-switch">
                                     <input

@@ -62,7 +62,7 @@ class LandingPageController extends Controller
             }
         }
 
-        return view('landing_page', compact(
+        return view('landing.landing_page', compact(
             'jadwal',
             'pengumuman',
             'edukasi',
@@ -79,17 +79,29 @@ class LandingPageController extends Controller
     public function edukasi($id)
     {
         $edukasi = Edukasi::findOrFail($id);
-        return view('edukasi_detail', compact('edukasi'));
+        return view('landing.edukasi_detail', compact('edukasi'));
     }
 
-    public function pengumuman($id)
+    public function pengumuman()
+    {
+        $pengumuman = Pengumuman::all();
+        return view('landing.pengumuman', compact('pengumuman'));
+    }
+
+    public function pengumuman_detail($id)
     {
         $pengumuman = Pengumuman::findOrFail($id);
         $pengumumanLain = Pengumuman::where('id', '!=', $id)
         ->latest()
         ->take(5)
         ->get();
-        return view('pengumuman_detail', compact('pengumuman', 'pengumumanLain'));
+        return view('landing.pengumuman_detail', compact('pengumuman', 'pengumumanLain'));
+    }
+
+    public function jadwal()
+    {
+        $jadwal = Layanan::all();
+        return view('landing.jadwal', compact('jadwal'));
     }
 
     public function kirim_komentar(Request $request)

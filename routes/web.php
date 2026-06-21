@@ -15,8 +15,10 @@ use Illuminate\Support\Facades\Route;
 
 Route::controller(LandingPageController::class)->group(function () {
     Route::get('/', 'index')->name('landing');
-    Route::get('/pengumuman/{id}', 'pengumuman')->name('landing.pengumuman');
-    Route::get('/edukasi/{id}', 'edukasi')->name('edukasi.show');
+    Route::get('/pengumuman', 'pengumuman')->name('landing.pengumuman');
+    Route::get('/pengumuman/{id}', 'pengumuman_detail')->name('landing.pengumuman_detail');
+    Route::get('/jadwal', 'jadwal')->name('landing.jadwal');
+    Route::get('/edukasi/{id}', 'edukasi')->name('landing.edukasi');
     Route::post('/kirim_komentar', 'kirim_komentar')->name('landing.kirim_komentar');
     Route::get('/komentar/load', 'load_komentar')->name('landing.load_komentar');
 });
@@ -104,6 +106,8 @@ Route::prefix('admin')->middleware(['auth', 'role:admin'])->group(function () {
         Route::put('/pengumuman/{id}', 'update')->name('admin.pengumuman.update');
         Route::delete('/pengumuman/destroy/{id}', 'destroy')->name('admin.pengumuman.destroy');
         Route::post('/pengumuman/status/{id}', 'change_status')->name('admin.pengumuman.change_status');
+
+        Route::post('/ckeditor/upload', 'upload')->name('ckeditor.upload');
     });
 
     // edukasi

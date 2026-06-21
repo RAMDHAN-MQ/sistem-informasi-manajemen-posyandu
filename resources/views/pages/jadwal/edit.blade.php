@@ -27,7 +27,7 @@
                     @method('PUT')
                     <div class="row">
                         <div class="col-12 col-md-4 mb-3 mb-md-0">
-                            <label class="form-label fw-semibold">Pilih Petugas <span class="text-danger">*</span></label></label>
+                            <label class="form-label fw-semibold">Pilih Penanggung Jawab <span class="text-danger">*</span></label></label>
                             <select class="form-select select2" name="user_id" required>
                                 <option value="">-- Cari Nama Petugas --</option>
                                 @foreach($petugas as $p)
